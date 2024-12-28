@@ -2,6 +2,8 @@ package base.connexe;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Connexion {
@@ -21,7 +23,7 @@ public class Connexion {
             connexe = DriverManager.getConnection(url, userName, passwd);
             stmt = connexe.createStatement();
         } catch (ClassNotFoundException e) {
-            System.out.println("Driver tsy hita trace");
+            System.out.println("Aucun Driver trouvee");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -32,6 +34,22 @@ public class Connexion {
     public void finaleClose() throws Exception {
         stmt.close();
         connexe.close();
+    }
+
+    public int incrementSequence(String sequenceName) throws Exception {
+        String req = "select nextval(\'" + sequenceName + "\')";
+        ResultSet set = null;
+        try {
+            set = stmt.executeQuery(req);
+            if (set.next()) {
+                return set.getInt(1);
+            }
+            throw new Exception("Il y des problemes sur votre sequence");
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (set != null) set.close();
+        }
     }
 
     // ! Getter

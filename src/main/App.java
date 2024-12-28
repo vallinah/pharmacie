@@ -1,5 +1,8 @@
 package main;
 
+import java.util.Vector;
+
+import base.Categorie;
 import base.Produit;
 import base.SousCategorie;
 import base.Type;

@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface AnnotationAttr {
     public abstract String nameInBase();
     public abstract boolean showInForm() default true;
+    public abstract boolean insert() default true;
 }
