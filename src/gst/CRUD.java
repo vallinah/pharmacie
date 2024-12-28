@@ -14,6 +14,66 @@ import fn.Function;
 
 public class CRUD {
 
+    public Vector<Field> fieldMapped(Class<?> cls) throws Exception {
+        Vector<Field> listFields = new Vector<>();
+        Class<?> kilasy = cls;
+        while (true) {
+            if (kilasy.equals(Object.class))
+                break;
+            if (kilasy != null) {
+                for (Field fld : kilasy.getDeclaredFields()) {
+                    if (fld.isAnnotationPresent(AnnotationAttr.class)) {
+                        if (fld.getAnnotation(AnnotationAttr.class).insert()) {
+                            listFields.add(fld);
+                        }
+                    }
+                }
+            }
+            kilasy = kilasy.getSuperclass();
+        }
+        return listFields;
+    }
+
+    public void delete(Class<?> cls, String id) throws Exception {
+        if (!cls.isAnnotationPresent(AnnotationClass.class))
+            throw new Exception("Cette classe n'a aucun reference dans votre base de donnée");
+        Vector<Field> listFields = fieldMapped(cls);
+        String nameInBase = cls.getAnnotation(AnnotationClass.class).nameInBase();
+        String id_in_base = null;
+
+        for (Field fld : listFields) {
+            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
+                id_in_base = fld.getName();
+                break;
+            }
+        }
+
+        String req = "delete from " + nameInBase + " where " + id_in_base + " = ?";
+
+        Connection connection = null;
+        PreparedStatement prp = null;
+
+        try {
+                Connexion connexion = Function.dbConnect();
+                connection = connexion.getConnexe();
+                connection.setAutoCommit(false);
+            prp = connection.prepareStatement(req);
+            prp.setString(1, id);
+            prp.executeUpdate();
+            connection.commit();
+
+        } catch (Exception e) {
+            connection.rollback();
+            throw e;
+        } finally {
+            if (prp != null) prp.close(); 
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
+    }
+    
     public void insert(Class<?> cls, Vector<String> insertion) throws Exception {
         String req = scriptInsert(cls);
             Vector<Field> listFields = fieldMapped(cls);
@@ -80,26 +140,6 @@ public class CRUD {
             }
         }
 
-    }
-
-    public Vector<Field> fieldMapped(Class<?> cls) throws Exception {
-        Vector<Field> listFields = new Vector<>();
-        Class<?> kilasy = cls;
-        while (true) {
-            if (kilasy.equals(Object.class))
-                break;
-            if (kilasy != null) {
-                for (Field fld : kilasy.getDeclaredFields()) {
-                    if (fld.isAnnotationPresent(AnnotationAttr.class)) {
-                        if (fld.getAnnotation(AnnotationAttr.class).insert()) {
-                            listFields.add(fld);
-                        }
-                    }
-                }
-            }
-            kilasy = kilasy.getSuperclass();
-        }
-        return listFields;
     }
 
     public String scriptInsert(Class<?> cls) throws Exception {
