@@ -14,18 +14,13 @@ import fn.Function;
 
 public class CRUD {
 
-    private Connexion connexion;
-
-    public CRUD() throws Exception {
-        this.connexion = Function.dbConnect();
-    }
-
     public void insert(Class<?> cls, Vector<String> insertion) throws Exception {
         String req = scriptInsert(cls);
             Vector<Field> listFields = fieldMapped(cls);
         Connection connection = null;
-        PreparedStatement prp = null;    
+        PreparedStatement prp = null;
         try {
+            Connexion connexion = Function.dbConnect();
             connection = connexion.getConnexe();
             connection.setAutoCommit(false);
 
