@@ -1,0 +1,58 @@
+void insert() throws Exception {
+        String query = "INSERT INTO Reservation (date_de_reservation, package_id, utilisateur_id) VALUES (?, ?, ?)";
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Connexion.getConnection();
+            connection.setAutoCommit(false); // Start transaction
+            statement = connection.prepareStatement(query);
+            statement.setDate(1, new java.sql.Date(this.dateDeReservation.getTime()));
+            statement.setInt(2, this.packageId);
+            statement.setInt(3, this.utilisateurId);
+            statement.executeUpdate();
+            connection.commit(); // Commit transaction
+        } catch (Exception e) {
+            if (connection != null) {
+                connection.rollback(); // Rollback transaction on error
+            }
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.setAutoCommit(true); // Reset autocommit
+                connection.close();
+            }
+        }
+    }
+
+    ------------------------------------------------------
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+        PrintWriter out = res.getWriter();
+        try {
+            HttpSession session = req.getSession();
+            if (session == null || session.getAttribute("utilisateur") == null) {
+                res.sendRedirect("login.jsp");
+            }
+            res.setContentType("text/plain");
+            Reservation r = new Reservation();
+            String dateReservationString = req.getParameter("dateDeReservation");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            r.setDateDeReservation(sdf.parse(dateReservationString));
+            r.setPackageId(Integer.parseInt(req.getParameter("packageId")));
+            r.setUtilisateurId(Integer.parseInt(req.getParameter("utilisateurId")));
+            if (req.getParameter("id") != null) {
+                r.setId(Integer.parseInt(req.getParameter("id")));
+                r.update();
+            } else {
+                r.insert();
+            }
+            res.sendRedirect("reservation");
+        } catch (Exception e) {
+            out.println(e.getMessage());
+        }
+    }
