@@ -7,9 +7,9 @@ import java.sql.Statement;
 public class Connexion {
     
     private Connection connexe = null;
-    private String userName = "root";
-    private String passwd = "";
-    private String url = "jdbc:mysql://localhost:3306/";
+    private String userName = "mihary";
+    private String passwd = "mihary";
+    private String url = "jdbc:postgresql://localhost:5432/";
     private Statement stmt;
 
     // ? Constructeur
@@ -17,7 +17,7 @@ public class Connexion {
     public Connexion(String dbName) {
         url += dbName;
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("org.postgresql.Driver");
             connexe = DriverManager.getConnection(url, userName, passwd);
             stmt = connexe.createStatement();
         } catch (ClassNotFoundException e) {
@@ -25,7 +25,6 @@ public class Connexion {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
     }
 
     // $ Fonction tsotra
