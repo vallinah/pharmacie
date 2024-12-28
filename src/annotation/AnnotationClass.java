@@ -9,4 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface AnnotationClass {
     public abstract String nameInBase();
+    public abstract String sequence() default "";
 }

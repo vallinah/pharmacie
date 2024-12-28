@@ -5,10 +5,10 @@ import java.sql.ResultSet;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-@AnnotationClass(nameInBase = "produit")
+@AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq")
 public class Produit {
 
-    @AnnotationAttr(nameInBase = "id_produit", showInForm = false)
+    @AnnotationAttr(nameInBase = "id_produit", inc = true)
     private String id_produit;
     @AnnotationAttr(nameInBase = "nom_produit")
     private String nom_produit;
