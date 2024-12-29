@@ -14,7 +14,21 @@ import fn.Function;
 
 public class CRUD {
 
-    public Vector<Field> fieldMapped(Class<?> cls) throws Exception {
+    private Class<?> cls;
+    private String nameInBase;
+    private String sequenceName;
+    private Vector<Field> listFields;
+
+    public CRUD(Class<?> cls) throws Exception {
+        if (!cls.isAnnotationPresent(AnnotationClass.class))
+            throw new Exception("Cette classe n'a aucun reference dans votre base de donnée");
+        this.cls = cls;
+        nameInBase = cls.getAnnotation(AnnotationClass.class).nameInBase();
+        sequenceName = cls.getAnnotation(AnnotationClass.class).sequence();
+        listFields = fieldMapped();
+    }
+
+    public Vector<Field> fieldMapped() throws Exception {
         Vector<Field> listFields = new Vector<>();
         Class<?> kilasy = cls;
         while (true) {
@@ -34,13 +48,8 @@ public class CRUD {
         return listFields;
     }
 
-    public void delete(Class<?> cls, String id) throws Exception {
-        if (!cls.isAnnotationPresent(AnnotationClass.class))
-            throw new Exception("Cette classe n'a aucun reference dans votre base de donnée");
-        Vector<Field> listFields = fieldMapped(cls);
-        String nameInBase = cls.getAnnotation(AnnotationClass.class).nameInBase();
+    public void delete(String id) throws Exception {
         String id_in_base = null;
-
         for (Field fld : listFields) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 id_in_base = fld.getName();
@@ -74,9 +83,8 @@ public class CRUD {
         }
     }
     
-    public void insert(Class<?> cls, Vector<String> insertion) throws Exception {
-        String req = scriptInsert(cls);
-            Vector<Field> listFields = fieldMapped(cls);
+    public void insert(Vector<String> insertion) throws Exception {
+        String req = scriptInsert();
         Connection connection = null;
         PreparedStatement prp = null;
         try {
@@ -91,7 +99,6 @@ public class CRUD {
             for (int a = 0; a < listFields.size(); a++) {
                 if (listFields.get(a).getType().equals(String.class)) {
                     if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                        String sequenceName = cls.getAnnotation(AnnotationClass.class).sequence();
                         prp.setString(a + 1, connexion.incrementSequence(sequenceName) + "");
                     } else {
                         prp.setString(a + 1, insertion.get(cpt));
@@ -102,7 +109,6 @@ public class CRUD {
                     cpt++;
                 } else if (listFields.get(a).getClass().equals(Integer.class)) {
                     if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                        String sequenceName = cls.getAnnotation(AnnotationClass.class).sequence();
                         prp.setInt(a + 1, connexion.incrementSequence(sequenceName));
                     } else {
                         prp.setInt(a + 1, Integer.parseInt(insertion.get(cpt)));
@@ -110,7 +116,6 @@ public class CRUD {
                     }
                 } else if (listFields.get(a).getClass().equals(Double.class)) {
                     if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                        String sequenceName = cls.getAnnotation(AnnotationClass.class).sequence();
                         prp.setDouble(a + 1, connexion.incrementSequence(sequenceName));
                     } else {
                         prp.setDouble(a + 1, Double.parseDouble(insertion.get(cpt)));
@@ -118,7 +123,6 @@ public class CRUD {
                     }
                 } else if (listFields.get(a).getClass().equals(Float.class)) {
                     if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                        String sequenceName = cls.getAnnotation(AnnotationClass.class).sequence();
                         prp.setFloat(a + 1, connexion.incrementSequence(sequenceName));
                     } else {
                         prp.setFloat(a + 1, Float.parseFloat(insertion.get(cpt)));
@@ -142,19 +146,14 @@ public class CRUD {
 
     }
 
-    public String scriptInsert(Class<?> cls) throws Exception {
-        if (!cls.isAnnotationPresent(AnnotationClass.class))
-            throw new Exception("Cette classe n'a aucun reference dans votre base de donnée");
-        String nameInbase = cls.getAnnotation(AnnotationClass.class).nameInBase();
-
+    public String scriptInsert() throws Exception {
         Vector<String> a_inserer = new Vector<>();
-        Vector<Field> listFields = fieldMapped(cls);
         for (Field f : listFields) {
             a_inserer.add(f.getName());
         }
 
         StringBuilder bld = new StringBuilder();
-        bld.append("insert into " + nameInbase + "(");
+        bld.append("insert into " + nameInBase + "(");
         String values = "(";
         for (String nomColonne : a_inserer) {
             bld.append(nomColonne);
