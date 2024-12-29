@@ -28,7 +28,24 @@ public class CRUD {
         listFields = fieldMapped();
     }
 
-    public void prepared(PreparedStatement prp, Connexion connexion,Field fld, String value, int indexNum, Integer cpt) throws Exception {
+    public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Integer cpt)  throws Exception{
+        if (fld.getType().equals(String.class)) {
+                prp.setString(++cpt, value);
+            }
+        else if (fld.getClass().equals(Date.class)
+                || fld.getClass().equals(java.sql.Date.class)
+                || fld.getClass().equals(LocalDate.class)) {
+            prp.setDate(++cpt, Function.dateByString(value));
+        } else if (fld.getClass().equals(Integer.class)) {
+                prp.setInt(++cpt, Integer.parseInt(value));
+        } else if (fld.getClass().equals(Double.class)) {
+                prp.setDouble(++cpt, Double.parseDouble(value));
+        } else if (fld.getClass().equals(Float.class)) {
+                prp.setFloat(++cpt, Float.parseFloat(value));
+        }
+    }
+
+    public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum, Integer cpt) throws Exception {
         if (fld.getType().equals(String.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 prp.setString(indexNum, connexion.incrementSequence(sequenceName) + "");
