@@ -28,6 +28,43 @@ public class CRUD {
         listFields = fieldMapped();
     }
 
+    public void prepared(PreparedStatement prp, Connexion connexion,Field fld, String value, int indexNum, Integer cpt) throws Exception {
+        if (fld.getType().equals(String.class)) {
+            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
+                prp.setString(indexNum, connexion.incrementSequence(sequenceName) + "");
+            } else {
+                prp.setString(indexNum, value);
+                cpt++;
+            }
+        } else if (fld.getClass().equals(Date.class)
+                || fld.getClass().equals(java.sql.Date.class)
+                || fld.getClass().equals(LocalDate.class)) {
+            prp.setDate(indexNum, Function.dateByString(value));
+            cpt++;
+        } else if (fld.getClass().equals(Integer.class)) {
+            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
+                prp.setInt(indexNum, connexion.incrementSequence(sequenceName));
+            } else {
+                prp.setInt(indexNum, Integer.parseInt(value));
+                cpt++;
+            }
+        } else if (fld.getClass().equals(Double.class)) {
+            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
+                prp.setDouble(indexNum, connexion.incrementSequence(sequenceName));
+            } else {
+                prp.setDouble(indexNum, Double.parseDouble(value));
+                cpt++;
+            }
+        } else if (fld.getClass().equals(Float.class)) {
+            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
+                prp.setFloat(indexNum, connexion.incrementSequence(sequenceName));
+            } else {
+                prp.setFloat(indexNum, Float.parseFloat(value));
+                cpt++;
+            }
+        }
+    }
+
     public Vector<Field> fieldMapped() throws Exception {
         Vector<Field> listFields = new Vector<>();
         Class<?> kilasy = cls;
@@ -63,9 +100,9 @@ public class CRUD {
         PreparedStatement prp = null;
 
         try {
-                Connexion connexion = Function.dbConnect();
-                connection = connexion.getConnexe();
-                connection.setAutoCommit(false);
+            Connexion connexion = Function.dbConnect();
+            connection = connexion.getConnexe();
+            connection.setAutoCommit(false);
             prp = connection.prepareStatement(req);
             prp.setString(1, id);
             prp.executeUpdate();
@@ -75,14 +112,15 @@ public class CRUD {
             connection.rollback();
             throw e;
         } finally {
-            if (prp != null) prp.close(); 
+            if (prp != null)
+                prp.close();
             if (connection != null) {
                 connection.setAutoCommit(true);
                 connection.close();
             }
         }
     }
-    
+
     public void insert(Vector<String> insertion) throws Exception {
         String req = scriptInsert();
         Connection connection = null;
@@ -93,51 +131,21 @@ public class CRUD {
             connection.setAutoCommit(false);
 
             prp = connection.prepareStatement(req);
-
-            int cpt = 0;
+            Integer cpt = 0;
 
             for (int a = 0; a < listFields.size(); a++) {
-                if (listFields.get(a).getType().equals(String.class)) {
-                    if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                        prp.setString(a + 1, connexion.incrementSequence(sequenceName) + "");
-                    } else {
-                        prp.setString(a + 1, insertion.get(cpt));
-                        cpt++;
-                    }
-                } else if (listFields.get(a).getClass().equals(Date.class) || listFields.get(a).getClass().equals(java.sql.Date.class) || listFields.get(a).getClass().equals(LocalDate.class)) {
-                    prp.setDate(a + 1, Function.dateByString(insertion.get(cpt)));
-                    cpt++;
-                } else if (listFields.get(a).getClass().equals(Integer.class)) {
-                    if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                        prp.setInt(a + 1, connexion.incrementSequence(sequenceName));
-                    } else {
-                        prp.setInt(a + 1, Integer.parseInt(insertion.get(cpt)));
-                        cpt++;
-                    }
-                } else if (listFields.get(a).getClass().equals(Double.class)) {
-                    if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                        prp.setDouble(a + 1, connexion.incrementSequence(sequenceName));
-                    } else {
-                        prp.setDouble(a + 1, Double.parseDouble(insertion.get(cpt)));
-                        cpt++;
-                    }
-                } else if (listFields.get(a).getClass().equals(Float.class)) {
-                    if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                        prp.setFloat(a + 1, connexion.incrementSequence(sequenceName));
-                    } else {
-                        prp.setFloat(a + 1, Float.parseFloat(insertion.get(cpt)));
-                        cpt++;
-                    }
-                }
+                prepared(prp, connexion, listFields.get(a), insertion.get(cpt), a + 1, cpt);
             }
             prp.executeUpdate();
-            connection.commit();            
+            connection.commit();
         } catch (Exception e) {
-            if (connection != null) connection.rollback();
+            if (connection != null)
+                connection.rollback();
             e.printStackTrace();
             throw e;
         } finally {
-            if (prp != null) prp.close();
+            if (prp != null)
+                prp.close();
             if (connection != null) {
                 connection.setAutoCommit(true);
                 connection.close();
@@ -166,4 +174,4 @@ public class CRUD {
         bld.append(") values " + values + ")");
         return bld.toString();
     }
-}
+} 
