@@ -102,6 +102,59 @@ public class CRUD {
         return listFields;
     }
 
+    private String scriptUpdate(Vector<String> updt, String id) throws Exception {
+        StringBuilder req = new StringBuilder();
+        String idName = null;
+        req.append("update " + nameInBase + " set ");
+        int cpt = 0;
+        for (int a = 0; a < listFields.size(); a++) {
+            if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
+                idName = listFields.get(a).getName();
+            } else {
+                req.append(listFields.get(a).getName() + " = ?");
+                if (cpt != updt.size() - 1) {
+                    req.append(",");
+                }
+                cpt++;
+            }
+        }
+        req.append(" where " + idName + " = ?");
+        return req.toString();
+    }
+
+public void update(Vector<String> updt, String id) throws Exception {
+    String req = scriptUpdate(updt, id);
+    PreparedStatement prp = null;
+    Connection connection = null;
+    try {
+        Connexion connexion = Function.dbConnect();
+        connection = connexion.getConnexe();
+        connection.setAutoCommit(false);
+
+        prp = connection.prepareStatement(req);
+        Integer cpt = 0;
+
+        for (int a = 0; a < listFields.size(); a++) {
+            if (!listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
+                preparedUpdate(prp, connexion, listFields.get(a), updt.get(cpt), cpt);
+            }
+        }
+        prp.setString(updt.size() + 1, id);
+        prp.executeUpdate();
+        connection.commit();
+        System.out.println("update reussi : " + req);
+    } catch (Exception e) {
+        connection.rollback();
+        throw e;
+    } finally {
+        if (prp != null) prp.close();
+        if (connection != null) {
+            connection.setAutoCommit(true);
+            connection.close();
+        }
+    }
+}
+
     public void delete(String id) throws Exception {
         String id_in_base = null;
         for (Field fld : listFields) {
@@ -138,6 +191,27 @@ public class CRUD {
         }
     }
 
+        public String scriptInsert() throws Exception {
+            Vector<String> a_inserer = new Vector<>();
+            for (Field f : listFields) {
+                a_inserer.add(f.getName());
+            }
+
+            StringBuilder bld = new StringBuilder();
+            bld.append("insert into " + nameInBase + "(");
+            String values = "(";
+            for (String nomColonne : a_inserer) {
+                bld.append(nomColonne);
+                values += "?";
+                if (nomColonne != a_inserer.lastElement()) {
+                    bld.append(",");
+                    values += ",";
+                }
+            }
+            bld.append(") values " + values + ")");
+            return bld.toString();
+        }
+
     public void insert(Vector<String> insertion) throws Exception {
         String req = scriptInsert();
         Connection connection = null;
@@ -169,26 +243,5 @@ public class CRUD {
             }
         }
 
-    }
-
-    public String scriptInsert() throws Exception {
-        Vector<String> a_inserer = new Vector<>();
-        for (Field f : listFields) {
-            a_inserer.add(f.getName());
-        }
-
-        StringBuilder bld = new StringBuilder();
-        bld.append("insert into " + nameInBase + "(");
-        String values = "(";
-        for (String nomColonne : a_inserer) {
-            bld.append(nomColonne);
-            values += "?";
-            if (nomColonne != a_inserer.lastElement()) {
-                bld.append(",");
-                values += ",";
-            }
-        }
-        bld.append(") values " + values + ")");
-        return bld.toString();
     }
 } 
