@@ -270,12 +270,12 @@ public String html_update(String id) throws Exception{
                 String name = fld.getName();
                 bld.append("            <div class=\"prt\">\n");
                 if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
-                    bld.append("                <textarea name=\"" + name + "\">" + set.getString(nameInBaseFld) + "</textarea>\n");
+                    bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + ">" + set.getString(nameInBaseFld) + "</textarea>\n");
                 } else {
-                    bld.append("                <input type=\"" + inputType(fld) + "\" value=\"" + set.getString(nameInBaseFld) + "\" name=\"" + name + "\">\n");
+                    bld.append("                <input type=\"" + inputType(fld) + "\" value=\"" + set.getString(nameInBaseFld) + "\" name=\"" + name + "\" required>\n" +
+                            "                <span>" + name + "</span>\n");
                 }
-                bld.append("                <span>" + name + "</span>\n" + //
-                            "            </div>\n");
+                bld.append("            </div>\n");
             }
         }
         bld.append("            <button type=\"submit\">Valider</button>\n" + //
@@ -393,12 +393,12 @@ public String html_update(String id) throws Exception{
                 bld.append("            <div class=\"prt\">\n");
 
                 if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
-                    bld.append("                <textarea name=\"" + name + "\"></textarea>\n");
+                    bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + "></textarea>\n");
                 } else {
-                    bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name + "\">\n");
+                    bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name + "\" required>\n" +
+                            "                <span>" + name + "</span>\n");
                 }
-                bld.append("                <span>" + name + "</span>\n" + //
-                                        "            </div>\n");
+                bld.append("            </div>\n");
             }
         }
         bld.append("            <button type=\"submit\">Valider</button>\n" + //
