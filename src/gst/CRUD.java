@@ -328,7 +328,7 @@ public void update(Vector<String> updt, String id) throws Exception {
         StringBuilder bld = new StringBuilder();
         bld.append("    <section class=\"gnr\">\n" + //
                         "        <h1>Insertion " + nameInBase + "</h1>\n" + //
-                        "        <form action=\"/pages/insert\" method=\"post\">\n" +
+                        "        <form action=\"./insert\" method=\"post\">\n" +
                         "            <input type=\"hidden\" name=\"cls\" value=\"" + cls.getName() + "\">\n");
         
         for (Field fld : listFields) {
