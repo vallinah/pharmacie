@@ -28,6 +28,16 @@ public class CRUD {
         listFields = fieldMapped();
     }
 
+    public String inputType(Field fld) {
+        String type = "text";
+        if (fld.getType().equals(Integer.class) || fld.getType().equals(Double.class) || fld.getType().equals(Float.class)) {
+            type = "number";
+        } else if (fld.getType().equals(Date.class) || fld.getType().equals(java.sql.Date.class) || fld.getType().equals(LocalDate.class)) {
+            type = "date";
+        }
+        return type;
+    }
+
     public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Integer cpt)  throws Exception{
         if (fld.getType().equals(String.class)) {
                 prp.setString(++cpt, value);
@@ -242,6 +252,33 @@ public void update(Vector<String> updt, String id) throws Exception {
                 connection.close();
             }
         }
+    }
 
+    public String html_insert() throws Exception {
+        StringBuilder bld = new StringBuilder();
+        bld.append("    <section class=\"gnr\">\n" + //
+                        "        <h1>Insertion " + nameInBase + "</h1>\n" + //
+                        "        <form action=\"/pages/insert\" method=\"post\">\n" +
+                        "            <input type=\"hidden\" name=\"cls\" value=\"" + cls.getName() + "\">\n");
+        
+        for (Field fld : listFields) {
+            AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
+            if (annotation.insert() && !annotation.inc()) {
+                String name = fld.getName();
+                bld.append("            <div class=\"prt\">\n");
+
+                if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
+                    bld.append("                <textarea name=\"" + name + "\"></textarea>\n");
+                } else {
+                    bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name + "\">\n");
+                }
+                bld.append("                <span>" + name + "</span>\n" + //
+                                        "            </div>\n");
+            }
+        }
+        bld.append("            <button type=\"submit\">Valider</button>\n" + //
+                        "        </form>\n" + //
+                        "    </section>");
+        return bld.toString();
     }
 } 
