@@ -10,9 +10,8 @@
 </head>
 <body>
     <h1>Hello Pharmacie</h1>
-
     <% for (Class<?> cls : Function.listeClass()) { %>
-        <a href="insert.jsp?cls=<%= cls.getName() %>"><%= cls.getSimpleName() %></a>
+        <a href="crud.jsp?cls=<%= cls.getName() %>"><%= cls.getSimpleName() %></a>
         <br>
     <% } %>
 </body>

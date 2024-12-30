@@ -3,6 +3,8 @@ package gst;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Vector;
@@ -36,6 +38,74 @@ public class CRUD {
             type = "date";
         }
         return type;
+    }
+
+    public String html_liste() throws Exception{
+        StringBuilder bld = new StringBuilder();
+        StringBuilder body = new StringBuilder();
+        String ttr = "";
+        bld.append("    <section class=\"list\">\n" + //
+                        "        <h1>Liste(s) " + nameInBase + "</h1>\n" + //
+                        "        <div class=\"bd\">\n");
+        String idName = null;
+
+        for (Field fld : listFields) {
+            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
+                idName = fld.getName();
+                break;
+            }
+        }
+
+        String req = "select * from " + nameInBase + " order by " + idName;
+        ResultSet set = null;
+        Connexion connexion = Function.dbConnect();
+
+        try {
+            set = connexion.getStmt().executeQuery(req);
+            ResultSetMetaData metaData = set.getMetaData();
+            int columnCpt = metaData.getColumnCount();
+
+            for (int a = 1; a <= columnCpt; a++) {
+               ttr += "                    <th>" + metaData.getColumnName(a) +  "</th>\n";
+            }
+            ttr += "                    <th>Action</th>\n" + //
+                                "               </tr>\n" + //
+                                "               <tr>\n";
+            int isEmpty = 0;
+            while (set.next()) {
+                for (int a = 1; a <= columnCpt; a++) {
+                    body.append("                    <td>" + set.getString(a) + "</td>\n");
+                }
+                body.append("                    <td>\n" + //
+                                        "                       <a href=\"\"><i class=\"bi bi-pencil\"></i></a>\n" + //
+                                        "                       <a href=\"\"><i class=\"bi bi-trash\"></i></a>\n" + //
+                                        "                   </td>\n" + //
+                                        "               </tr>\n");
+                isEmpty++;
+            }
+
+            if (isEmpty != 0) {
+                bld.append("            <table border=\"1\">\n" + //
+                        "               <tr>\n");
+                bld.append(ttr);
+            } else {
+                body.append("           <h2>Aucun(s) element(s)</h2>\n");
+            }
+
+            bld.append(body);
+
+            if (isEmpty != 0) {
+                bld.append("            </table>\n");
+            }
+        bld.append("        </div>\n" + //
+                        "    </section>");
+            return bld.toString();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (set != null) set.close();
+            connexion.finaleClose();
+        }
     }
 
     public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Integer cpt)  throws Exception{
@@ -281,4 +351,4 @@ public void update(Vector<String> updt, String id) throws Exception {
                         "    </section>");
         return bld.toString();
     }
-} 
+}
