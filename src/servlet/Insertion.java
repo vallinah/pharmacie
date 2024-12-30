@@ -31,7 +31,7 @@ public class Insertion extends HttpServlet {
         try {
             CRUD crd = new CRUD(Class.forName(clsName));
             crd.insert(values);
-            resp.sendRedirect("insert.jsp?cls=" + clsName);
+            resp.sendRedirect("crud.jsp?cls=" + clsName);
         } catch (Exception e) {
             e.printStackTrace(out);
         }

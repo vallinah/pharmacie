@@ -53,7 +53,9 @@ public class CRUD {
         StringBuilder body = new StringBuilder();
         String ttr = "";
         bld.append("    <section class=\"list\">\n" + //
-                        "        <h1>Liste(s) " + nameInBase + "</h1>\n" + //
+                        "       <div class='ttr'>\n" +
+                        "           <h1>Listes " + nameInBase + "</h1>\n" + //
+                        "        </div>\n" +
                         "        <div class=\"bd\">\n");
         String idName = null;
 
@@ -85,8 +87,10 @@ public class CRUD {
                     body.append("                    <td>" + set.getString(a) + "</td>\n");
                 }
                 body.append("                    <td>\n" + //
-                                        "                       <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-pencil\"></i></a>\n" + //
-                                        "                       <a href=\"delete?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-trash\"></i></a>\n" + //
+                                        "                       <div class='action'>\n" +
+                                        "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-pencil\"></i></a>\n" + //
+                                        "                           <a href=\"delete?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-trash\"></i></a>\n" + //
+                                        "                       </div>\n" +
                                         "                   </td>\n" + //
                                         "               </tr>\n");
                 isEmpty++;
