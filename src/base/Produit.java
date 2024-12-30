@@ -14,6 +14,8 @@ public class Produit {
     private String nom_produit;
     @AnnotationAttr(nameInBase = "description")
     private String description;
+    @AnnotationAttr(nameInBase = "id_type")
+    private String id_type;
 
     public Produit(String id_produit, String nom_produit, String description) {
         this.id_produit = id_produit;
@@ -51,5 +53,13 @@ public class Produit {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getId_type() {
+        return id_type;
+    }
+
+    public void setId_type(String id_type) {
+        this.id_type = id_type;
     }
 }
