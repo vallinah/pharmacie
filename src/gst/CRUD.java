@@ -86,7 +86,7 @@ public class CRUD {
                 }
                 body.append("                    <td>\n" + //
                                         "                       <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-pencil\"></i></a>\n" + //
-                                        "                       <a href=\"\"><i class=\"bi bi-trash\"></i></a>\n" + //
+                                        "                       <a href=\"delete?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-trash\"></i></a>\n" + //
                                         "                   </td>\n" + //
                                         "               </tr>\n");
                 isEmpty++;
