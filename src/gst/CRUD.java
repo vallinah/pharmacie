@@ -12,6 +12,7 @@ import java.util.Vector;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import base.connexe.Connexion;
+import fn.Compteur;
 import fn.Function;
 
 public class CRUD {
@@ -108,56 +109,58 @@ public class CRUD {
         }
     }
 
-    public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Integer cpt)  throws Exception{
+    public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Compteur cpt)  throws Exception{
+        int compteur = cpt.getCpt() + 1;
+        cpt.setCpt(compteur + 1);
         if (fld.getType().equals(String.class)) {
-                prp.setString(++cpt, value);
+                prp.setString(compteur, value);
             }
         else if (fld.getClass().equals(Date.class)
                 || fld.getClass().equals(java.sql.Date.class)
                 || fld.getClass().equals(LocalDate.class)) {
-            prp.setDate(++cpt, Function.dateByString(value));
+            prp.setDate(compteur, Function.dateByString(value));
         } else if (fld.getClass().equals(Integer.class)) {
-                prp.setInt(++cpt, Integer.parseInt(value));
+                prp.setInt(compteur, Integer.parseInt(value));
         } else if (fld.getClass().equals(Double.class)) {
-                prp.setDouble(++cpt, Double.parseDouble(value));
+                prp.setDouble(compteur, Double.parseDouble(value));
         } else if (fld.getClass().equals(Float.class)) {
-                prp.setFloat(++cpt, Float.parseFloat(value));
+                prp.setFloat(compteur, Float.parseFloat(value));
         }
     }
 
-    public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum, Integer cpt) throws Exception {
+    public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum, Compteur cpt) throws Exception {
         if (fld.getType().equals(String.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 prp.setString(indexNum, connexion.incrementSequence(sequenceName) + "");
             } else {
                 prp.setString(indexNum, value);
-                cpt++;
+                cpt.setCpt(cpt.getCpt() + 1);
             }
         } else if (fld.getClass().equals(Date.class)
                 || fld.getClass().equals(java.sql.Date.class)
                 || fld.getClass().equals(LocalDate.class)) {
             prp.setDate(indexNum, Function.dateByString(value));
-            cpt++;
+            cpt.setCpt(cpt.getCpt() + 1);
         } else if (fld.getClass().equals(Integer.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 prp.setInt(indexNum, connexion.incrementSequence(sequenceName));
             } else {
                 prp.setInt(indexNum, Integer.parseInt(value));
-                cpt++;
+                cpt.setCpt(cpt.getCpt() + 1);
             }
         } else if (fld.getClass().equals(Double.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 prp.setDouble(indexNum, connexion.incrementSequence(sequenceName));
             } else {
                 prp.setDouble(indexNum, Double.parseDouble(value));
-                cpt++;
+                cpt.setCpt(cpt.getCpt() + 1);
             }
         } else if (fld.getClass().equals(Float.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 prp.setFloat(indexNum, connexion.incrementSequence(sequenceName));
             } else {
                 prp.setFloat(indexNum, Float.parseFloat(value));
-                cpt++;
+                cpt.setCpt(cpt.getCpt() + 1);
             }
         }
     }
@@ -212,11 +215,11 @@ public void update(Vector<String> updt, String id) throws Exception {
         connection.setAutoCommit(false);
 
         prp = connection.prepareStatement(req);
-        Integer cpt = 0;
+        Compteur cpt = new Compteur(0);
 
         for (int a = 0; a < listFields.size(); a++) {
             if (!listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                preparedUpdate(prp, connexion, listFields.get(a), updt.get(cpt), cpt);
+                preparedUpdate(prp, connexion, listFields.get(a), updt.get(cpt.getCpt()), cpt);
             }
         }
         prp.setString(updt.size() + 1, id);
@@ -302,10 +305,10 @@ public void update(Vector<String> updt, String id) throws Exception {
             connection.setAutoCommit(false);
 
             prp = connection.prepareStatement(req);
-            Integer cpt = 0;
+            Compteur cpt = new Compteur(0);
 
             for (int a = 0; a < listFields.size(); a++) {
-                prepared(prp, connexion, listFields.get(a), insertion.get(cpt), a + 1, cpt);
+                prepared(prp, connexion, listFields.get(a), insertion.get(cpt.getCpt()), a + 1, cpt);
             }
             prp.executeUpdate();
             connection.commit();
@@ -328,8 +331,7 @@ public void update(Vector<String> updt, String id) throws Exception {
         StringBuilder bld = new StringBuilder();
         bld.append("    <section class=\"gnr\">\n" + //
                         "        <h1>Insertion " + nameInBase + "</h1>\n" + //
-                        "        <form action=\"./insert\" method=\"post\">\n" +
-                        "            <input type=\"hidden\" name=\"cls\" value=\"" + cls.getName() + "\">\n");
+                        "        <form action=\"./insert?cls=" + cls.getName() + "\" method=\"post\">\n");
         
         for (Field fld : listFields) {
             AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
