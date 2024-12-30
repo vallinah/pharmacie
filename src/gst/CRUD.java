@@ -21,6 +21,7 @@ public class CRUD {
     private String nameInBase;
     private String sequenceName;
     private Vector<Field> listFields;
+    private String idName;
 
     public CRUD(Class<?> cls) throws Exception {
         if (!cls.isAnnotationPresent(AnnotationClass.class))
@@ -29,6 +30,12 @@ public class CRUD {
         nameInBase = cls.getAnnotation(AnnotationClass.class).nameInBase();
         sequenceName = cls.getAnnotation(AnnotationClass.class).sequence();
         listFields = fieldMapped();
+        for (Field fld : listFields) {
+            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
+                idName = fld.getName();
+                break;
+            }
+        }
     }
 
     public String inputType(Field fld) {
@@ -78,7 +85,7 @@ public class CRUD {
                     body.append("                    <td>" + set.getString(a) + "</td>\n");
                 }
                 body.append("                    <td>\n" + //
-                                        "                       <a href=\"\"><i class=\"bi bi-pencil\"></i></a>\n" + //
+                                        "                       <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-pencil\"></i></a>\n" + //
                                         "                       <a href=\"\"><i class=\"bi bi-trash\"></i></a>\n" + //
                                         "                   </td>\n" + //
                                         "               </tr>\n");
@@ -111,21 +118,20 @@ public class CRUD {
 
     public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Compteur cpt)  throws Exception{
         int compteur = cpt.getCpt() + 1;
-        cpt.setCpt(compteur + 1);
         if (fld.getType().equals(String.class)) {
                 prp.setString(compteur, value);
-            }
-        else if (fld.getClass().equals(Date.class)
+        } else if (fld.getClass().equals(Date.class)
                 || fld.getClass().equals(java.sql.Date.class)
                 || fld.getClass().equals(LocalDate.class)) {
             prp.setDate(compteur, Function.dateByString(value));
         } else if (fld.getClass().equals(Integer.class)) {
-                prp.setInt(compteur, Integer.parseInt(value));
+            prp.setInt(compteur, Integer.parseInt(value));
         } else if (fld.getClass().equals(Double.class)) {
-                prp.setDouble(compteur, Double.parseDouble(value));
+            prp.setDouble(compteur, Double.parseDouble(value));
         } else if (fld.getClass().equals(Float.class)) {
-                prp.setFloat(compteur, Float.parseFloat(value));
+            prp.setFloat(compteur, Float.parseFloat(value));
         }
+        cpt.setCpt(compteur);
     }
 
     public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum, Compteur cpt) throws Exception {
@@ -228,7 +234,8 @@ public void update(Vector<String> updt, String id) throws Exception {
         System.out.println("update reussi : " + req);
     } catch (Exception e) {
         connection.rollback();
-        throw e;
+        e.printStackTrace();
+        // throw e;
     } finally {
         if (prp != null) prp.close();
         if (connection != null) {
