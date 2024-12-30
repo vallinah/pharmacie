@@ -12,12 +12,12 @@ public class App {
     public static void main(String[] args) {
         try {
             CRUD crd = new CRUD(Produit.class);
+            // System.out.println(crd.html_update("21"));
             Vector<String> vect = new Vector<>();
-            vect.add("test");
-            vect.add("aa");
+            vect.add("dd");
+            vect.add("rr");
             vect.add("1");
-            crd.insert(vect);
-            // System.out.println(crd.html_liste());
+            crd.update(vect, "1");
         } catch (Exception e) {
             // e.printStackTrace();
             System.out.println("Erreur : " + e.getMessage());

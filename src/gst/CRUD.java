@@ -245,6 +245,52 @@ public void update(Vector<String> updt, String id) throws Exception {
     }
 }
 
+public String html_update(String id) throws Exception{
+    String req = "select * from " + nameInBase + " where " + idName + " = ?";
+    PreparedStatement prp = null;
+    ResultSet set = null;
+    Connexion connexion = Function.dbConnect();
+
+    try {
+        prp = connexion.getConnexe().prepareStatement(req);
+        prp.setString(1, id);
+        set = prp.executeQuery();
+
+        if (!set.next()) throw new Exception("Aucun donnees de cette id");
+
+        StringBuilder bld = new StringBuilder();
+        bld.append("    <section class=\"gnr\">\n" + //
+                        "        <h1>Update " + nameInBase + "</h1>\n" + //
+                        "        <form action=\"./update?cls=" + cls.getName() + "&id=" + id +"\" method=\"post\">\n");
+
+        for (Field fld : listFields) {
+            AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
+            if (annotation.insert() && !annotation.inc()) {
+                String nameInBaseFld = fld.getAnnotation(AnnotationAttr.class).nameInBase();
+                String name = fld.getName();
+                bld.append("            <div class=\"prt\">\n");
+                if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
+                    bld.append("                <textarea name=\"" + name + "\">" + set.getString(nameInBaseFld) + "</textarea>\n");
+                } else {
+                    bld.append("                <input type=\"" + inputType(fld) + "\" value=\"" + set.getString(nameInBaseFld) + "\" name=\"" + name + "\">\n");
+                }
+                bld.append("                <span>" + name + "</span>\n" + //
+                            "            </div>\n");
+            }
+        }
+        bld.append("            <button type=\"submit\">Valider</button>\n" + //
+                        "        </form>\n" + //
+                        "    </section>");
+        return bld.toString();
+    } catch (Exception e) {
+        throw e;
+    } finally {
+        if (prp != null) prp.close();
+        if (set != null) set.close();
+        connexion.finaleClose();
+    }
+}
+
     public void delete(String id) throws Exception {
         String id_in_base = null;
         for (Field fld : listFields) {
