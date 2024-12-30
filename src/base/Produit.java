@@ -12,7 +12,7 @@ public class Produit {
     private String id_produit;
     @AnnotationAttr(nameInBase = "nom_produit")
     private String nom_produit;
-    @AnnotationAttr(nameInBase = "description")
+    @AnnotationAttr(nameInBase = "description", textarea = true)
     private String description;
     @AnnotationAttr(nameInBase = "id_type")
     private String id_type;
