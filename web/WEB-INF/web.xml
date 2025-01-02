@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <servlet>
+        <servlet-name>java</servlet-name>
+        <servlet-class>CrudServlet.java</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CrudServlet</servlet-name>
+        <servlet-class>servlet.CrudServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CategorieServlet</servlet-name>
+        <servlet-class>servlet.CategorieServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>java</servlet-name>
+        <url-pattern>/java</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CrudServlet</servlet-name>
+        <url-pattern>/CrudServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CategorieServlet</servlet-name>
+        <url-pattern>/CategorieServlet</url-pattern>
+    </servlet-mapping>
+</web-app>
