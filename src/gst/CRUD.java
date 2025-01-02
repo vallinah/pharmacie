@@ -1,5 +1,10 @@
 package gst;
 
+import annotation.AnnotationAttr;
+import annotation.AnnotationClass;
+import base.connexe.Connexion;
+import fn.Compteur;
+import fn.Function;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,12 +13,6 @@ import java.sql.ResultSetMetaData;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.Vector;
-
-import annotation.AnnotationAttr;
-import annotation.AnnotationClass;
-import base.connexe.Connexion;
-import fn.Compteur;
-import fn.Function;
 
 public class CRUD {
 
@@ -24,8 +23,9 @@ public class CRUD {
     private String idName;
 
     public CRUD(Class<?> cls) throws Exception {
-        if (!cls.isAnnotationPresent(AnnotationClass.class))
+        if (!cls.isAnnotationPresent(AnnotationClass.class)) {
             throw new Exception("Cette classe n'a aucun reference dans votre base de donnée");
+        }
         this.cls = cls;
         nameInBase = cls.getAnnotation(AnnotationClass.class).nameInBase();
         sequenceName = cls.getAnnotation(AnnotationClass.class).sequence();
@@ -48,15 +48,17 @@ public class CRUD {
         return type;
     }
 
-    public String html_liste() throws Exception{
+    public String html_liste() throws Exception {
         StringBuilder bld = new StringBuilder();
         StringBuilder body = new StringBuilder();
         String ttr = "";
-        bld.append("    <section class=\"list\">\n" + //
-                        "       <div class='ttr'>\n" +
-                        "           <h1>Listes " + nameInBase + "</h1>\n" + //
-                        "        </div>\n" +
-                        "        <div class=\"bd\">\n");
+        bld.append("    <section class=\"list\">\n"
+                + //
+                "       <div class='ttr'>\n"
+                + "           <h1>Listes " + nameInBase + "</h1>\n"
+                + //
+                "        </div>\n"
+                + "        <div class=\"bd\">\n");
         String idName = null;
 
         for (Field fld : listFields) {
@@ -76,28 +78,35 @@ public class CRUD {
             int columnCpt = metaData.getColumnCount();
 
             for (int a = 1; a <= columnCpt; a++) {
-               ttr += "                    <th>" + metaData.getColumnName(a) +  "</th>\n";
+                ttr += "                    <th>" + metaData.getColumnName(a) + "</th>\n";
             }
-            ttr += "                    <th>Action</th>\n" + //
-                                "               </tr>\n" + //
-                                "               <tr>\n";
+            ttr += "                    <th>Action</th>\n"
+                    + //
+                    "               </tr>\n"
+                    + //
+                    "               <tr>\n";
             int isEmpty = 0;
             while (set.next()) {
                 for (int a = 1; a <= columnCpt; a++) {
                     body.append("                    <td>" + set.getString(a) + "</td>\n");
                 }
-                body.append("                    <td>\n" + //
-                                        "                       <div class='action'>\n" +
-                                        "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-pencil\"></i></a>\n" + //
-                                        "                           <a href=\"delete?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-trash\"></i></a>\n" + //
-                                        "                       </div>\n" +
-                                        "                   </td>\n" + //
-                                        "               </tr>\n");
+                body.append("                    <td>\n"
+                        + //
+                        "                       <div class='action'>\n"
+                        + "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-pencil\"></i></a>\n"
+                        + //
+                        "                           <a href=\"crud?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-trash\"></i></a>\n"
+                        + //
+                        "                       </div>\n"
+                        + "                   </td>\n"
+                        + //
+                        "               </tr>\n");
                 isEmpty++;
             }
 
             if (isEmpty != 0) {
-                bld.append("            <table border=\"1\">\n" + //
+                bld.append("            <table border=\"1\">\n"
+                        + //
                         "               <tr>\n");
                 bld.append(ttr);
             } else {
@@ -109,21 +118,26 @@ public class CRUD {
             if (isEmpty != 0) {
                 bld.append("            </table>\n");
             }
-        bld.append("        </div>\n" + //
-                        "    </section>");
+            bld.append("        </div>\n"
+                    + //
+                    "    </section>");
             return bld.toString();
         } catch (Exception e) {
             throw e;
         } finally {
-            if (set != null) set.close();
-            connexion.finaleClose();
+            if (set != null) {
+                set.close();
+            }
+            if(connexion != null){
+                connexion.finaleClose();
+            }
         }
     }
 
-    public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Compteur cpt)  throws Exception{
+    public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Compteur cpt) throws Exception {
         int compteur = cpt.getCpt() + 1;
         if (fld.getType().equals(String.class)) {
-                prp.setString(compteur, value);
+            prp.setString(compteur, value);
         } else if (fld.getClass().equals(Date.class)
                 || fld.getClass().equals(java.sql.Date.class)
                 || fld.getClass().equals(LocalDate.class)) {
@@ -179,8 +193,9 @@ public class CRUD {
         Vector<Field> listFields = new Vector<>();
         Class<?> kilasy = cls;
         while (true) {
-            if (kilasy.equals(Object.class))
+            if (kilasy.equals(Object.class)) {
                 break;
+            }
             if (kilasy != null) {
                 for (Field fld : kilasy.getDeclaredFields()) {
                     if (fld.isAnnotationPresent(AnnotationAttr.class)) {
@@ -215,85 +230,97 @@ public class CRUD {
         return req.toString();
     }
 
-public void update(Vector<String> updt, String id) throws Exception {
-    String req = scriptUpdate(updt, id);
-    PreparedStatement prp = null;
-    Connection connection = null;
-    try {
-        Connexion connexion = Function.dbConnect();
-        connection = connexion.getConnexe();
-        connection.setAutoCommit(false);
+    public void update(Vector<String> updt, String id) throws Exception {
+        String req = scriptUpdate(updt, id);
+        PreparedStatement prp = null;
+        Connection connection = null;
+        try {
+            Connexion connexion = Function.dbConnect();
+            connection = connexion.getConnexe();
+            connection.setAutoCommit(false);
 
-        prp = connection.prepareStatement(req);
-        Compteur cpt = new Compteur(0);
+            prp = connection.prepareStatement(req);
+            Compteur cpt = new Compteur(0);
 
-        for (int a = 0; a < listFields.size(); a++) {
-            if (!listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                preparedUpdate(prp, connexion, listFields.get(a), updt.get(cpt.getCpt()), cpt);
-            }
-        }
-        prp.setString(updt.size() + 1, id);
-        prp.executeUpdate();
-        connection.commit();
-        System.out.println("update reussi : " + req);
-    } catch (Exception e) {
-        connection.rollback();
-        e.printStackTrace();
-        // throw e;
-    } finally {
-        if (prp != null) prp.close();
-        if (connection != null) {
-            connection.setAutoCommit(true);
-            connection.close();
-        }
-    }
-}
-
-public String html_update(String id) throws Exception{
-    String req = "select * from " + nameInBase + " where " + idName + " = ?";
-    PreparedStatement prp = null;
-    ResultSet set = null;
-    Connexion connexion = Function.dbConnect();
-
-    try {
-        prp = connexion.getConnexe().prepareStatement(req);
-        prp.setString(1, id);
-        set = prp.executeQuery();
-
-        if (!set.next()) throw new Exception("Aucun donnees de cette id");
-
-        StringBuilder bld = new StringBuilder();
-        bld.append("    <section class=\"gnr\">\n" + //
-                        "        <h1>Update " + nameInBase + "</h1>\n" + //
-                        "        <form action=\"./update?cls=" + cls.getName() + "&id=" + id +"\" method=\"post\">\n");
-
-        for (Field fld : listFields) {
-            AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
-            if (annotation.insert() && !annotation.inc()) {
-                String nameInBaseFld = fld.getAnnotation(AnnotationAttr.class).nameInBase();
-                String name = fld.getName();
-                bld.append("            <div class=\"prt\">\n");
-                if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
-                    bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + ">" + set.getString(nameInBaseFld) + "</textarea>\n");
-                } else {
-                    bld.append("                <input type=\"" + inputType(fld) + "\" value=\"" + set.getString(nameInBaseFld) + "\" name=\"" + name + "\" required>\n" +
-                            "                <span>" + name + "</span>\n");
+            for (int a = 0; a < listFields.size(); a++) {
+                if (!listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
+                    preparedUpdate(prp, connexion, listFields.get(a), updt.get(cpt.getCpt()), cpt);
                 }
-                bld.append("            </div>\n");
+            }
+            prp.setString(updt.size() + 1, id);
+            prp.executeUpdate();
+            connection.commit();
+            System.out.println("update reussi : " + req);
+        } catch (Exception e) {
+            connection.rollback();
+            e.printStackTrace();
+            // throw e;
+        } finally {
+            if (prp != null) {
+                prp.close();
+            }
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
             }
         }
-        bld.append("            <button type=\"submit\">Valider</button>\n" + //
-                        "        </form>\n" + //
-                        "    </section>");
-        return bld.toString();
-    } catch (Exception e) {
-        throw e;
-    } finally {
-        if (prp != null) prp.close();
-        if (set != null) set.close();
-        connexion.finaleClose();
     }
-}
+
+    public String html_update(String id) throws Exception {
+        String req = "select * from " + nameInBase + " where " + idName + " = ?";
+        PreparedStatement prp = null;
+        ResultSet set = null;
+        Connexion connexion = Function.dbConnect();
+
+        try {
+            prp = connexion.getConnexe().prepareStatement(req);
+            prp.setString(1, id);
+            set = prp.executeQuery();
+
+            if (!set.next()) {
+                throw new Exception("Aucun donnees de cette id");
+            }
+
+            StringBuilder bld = new StringBuilder();
+            bld.append("    <section class=\"gnr\">\n"
+                    + //
+                    "        <h1>Update " + nameInBase + "</h1>\n"
+                    + //
+                    "        <form action=\"./crud?cls=" + cls.getName() + "&id=" + id + "\" method=\"post\">\n");
+
+            for (Field fld : listFields) {
+                AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
+                if (annotation.insert() && !annotation.inc()) {
+                    String nameInBaseFld = fld.getAnnotation(AnnotationAttr.class).nameInBase();
+                    String name = fld.getName();
+                    bld.append("            <div class=\"prt\">\n");
+                    if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
+                        bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + ">" + set.getString(nameInBaseFld) + "</textarea>\n");
+                    } else {
+                        bld.append("                <input type=\"" + inputType(fld) + "\" value=\"" + set.getString(nameInBaseFld) + "\" name=\"" + name + "\" required>\n"
+                                + "                <span>" + name + "</span>\n");
+                    }
+                    bld.append("            </div>\n");
+                }
+            }
+            bld.append("            <button type=\"submit\">Valider</button>\n"
+                    + //
+                    "        </form>\n"
+                    + //
+                    "    </section>");
+            return bld.toString();
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (prp != null) {
+                prp.close();
+            }
+            if (set != null) {
+                set.close();
+            }
+            connexion.finaleClose();
+        }
+    }
 
     public void delete(String id) throws Exception {
         String id_in_base = null;
@@ -322,8 +349,9 @@ public String html_update(String id) throws Exception{
             connection.rollback();
             throw e;
         } finally {
-            if (prp != null)
+            if (prp != null) {
                 prp.close();
+            }
             if (connection != null) {
                 connection.setAutoCommit(true);
                 connection.close();
@@ -331,26 +359,26 @@ public String html_update(String id) throws Exception{
         }
     }
 
-        public String scriptInsert() throws Exception {
-            Vector<String> a_inserer = new Vector<>();
-            for (Field f : listFields) {
-                a_inserer.add(f.getName());
-            }
-
-            StringBuilder bld = new StringBuilder();
-            bld.append("insert into " + nameInBase + "(");
-            String values = "(";
-            for (String nomColonne : a_inserer) {
-                bld.append(nomColonne);
-                values += "?";
-                if (nomColonne != a_inserer.lastElement()) {
-                    bld.append(",");
-                    values += ",";
-                }
-            }
-            bld.append(") values " + values + ")");
-            return bld.toString();
+    public String scriptInsert() throws Exception {
+        Vector<String> a_inserer = new Vector<>();
+        for (Field f : listFields) {
+            a_inserer.add(f.getName());
         }
+
+        StringBuilder bld = new StringBuilder();
+        bld.append("insert into " + nameInBase + "(");
+        String values = "(";
+        for (String nomColonne : a_inserer) {
+            bld.append(nomColonne);
+            values += "?";
+            if (nomColonne != a_inserer.lastElement()) {
+                bld.append(",");
+                values += ",";
+            }
+        }
+        bld.append(") values " + values + ")");
+        return bld.toString();
+    }
 
     public void insert(Vector<String> insertion) throws Exception {
         String req = scriptInsert();
@@ -370,13 +398,15 @@ public String html_update(String id) throws Exception{
             prp.executeUpdate();
             connection.commit();
         } catch (Exception e) {
-            if (connection != null)
+            if (connection != null) {
                 connection.rollback();
+            }
             e.printStackTrace();
             throw e;
         } finally {
-            if (prp != null)
+            if (prp != null) {
                 prp.close();
+            }
             if (connection != null) {
                 connection.setAutoCommit(true);
                 connection.close();
@@ -386,10 +416,12 @@ public String html_update(String id) throws Exception{
 
     public String html_insert() throws Exception {
         StringBuilder bld = new StringBuilder();
-        bld.append("    <section class=\"gnr\">\n" + //
-                        "        <h1>Insertion " + nameInBase + "</h1>\n" + //
-                        "        <form action=\"./insert?cls=" + cls.getName() + "\" method=\"post\">\n");
-        
+        bld.append("    <section class=\"gnr\">\n"
+                + //
+                "        <h1>Insertion " + nameInBase + "</h1>\n"
+                + //
+                "        <form action=\"./crud?cls=" + cls.getName() + "\" method=\"post\">\n");
+
         for (Field fld : listFields) {
             AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
             if (annotation.insert() && !annotation.inc()) {
@@ -399,15 +431,17 @@ public String html_update(String id) throws Exception{
                 if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
                     bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + "></textarea>\n");
                 } else {
-                    bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name + "\" required>\n" +
-                            "                <span>" + name + "</span>\n");
+                    bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name + "\" required>\n"
+                            + "                <span>" + name + "</span>\n");
                 }
                 bld.append("            </div>\n");
             }
         }
-        bld.append("            <button type=\"submit\">Valider</button>\n" + //
-                        "        </form>\n" + //
-                        "    </section>");
+        bld.append("            <button type=\"submit\">Valider</button>\n"
+                + //
+                "        </form>\n"
+                + //
+                "    </section>");
         return bld.toString();
     }
 }

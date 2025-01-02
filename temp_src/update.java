@@ -12,29 +12,30 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/pages/insert")
-public class Insertion extends HttpServlet {
+@WebServlet("/pages/update")
+public class update extends HttpServlet {
+    
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         Enumeration<String> enumeration = req.getParameterNames();
         Vector<String> values = new Vector<>();
         String clsName = null;
-
-        out.println(req.getParameter("nom_produit"));
-
+        String id = null;
         while (enumeration.hasMoreElements()) {
             String val = enumeration.nextElement();
             if (val.equals("cls")) {
                 clsName = req.getParameter(val);
+            } else if (val.equals("id")) {
+                id = req.getParameter(val);
             } else {
                 values.add(req.getParameter(val));
             }
         }
         try {
             CRUD crd = new CRUD(Class.forName(clsName));
-            crd.insert(values);
-            // resp.sendRedirect("crud.jsp?cls=" + clsName);
+            crd.update(values, id);
+            resp.sendRedirect("crud.jsp?cls=" + clsName);
         } catch (Exception e) {
             e.printStackTrace(out);
         }
