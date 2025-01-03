@@ -8,6 +8,7 @@
     <title>update</title>
     <link rel="stylesheet" href="../assets/styles/css/crud.css">
     <script src="../assets/styles/js/crud.js" defer></script>
+    <script src="../assets/styles/js/update.js" defer type="module"></script>
 </head>
 <body>
     <%@include file="../inc/header.jsp" %>

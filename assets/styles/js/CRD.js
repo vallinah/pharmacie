@@ -11,34 +11,37 @@ export default class Crud {
         return formulaire.getAttribute("action");
     }
 
-    #sendAjax(url, formulaire, methode = "GET") {
+    #sendAjax(url, formulaire, methode = "POST") {
         let xhr = new XMLHttpRequest();
         xhr.open(methode, url);
+        xhr.responseType = "text";
         xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4) {
+                console.log(this.#toFormdata(formulaire));
                 switch (xhr.status) {
                     case 500:
-                        console.log("misy erreur");
+                        // DANGER : ampina erreur
                         break;
                     default:
-                        console.log("vita");
-                        break;
+                        let res = xhr.responseText;
+                        window.location.assign("./crud.jsp?cls=" + res);
+                        return ;
                 }
             }
         }
         xhr.send(this.#toFormdata(formulaire));
     }
 
-    doGet(formulaire) {
-        this.#sendAjax(this.#getAction(formulaire), formulaire);
+    doPost(formulaire) {
+       return this.#sendAjax(this.#getAction(formulaire), formulaire)
     }
 
-    doPost(formulaire) {
-       this.#sendAjax(this.#getAction(formulaire), formulaire, "POST")
+    doPut(formulaire) {
+        return this.#sendAjax(this.#getAction(formulaire), formulaire, "PUT");
     }
-    
-    doDelete(lien) {
+
+    doDelete(lien, cb) {
         let xhr = new XMLHttpRequest();
         xhr.open("DELETE", lien.href);
         xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
@@ -46,10 +49,9 @@ export default class Crud {
             if (xhr.readyState == 4) {
                 switch (xhr.status == 200) {
                     case 500:
-                        console.log("misy olana");
                         break;
                     default:
-                        console.log("voafafa");
+                        cb();
                         break;
                 }
             }

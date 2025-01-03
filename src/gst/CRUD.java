@@ -253,8 +253,7 @@ public class CRUD {
             System.out.println("update reussi : " + req);
         } catch (Exception e) {
             connection.rollback();
-            e.printStackTrace();
-            // throw e;
+            throw e;
         } finally {
             if (prp != null) {
                 prp.close();

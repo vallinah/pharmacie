@@ -1,5 +1,4 @@
 <%@page import="gst.CRUD" %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
