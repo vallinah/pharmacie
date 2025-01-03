@@ -30,5 +30,5 @@ echo "Répertoire temporaire pour les .class"
 find "src" -name "*.java" -exec cp {} "$TEMP_SRC" \;
 
 # Compilation des fichiers Java du répertoire source vers classes
-javac -cp "lib\*" -d "$MY_CLASSES" "$TEMP_SRC/*.java"
+javac -cp "WEB-INF/lib/*" -d "$MY_CLASSES" "$TEMP_SRC/*.java"
 echo "Fichiers Java compilés dans le répertoire classes"
