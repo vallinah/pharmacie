@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
+import annotation.ForeingKey;
 
 @AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq")
 public class Produit {
@@ -15,6 +16,7 @@ public class Produit {
     @AnnotationAttr(nameInBase = "description", textarea = true)
     private String description;
     @AnnotationAttr(nameInBase = "id_type")
+    @ForeingKey(col = "type", cls = "type")
     private String id_type;
 
     public Produit(String id_produit, String nom_produit, String description) {

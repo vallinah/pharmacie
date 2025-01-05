@@ -61,7 +61,7 @@
     width: 0;
 }
 
-.gnr form .prt input, .gnr form .prt textarea {
+.gnr form .prt input, .gnr form .prt textarea, .gnr form .prt select {
     width: 90%;
     height: 50px;
     border-radius: 5px;
