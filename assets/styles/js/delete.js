@@ -2,6 +2,9 @@ import Crud from "./CRD.js";
 
 let crd = new Crud();
 
+let bd = document.querySelector(".bd");
+let table = bd.querySelector("table");
+
 document.querySelectorAll(".action a:nth-child(2)")
 .forEach(el => {
     el.addEventListener('click', e => {
@@ -12,6 +15,9 @@ document.querySelectorAll(".action a:nth-child(2)")
                 prt = prt.parentElement;
             }
             prt.remove()
+            if (table.children.length <= 1) {
+                bd.innerHTML = "<h2>Aucun(s) element(s)</h2>"
+            }
         });
     })
 })
