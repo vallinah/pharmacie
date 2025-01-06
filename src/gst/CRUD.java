@@ -4,6 +4,7 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 import base.connexe.Connexion;
+import fn.All;
 import fn.Compteur;
 import fn.Function;
 
@@ -11,7 +12,6 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
@@ -127,7 +127,6 @@ public class CRUD {
                 + //
                 "        </div>\n"
                 + "        <div class=\"bd\">\n");
-        String idName = null;
 
         for (Field fld : listFields) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
@@ -136,17 +135,13 @@ public class CRUD {
             }
         }
 
-        String req = "select * from " + nameInBase + " order by " + idName;
-        ResultSet set = null;
-        Connexion connexion = Function.dbConnect();
+        All all = new All(cls);
+        Vector<Vector<String>> rehetra = all.getAll();
+        Vector<String> titre = all.getAllTitre();
 
-        try {
-            set = connexion.getStmt().executeQuery(req);
-            ResultSetMetaData metaData = set.getMetaData();
-            int columnCpt = metaData.getColumnCount();
 
-            for (int a = 1; a <= columnCpt; a++) {
-                ttr += "                    <th>" + metaData.getColumnName(a) + "</th>\n";
+            for (int a = 0; a < titre.size(); a++) {
+                ttr += "                    <th>" + titre.get(a) + "</th>\n";
             }
             ttr += "                    <th>Action</th>\n"
                     + //
@@ -154,16 +149,16 @@ public class CRUD {
                     + //
                     "               <tr>\n";
             int isEmpty = 0;
-            while (set.next()) {
-                for (int a = 1; a <= columnCpt; a++) {
-                    body.append("                    <td>" + set.getString(a) + "</td>\n");
+            for(Vector<String> ligne : rehetra) {
+                for (String value : ligne) {
+                    body.append("                    <td>" + value + "</td>\n");
                 }
                 body.append("                    <td>\n"
                         + //
                         "                       <div class='action'>\n"
-                        + "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-pencil\"></i></a>\n"
+                        + "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + ligne.firstElement() + "\"><i class=\"bi bi-pencil\"></i></a>\n"
                         + //
-                        "                           <a href=\"crud?cls=" + cls.getName() + "&id=" + set.getString(1) + "\"><i class=\"bi bi-trash\"></i></a>\n"
+                        "                           <a href=\"crud?cls=" + cls.getName() + "&id=" + ligne.firstElement() + "\"><i class=\"bi bi-trash\"></i></a>\n"
                         + //
                         "                       </div>\n"
                         + "                   </td>\n"
@@ -171,7 +166,7 @@ public class CRUD {
                         "               </tr>\n");
                 isEmpty++;
             }
-
+        
             if (isEmpty != 0) {
                 bld.append("            <table border=\"1\">\n"
                         + //
@@ -190,16 +185,6 @@ public class CRUD {
                     + //
                     "    </section>");
             return bld.toString();
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            if (set != null) {
-                set.close();
-            }
-            if(connexion != null){
-                connexion.finaleClose();
-            }
-        }
     }
 
     public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Compteur cpt) throws Exception {
