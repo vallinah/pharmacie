@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-@AnnotationClass(nameInBase = "type", sequence = "type_id_seq")
+@AnnotationClass(nameInBase = "type", sequence = "type_id_seq", prefix = "TYP")
 public class Type {
 
     @AnnotationAttr(nameInBase = "id_type", inc = true)

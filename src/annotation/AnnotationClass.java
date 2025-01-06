@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface AnnotationClass {
     public abstract String nameInBase();
     public abstract String sequence() default "";
+    public abstract String prefix() default "";
 }

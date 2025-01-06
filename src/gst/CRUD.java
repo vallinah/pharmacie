@@ -208,7 +208,8 @@ public class CRUD {
     public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum, Compteur cpt) throws Exception {
         if (fld.getType().equals(String.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                prp.setString(indexNum, connexion.incrementSequence(sequenceName) + "");
+                String prefix = cls.getAnnotation(AnnotationClass.class).prefix();
+                prp.setString(indexNum, prefix + "" + connexion.incrementSequence(sequenceName));
             } else {
                 prp.setString(indexNum, value);
                 cpt.setCpt(cpt.getCpt() + 1);

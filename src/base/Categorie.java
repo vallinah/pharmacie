@@ -3,7 +3,7 @@ package base;
 import annotation.*;
 import java.sql.ResultSet;
 
-@AnnotationClass(nameInBase = "categorie", sequence = "categorie_id_seq")
+@AnnotationClass(nameInBase = "categorie", sequence = "categorie_id_seq", prefix = "CAT")
 public class Categorie {
 
     @AnnotationAttr(nameInBase = "id_categorie", inc = true)

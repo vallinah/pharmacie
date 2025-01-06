@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-@AnnotationClass(nameInBase = "sous_categorie", sequence = "sous_categorie_id_seq")
+@AnnotationClass(nameInBase = "sous_categorie", sequence = "sous_categorie_id_seq", prefix = "SCAT")
 public class SousCategorie {
 
     @AnnotationAttr(nameInBase = "id_sous_categorie", inc = true)

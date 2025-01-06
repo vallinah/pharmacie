@@ -8,8 +8,8 @@ import java.sql.Statement;
 public class Connexion {
     
     private Connection connexe = null;
-    private String userName = "postgres";
-    private String passwd = "vallinah";
+    private String userName = "mihary";
+    private String passwd = "mihary";
     private String url = "jdbc:postgresql://localhost:5432/";
     private Statement stmt;
 
