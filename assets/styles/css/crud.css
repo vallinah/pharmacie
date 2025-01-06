@@ -101,6 +101,13 @@
     cursor: pointer;
 }
 
+.gnr .err {
+    min-height: 20px;
+    color: red;
+    text-align: center;
+    font-weight: bolder;
+}
+
 table {
     border-collapse: collapse;
     text-align: center;

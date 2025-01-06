@@ -365,7 +365,10 @@ public class CRUD {
                     bld.append("            </div>\n");
                 }
             }
-            bld.append("            <button type=\"submit\">Valider</button>\n"
+            bld.append("            <button type=\"submit\">Valider</button>\n" + 
+                        "            <div class=\"err\">\n" + //
+                        "                <span></span>\n" + //
+                        "            </div>"
                     + //
                     "        </form>\n"
                     + //
@@ -516,6 +519,9 @@ public class CRUD {
             }
         }
         bld.append("            <button type=\"submit\">Valider</button>\n"
+                + "            <div class=\"err\">\n" + //
+                "                <span></span>\n" + //
+                "            </div>"
                 + //
                 "        </form>\n"
                 + //
