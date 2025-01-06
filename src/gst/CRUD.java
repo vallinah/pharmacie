@@ -213,33 +213,19 @@ public class CRUD {
                 prp.setString(indexNum, value);
                 cpt.setCpt(cpt.getCpt() + 1);
             }
+            return;
         } else if (fld.getClass().equals(Date.class)
                 || fld.getClass().equals(java.sql.Date.class)
                 || fld.getClass().equals(LocalDate.class)) {
             prp.setDate(indexNum, Function.dateByString(value));
-            cpt.setCpt(cpt.getCpt() + 1);
         } else if (fld.getClass().equals(Integer.class)) {
-            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                prp.setInt(indexNum, connexion.incrementSequence(sequenceName));
-            } else {
-                prp.setInt(indexNum, Integer.parseInt(value));
-                cpt.setCpt(cpt.getCpt() + 1);
-            }
+            prp.setInt(indexNum, Integer.parseInt(value));
         } else if (fld.getClass().equals(Double.class)) {
-            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                prp.setDouble(indexNum, connexion.incrementSequence(sequenceName));
-            } else {
-                prp.setDouble(indexNum, Double.parseDouble(value));
-                cpt.setCpt(cpt.getCpt() + 1);
-            }
+            prp.setDouble(indexNum, Double.parseDouble(value));
         } else if (fld.getClass().equals(Float.class)) {
-            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                prp.setFloat(indexNum, connexion.incrementSequence(sequenceName));
-            } else {
-                prp.setFloat(indexNum, Float.parseFloat(value));
-                cpt.setCpt(cpt.getCpt() + 1);
-            }
+            prp.setFloat(indexNum, Float.parseFloat(value));
         }
+        cpt.setCpt(cpt.getCpt() + 1);
     }
 
     public Vector<Field> fieldMapped() throws Exception {
