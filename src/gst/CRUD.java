@@ -35,7 +35,7 @@ public class CRUD {
         listFields = fieldMapped();
         for (Field fld : listFields) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                idName = fld.getName();
+                idName = fld.getAnnotation(AnnotationAttr.class).nameInBase();
                 break;
             }
         }
@@ -257,7 +257,7 @@ public class CRUD {
         int cpt = 0;
         for (int a = 0; a < listFields.size(); a++) {
             if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                idName = listFields.get(a).getName();
+                idName = listFields.get(a).getAnnotation(AnnotationAttr.class).nameInBase();
             } else {
                 req.append(listFields.get(a).getName() + " = ?");
                 if (cpt != updt.size() - 1) {
@@ -343,7 +343,7 @@ public class CRUD {
                             bld.append("                <select name=\"" + name + "\">\n" + //
                                         "                    <option value=\"\">Choise " + nomCol + "</option>\n");
                             Vector<String> list = getData(nomCol, foreingKey.cls(),null);
-                            Vector<String> listId = getData(fld.getName(), foreingKey.cls(),null);
+                            Vector<String> listId = getData(fld.getAnnotation(AnnotationAttr.class).nameInBase(), foreingKey.cls(),null);
 
                             String idInBase = set.getString(nameInBaseFld);
 
@@ -427,7 +427,7 @@ public class CRUD {
     public String scriptInsert() throws Exception {
         Vector<String> a_inserer = new Vector<>();
         for (Field f : listFields) {
-            a_inserer.add(f.getName());
+            a_inserer.add(f.getAnnotation(AnnotationAttr.class).nameInBase());
         }
 
         StringBuilder bld = new StringBuilder();
@@ -502,7 +502,7 @@ public class CRUD {
                         bld.append("                <select name=\"" + name + "\">\n" + //
                                     "                    <option value=\"\">Choise " + nomCol + "</option>\n");
                         Vector<String> list = getData(nomCol, foreingKey.cls(),null);
-                        Vector<String> listId = getData(fld.getName(), foreingKey.cls(),null);
+                        Vector<String> listId = getData(fld.getAnnotation(AnnotationAttr.class).nameInBase(), foreingKey.cls(),null);
 
                         for (int a = 0; a < list.size(); a++) {
                             bld.append("                    <option value=\"" + listId.get(a) + "\">" + list.get(a) + "</option>\n");
