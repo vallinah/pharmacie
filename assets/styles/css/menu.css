@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    height: 80px;
+    background-color: white;
+    box-shadow:  2px 0 10px rgba(0, 0, 0, 0.339);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+menu  {
+    padding-top: 80px;
+    position: fixed;
+    width: 350px;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: tomato;
+}
+
+.menu_ttr {
+    height: 15%;
+    min-height: 15%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu_bd {
+    height: 75%;
+    min-height: 75%;
+}
