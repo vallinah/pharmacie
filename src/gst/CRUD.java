@@ -266,7 +266,7 @@ public class CRUD {
             if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
                 idName = listFields.get(a).getAnnotation(AnnotationAttr.class).nameInBase();
             } else {
-                req.append(listFields.get(a).getName() + " = ?");
+                req.append(listFields.get(a).getAnnotation(AnnotationAttr.class).nameInBase() + " = ?");
                 if (cpt != updt.size() - 1) {
                     req.append(",");
                 }
@@ -337,14 +337,12 @@ public class CRUD {
             for (Field fld : listFields) {
                 AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
                 if (annotation.insert() && !annotation.inc()) {
-                    String nameInBaseFld = fld.getAnnotation(AnnotationAttr.class).nameInBase();
-                    String name = fld.getName();
+                    String name = fld.getAnnotation(AnnotationAttr.class).nameInBase();
                     bld.append("            <div class=\"prt\">\n");
                     if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
                         bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + ">"
-                                + set.getString(nameInBaseFld) + "</textarea>\n");
+                                + set.getString(name) + "</textarea>\n");
                     } else {
-
                         if (fld.isAnnotationPresent(ForeingKey.class)) {
                             ForeingKey foreingKey = fld.getAnnotation(ForeingKey.class);
                             String nomCol = foreingKey.col();
@@ -353,7 +351,7 @@ public class CRUD {
                             Vector<String> list = getData(nomCol, foreingKey.cls(),null);
                             Vector<String> listId = getData(fld.getAnnotation(AnnotationAttr.class).nameInBase(), foreingKey.cls(),null);
 
-                            String idInBase = set.getString(nameInBaseFld);
+                            String idInBase = set.getString(name);
 
                             for (int a = 0; a < list.size(); a++) {
                                 String selected = "";
@@ -368,7 +366,7 @@ public class CRUD {
                             bld.append("                </select>\n");
                         } else {
                             bld.append("                <input type=\"" + inputType(fld) + "\" value=\""
-                                    + set.getString(nameInBaseFld) + "\" name=\"" + name + "\" required>\n"
+                                    + set.getString(name) + "\" name=\"" + name + "\" required>\n"
                                     + "                <span>" + name + "</span>\n");
                         }
                     }
@@ -401,7 +399,7 @@ public class CRUD {
         String id_in_base = null;
         for (Field fld : listFields) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                id_in_base = fld.getName();
+                id_in_base = fld.getAnnotation(AnnotationAttr.class).nameInBase();
                 break;
             }
         }
@@ -437,7 +435,6 @@ public class CRUD {
     public String scriptInsert() throws Exception {
         Vector<String> a_inserer = new Vector<>();
         for (Field f : listFields) {
-            a_inserer.add(f.getAnnotation(AnnotationAttr.class).nameInBase());
             a_inserer.add(f.getAnnotation(AnnotationAttr.class).nameInBase());
         }
 
