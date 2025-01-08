@@ -63,23 +63,25 @@ menu.hide {
 }
 
 
-.acc_ttr {
+.acc_ttr, .lien {
     height: 50px;
     display: flex;
     align-items: center;
-    justify-content: center;
     padding: 0 20px;
+    padding-left: 15%;
     position: relative;
     cursor: pointer;
 }
 
-.acc_ttr h2 {
+.acc_ttr h2, .lien a {
     font-size: 1.1rem;
+    margin-left: 35px;
 }
 
-.acc_ttr .bi {
+.acc_ttr .bi-chevron-right {
     position: absolute;
 }
+
 
 .acc_ttr  .bi:first-child{
     left: 30px;
@@ -115,12 +117,17 @@ menu.hide {
     transition: .2s;
 }
 
-.acc_body .prt:hover {
+.lien {
+    transition: .2s;
+}
+
+
+.acc_body .prt:hover, .lien:hover{
     background-color: rgba(128, 128, 128, 0.087);
     transition: .2s;
 }
 
-.acc_body .prt a {
+.acc_body .prt a, .lien a {
     color:  black;
     text-decoration: none;
     font-weight: bolder;
