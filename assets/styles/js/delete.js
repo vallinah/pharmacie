@@ -15,7 +15,7 @@ document.querySelectorAll(".action a:nth-child(2)")
                 prt = prt.parentElement;
             }
             prt.remove()
-            if (table.children.length <= 1) {
+            if (table.querySelectorAll("tr").length <= 1) {
                 bd.innerHTML = "<h2>Aucun(s) element(s)</h2>"
             }
         });

@@ -1,0 +1,127 @@
+header {
+    height: 80px;
+    background-color: white;
+    box-shadow:  2px 0 10px rgba(0, 0, 0, 0.339);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+    position: relative;
+}
+
+#menu_control {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    font-size: 23px;
+    cursor: pointer;
+}
+
+menu {
+    transform: translateX(0);
+    padding-top: 80px;
+    position: relative;
+    width: 330px;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.218);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    z-index: 5;
+}
+
+.menu_ttr {
+    height: 10%;
+    min-height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: rgba(128, 128, 128, 0.296); */
+    border-bottom: 2px solid rgba(0, 0, 0, 0.226);
+}
+
+.menu_ttr h1 {
+    font-size: 20px;
+}
+
+.menu_bd {
+    padding-top: 5%;
+    height: 75%;
+    min-height: 75%;
+}
+
+.acc_ttr, .lien {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    padding-left: 15%;
+    position: relative;
+    cursor: pointer;
+}
+
+.acc_ttr h2, .lien a {
+    font-size: 1.1rem;
+    margin-left: 35px;
+}
+
+.acc_ttr .bi-chevron-right {
+    position: absolute;
+}
+
+
+.acc_ttr  .bi:first-child{
+    left: 30px;
+}
+
+.acc_ttr  .bi:last-child  {
+    right: 40px;
+}
+
+.acc_body {
+    height: 0;
+    overflow: hidden;
+    transition: height .3s;
+}
+
+.acc.active .bi-chevron-right {
+    transform: rotate(90deg);
+    transition: .5s;
+}
+
+.acc .bi-chevron-right {
+    transition: .5s;
+}
+
+.acc_body .prt {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding-left: 30%;
+    position: relative;
+    margin: 0 auto;
+    border-radius: 5px;
+    transition: .2s;
+}
+
+.lien {
+    transition: .2s;
+}
+
+
+.acc_body .prt:hover, .lien:hover{
+    background-color: rgba(128, 128, 128, 0.087);
+    transition: .2s;
+}
+
+.acc_body .prt a, .lien a {
+    color:  black;
+    text-decoration: none;
+    font-weight: bolder;
+}
+
+.acc_body .prt .bi {
+    margin-right: 20px;
+}

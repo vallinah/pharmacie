@@ -1,3 +1,7 @@
+main {
+    display: flex;
+}
+
 .gnr {
     width: 600px;
     margin: 0 auto;
@@ -18,13 +22,16 @@
     letter-spacing: 5px;
 }
 
+.gnr h1 {
+    height: 100px;
+}
+
 .gnr form {
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
     align-items: center;
-    row-gap: 25px;
-    padding: 10px 0;
+    row-gap: 20px;
 }
 
 .gnr form .prt {
@@ -37,7 +44,7 @@
 
 .gnr form .prt span {
     position: absolute;
-    left: 50px;
+    left: 80px;
     z-index: 1;
     transition: .5s;
     opacity: .6;
@@ -46,7 +53,7 @@
 
 .gnr form .prt textarea {
     resize: vertical;
-    min-height: 70px;
+    min-height: 50px;
     padding-top: 15px !important;
     padding-bottom: 15px !important;
     max-height: 150px;
@@ -62,7 +69,7 @@
 }
 
 .gnr form .prt input, .gnr form .prt textarea, .gnr form .prt select {
-    width: 90%;
+    width: 80%;
     height: 50px;
     border-radius: 5px;
     border: 0.5px solid black;
@@ -81,7 +88,7 @@
 .gnr form .prt input:focus ~ span, .gnr form .prt textarea:focus ~ span,
 .gnr form .prt input:checked ~ span, .gnr form .prt textarea:checked ~ span,
 .gnr form .prt input:valid ~ span, .gnr form .prt textarea:valid ~ span {
-    transform: translate(10px, -27px);
+    transform: translate(20px, -27px);
     transition: .5s;
     background-color: white;
     z-index: 3;

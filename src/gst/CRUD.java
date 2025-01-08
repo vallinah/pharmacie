@@ -34,7 +34,7 @@ public class CRUD {
         listFields = fieldMapped();
         for (Field fld : listFields) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                idName = fld.getName();
+                idName = fld.getAnnotation(AnnotationAttr.class).nameInBase();
                 break;
             }
         }
@@ -264,9 +264,9 @@ public class CRUD {
         int cpt = 0;
         for (int a = 0; a < listFields.size(); a++) {
             if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                idName = listFields.get(a).getName();
+                idName = listFields.get(a).getAnnotation(AnnotationAttr.class).nameInBase();
             } else {
-                req.append(listFields.get(a).getName() + " = ?");
+                req.append(listFields.get(a).getAnnotation(AnnotationAttr.class).nameInBase() + " = ?");
                 if (cpt != updt.size() - 1) {
                     req.append(",");
                 }
@@ -337,23 +337,21 @@ public class CRUD {
             for (Field fld : listFields) {
                 AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
                 if (annotation.insert() && !annotation.inc()) {
-                    String nameInBaseFld = fld.getAnnotation(AnnotationAttr.class).nameInBase();
-                    String name = fld.getName();
+                    String name = fld.getAnnotation(AnnotationAttr.class).nameInBase();
                     bld.append("            <div class=\"prt\">\n");
                     if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
                         bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + ">"
-                                + set.getString(nameInBaseFld) + "</textarea>\n");
+                                + set.getString(name) + "</textarea>\n");
                     } else {
-
                         if (fld.isAnnotationPresent(ForeingKey.class)) {
                             ForeingKey foreingKey = fld.getAnnotation(ForeingKey.class);
                             String nomCol = foreingKey.col();
                             bld.append("                <select name=\"" + name + "\">\n" + //
-                                    "                    <option value=\"\">Choise " + nomCol + "</option>\n");
-                            Vector<String> list = getData(nomCol, foreingKey.cls(), null);
-                            Vector<String> listId = getData(fld.getName(), foreingKey.cls(), null);
+                                        "                    <option value=\"\">Choise " + nomCol + "</option>\n");
+                            Vector<String> list = getData(nomCol, foreingKey.cls(),null);
+                            Vector<String> listId = getData(fld.getAnnotation(AnnotationAttr.class).nameInBase(), foreingKey.cls(),null);
 
-                            String idInBase = set.getString(nameInBaseFld);
+                            String idInBase = set.getString(name);
 
                             for (int a = 0; a < list.size(); a++) {
                                 String selected = "";
@@ -368,17 +366,17 @@ public class CRUD {
                             bld.append("                </select>\n");
                         } else {
                             bld.append("                <input type=\"" + inputType(fld) + "\" value=\""
-                                    + set.getString(nameInBaseFld) + "\" name=\"" + name + "\" required>\n"
+                                    + set.getString(name) + "\" name=\"" + name + "\" required>\n"
                                     + "                <span>" + name + "</span>\n");
                         }
                     }
                     bld.append("            </div>\n");
                 }
             }
-            bld.append("            <button type=\"submit\">Valider</button>\n" +
-                    "            <div class=\"err\">\n" + //
-                    "                <span></span>\n" + //
-                    "            </div>"
+            bld.append("            <button type=\"submit\">Valider</button>\n" + 
+                        "            <div class=\"err\">\n" + //
+                        "                <span></span>\n" + //
+                        "            </div>"
                     + //
                     "        </form>\n"
                     + //
@@ -401,7 +399,7 @@ public class CRUD {
         String id_in_base = null;
         for (Field fld : listFields) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                id_in_base = fld.getName();
+                id_in_base = fld.getAnnotation(AnnotationAttr.class).nameInBase();
                 break;
             }
         }
@@ -511,9 +509,9 @@ public class CRUD {
                         ForeingKey foreingKey = fld.getAnnotation(ForeingKey.class);
                         String nomCol = foreingKey.col();
                         bld.append("                <select name=\"" + name + "\">\n" + //
-                                "                    <option value=\"\">Choise " + nomCol + "</option>\n");
-                        Vector<String> list = getData(nomCol, foreingKey.cls(), null);
-                        Vector<String> listId = getData(fld.getName(), foreingKey.cls(), null);
+                                    "                    <option value=\"\">Choise " + nomCol + "</option>\n");
+                        Vector<String> list = getData(nomCol, foreingKey.cls(),null);
+                        Vector<String> listId = getData(fld.getAnnotation(AnnotationAttr.class).nameInBase(), foreingKey.cls(),null);
 
                         for (int a = 0; a < list.size(); a++) {
                             bld.append("                    <option value=\"" + listId.get(a) + "\">" + list.get(a)
