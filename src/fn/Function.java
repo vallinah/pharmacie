@@ -1,11 +1,13 @@
 package fn;
 
+import base.*;
+import base.connexe.Connexion;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
-import base.*;
-import base.connexe.Connexion;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public class Function {
     
@@ -13,12 +15,18 @@ public class Function {
         return new Connexion("pharmacie");
     }
 
+    public static String giveJson(String cls, String mess) {
+        Gson gson = new Gson();
+        JsonObject obj = new JsonObject();
+        obj.addProperty(cls, mess);
+        return gson.toJson(obj);
+    }
+
     public static Vector<Class<?>> listeClass() {
         Vector<Class<?>> liste = new Vector<>();
-        liste.add(Categorie.class);
         liste.add(Produit.class);
-        liste.add(SousCategorie.class);
-        liste.add(Type.class);
+        liste.add(Maladie.class);
+        liste.add(Laboratoire.class);
         return liste;
     }
 

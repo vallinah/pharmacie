@@ -14,18 +14,19 @@ export default class Crud {
     #sendAjax(url, formulaire, methode = "POST") {
         let xhr = new XMLHttpRequest();
         xhr.open(methode, url);
-        xhr.responseType = "text";
+        xhr.responseType = "json";
         xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4) {
                 console.log(this.#toFormdata(formulaire));
                 switch (xhr.status) {
                     case 500:
-                        // DANGER : ampina erreur
+                        let {err} = xhr.response;
+                        document.querySelector(".gnr .err span").innerText = err;
                         break;
                     default:
-                        let res = xhr.responseText;
-                        window.location.assign("./crud.jsp?cls=" + res);
+                        let {cls} = xhr.response;
+                        window.location.assign("./crud.jsp?cls=" + cls);
                         return ;
                 }
             }

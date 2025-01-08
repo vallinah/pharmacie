@@ -1,52 +1,81 @@
 package base;
 
-import java.sql.ResultSet;
-
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq", prefix = "PRD")
+@AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq")
 public class Produit {
-
     @AnnotationAttr(nameInBase = "id_produit", inc = true)
-    private String id_produit;
+    String idProduit;
     @AnnotationAttr(nameInBase = "nom_produit")
-    private String nom_produit;
+    String nomProduit;
+    @AnnotationAttr(nameInBase = "prix_vente_unitaire")
+    double prixVenteUnitaire;
+    @AnnotationAttr(nameInBase = "nombre")
+    int nombre;
+    @AnnotationAttr(nameInBase = "prix_achat_unitaire")
+    double prixAchatUnitaire;
+    @AnnotationAttr(nameInBase = "quantite")
+    String quantite;
     @AnnotationAttr(nameInBase = "description", textarea = true)
-    private String description;
-    @AnnotationAttr(nameInBase = "id_type")
-    @ForeingKey(col = "type", cls = "type")
-    private String id_type;
+    String description;
+    @AnnotationAttr(nameInBase = "id_forme")
+    @ForeingKey(cls = "forme", col = "forme")
+    String idForme;
+    @ForeingKey(cls = "mode_administration", col = "mode_administration")
+    @AnnotationAttr(nameInBase = "id_mode_administration")
+    String idModeAdministration;
+    @ForeingKey(cls = "laboratoire", col = "nom_laboratoire")
+    @AnnotationAttr(nameInBase = "id_laboratoire")
+    String idLaboratoire;
 
-    public Produit(String id_produit, String nom_produit, String description) {
-        this.id_produit = id_produit;
-        this.nom_produit = nom_produit;
-        this.description = description;
+    public String getIdProduit() {
+        return idProduit;
     }
 
-    public Produit(ResultSet set) throws Exception {
-        this.id_produit = set.getString("ID_PRODUIT");
-        this.nom_produit = set.getString("NOM_PRODUIT");
-        this.description = set.getString("DESCRIPTION");
+    public void setIdProduit(String idProduit) {
+        this.idProduit = idProduit;
     }
 
-    // ! Getter and Setter
-
-    public String getId_produit() {
-        return id_produit;
+    public String getNomProduit() {
+        return nomProduit;
     }
 
-    public void setId_produit(String id_produit) {
-        this.id_produit = id_produit;
+    public void setNomProduit(String nomProduit) {
+        this.nomProduit = nomProduit;
     }
 
-    public String getNom_produit() {
-        return nom_produit;
+    public double getPrixVenteUnitaire() {
+        return prixVenteUnitaire;
     }
 
-    public void setNom_produit(String nom_produit) {
-        this.nom_produit = nom_produit;
+    public void setPrixVenteUnitaire(double prixVenteUnitaire) {
+        this.prixVenteUnitaire = prixVenteUnitaire;
+    }
+
+    public int getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(int nombre) {
+        this.nombre = nombre;
+    }
+
+    public double getPrixAchatUnitaire() {
+        return prixAchatUnitaire;
+    }
+
+    public void setPrixAchatUnitaire(double prixAchatUnitaire) {
+        this.prixAchatUnitaire = prixAchatUnitaire;
+    }
+
+    public String getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(String quantite) {
+        this.quantite = quantite;
     }
 
     public String getDescription() {
@@ -57,11 +86,27 @@ public class Produit {
         this.description = description;
     }
 
-    public String getId_type() {
-        return id_type;
+    public String getIdForme() {
+        return idForme;
     }
 
-    public void setId_type(String id_type) {
-        this.id_type = id_type;
+    public void setIdForme(String idForme) {
+        this.idForme = idForme;
+    }
+
+    public String getIdModeAdministration() {
+        return idModeAdministration;
+    }
+
+    public void setIdModeAdministration(String idModeAdministration) {
+        this.idModeAdministration = idModeAdministration;
+    }
+
+    public String getIdLaboratoire() {
+        return idLaboratoire;
+    }
+
+    public void setIdLaboratoire(String idLaboratoire) {
+        this.idLaboratoire = idLaboratoire;
     }
 }

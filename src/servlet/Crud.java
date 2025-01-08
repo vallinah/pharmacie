@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import fn.Function;
 import gst.CRUD;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -34,10 +35,10 @@ public class Crud extends HttpServlet {
         try {
             CRUD crd = new CRUD(Class.forName(clsName));
             crd.insert(values);
-            out.println(clsName);
+            out.println(Function.giveJson("cls", clsName));
         } catch (Exception e) {
             resp.setStatus(500);
-            e.printStackTrace(out);
+            out.println(Function.giveJson("err", e.getMessage()));
         }
     }
     
@@ -53,7 +54,8 @@ public class Crud extends HttpServlet {
                 values.add(URLDecoder.decode(s.split("=")[1], "UTF-8"));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            resp.setStatus(500);
+            out.println(Function.giveJson("err", e.getMessage()));
             return;
         }
 
@@ -71,10 +73,10 @@ public class Crud extends HttpServlet {
         try {
             CRUD crd = new CRUD(Class.forName(clsName));
             crd.update(values, id);
-            out.println(clsName);
+            out.println(Function.giveJson("cls", clsName));
         } catch (Exception e) {
             resp.setStatus(500);
-            e.printStackTrace(out);
+            out.println(Function.giveJson("err", e.getMessage()));
         }
     }
 
