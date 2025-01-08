@@ -1,3 +1,4 @@
+<%@page import="fn.Function"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,13 @@
     <title>Accueil</title>
 </head>
 <body>
-    <h1>Hello Pharmacie</h1>
+    <%@include file="../inc/header.jsp" %>
+    <section class="body">
+        <div class="ls">
+            <% for (Class<?> cls : Function.listeClass()) { %>
+                <li><a href="crud.jsp?cls=<%= cls.getName() %>"><%= cls.getSimpleName() %></a></li>
+            <% } %>
+        </div>
+    </section>
 </body>
-</html>
+</html
