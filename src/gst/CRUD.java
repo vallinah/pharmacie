@@ -7,7 +7,6 @@ import base.connexe.Connexion;
 import fn.All;
 import fn.Compteur;
 import fn.Function;
-
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -58,14 +57,15 @@ public class CRUD {
             prp.setFloat(numero, Float.parseFloat(value));
         } else if (fld.getType().equals(Double.class)) {
             prp.setDouble(numero, Double.parseDouble(value));
-        } else if (fld.getType().equals(Date.class) || fld.getType().equals(java.sql.Date.class) || fld.getType().equals(LocalDate.class)) {
+        } else if (fld.getType().equals(Date.class) || fld.getType().equals(java.sql.Date.class)
+                || fld.getType().equals(LocalDate.class)) {
             prp.setDate(numero, Function.dateByString(value));
         } else {
             prp.setString(numero, value);
         }
     }
 
-    public Vector<String> getData(String column_name,  String nameInBase,HashMap<String, String> map) throws Exception {
+    public Vector<String> getData(String column_name, String nameInBase, HashMap<String, String> map) throws Exception {
         String req = "select " + column_name + " from " + nameInBase;
         Vector<String> key = new Vector<>();
         if (map != null) {
@@ -90,7 +90,7 @@ public class CRUD {
             for (int a = 0; a < key.size(); a++) {
                 preparedField(key.get(a), prp, a + 1, map.get(key.get(a)));
             }
-                set = prp.executeQuery();
+            set = prp.executeQuery();
 
             Vector<String> result = new Vector<>();
             while (set.next()) {
@@ -100,17 +100,21 @@ public class CRUD {
         } catch (Exception e) {
             throw e;
         } finally {
-            if (set != null) set.close();
-            if (prp != null) prp.close();
+            if (set != null)
+                set.close();
+            if (prp != null)
+                prp.close();
             connexion.finaleClose();
         }
     }
 
     public String inputType(Field fld) {
         String type = "text";
-        if (fld.getType().equals(Integer.class) || fld.getType().equals(Double.class) || fld.getType().equals(Float.class)) {
+        if (fld.getType().equals(Integer.class) || fld.getType().equals(Double.class)
+                || fld.getType().equals(Float.class)) {
             type = "number";
-        } else if (fld.getType().equals(Date.class) || fld.getType().equals(java.sql.Date.class) || fld.getType().equals(LocalDate.class)) {
+        } else if (fld.getType().equals(Date.class) || fld.getType().equals(java.sql.Date.class)
+                || fld.getType().equals(LocalDate.class)) {
             type = "date";
         }
         return type;
@@ -139,55 +143,57 @@ public class CRUD {
         Vector<Vector<String>> rehetra = all.getAll();
         Vector<String> titre = all.getAllTitre();
 
-
-            for (int a = 0; a < titre.size(); a++) {
-                ttr += "                    <th>" + titre.get(a) + "</th>\n";
+        for (int a = 0; a < titre.size(); a++) {
+            ttr += "                    <th>" + titre.get(a) + "</th>\n";
+        }
+        ttr += "                    <th>Action</th>\n"
+                + //
+                "               </tr>\n"
+                + //
+                "               <tr>\n";
+        int isEmpty = 0;
+        for (Vector<String> ligne : rehetra) {
+            for (String value : ligne) {
+                body.append("                    <td>" + value + "</td>\n");
             }
-            ttr += "                    <th>Action</th>\n"
+            body.append("                    <td>\n"
                     + //
-                    "               </tr>\n"
+                    "                       <div class='action'>\n"
+                    + "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id="
+                    + ligne.firstElement() + "\"><i class=\"bi bi-pencil\"></i></a>\n"
                     + //
-                    "               <tr>\n";
-            int isEmpty = 0;
-            for(Vector<String> ligne : rehetra) {
-                for (String value : ligne) {
-                    body.append("                    <td>" + value + "</td>\n");
-                }
-                body.append("                    <td>\n"
-                        + //
-                        "                       <div class='action'>\n"
-                        + "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id=" + ligne.firstElement() + "\"><i class=\"bi bi-pencil\"></i></a>\n"
-                        + //
-                        "                           <a href=\"crud?cls=" + cls.getName() + "&id=" + ligne.firstElement() + "\"><i class=\"bi bi-trash\"></i></a>\n"
-                        + //
-                        "                       </div>\n"
-                        + "                   </td>\n"
-                        + //
-                        "               </tr>\n");
-                isEmpty++;
-            }
-        
-            if (isEmpty != 0) {
-                bld.append("            <table border=\"1\">\n"
-                        + //
-                        "               <tr>\n");
-                bld.append(ttr);
-            } else {
-                body.append("           <h2>Aucun(s) element(s)</h2>\n");
-            }
-
-            bld.append(body);
-
-            if (isEmpty != 0) {
-                bld.append("            </table>\n");
-            }
-            bld.append("        </div>\n"
+                    "                           <a href=\"crud?cls=" + cls.getName() + "&id=" + ligne.firstElement()
+                    + "\"><i class=\"bi bi-trash\"></i></a>\n"
                     + //
-                    "    </section>");
-            return bld.toString();
+                    "                       </div>\n"
+                    + "                   </td>\n"
+                    + //
+                    "               </tr>\n");
+            isEmpty++;
+        }
+
+        if (isEmpty != 0) {
+            bld.append("            <table border=\"1\">\n"
+                    + //
+                    "               <tr>\n");
+            bld.append(ttr);
+        } else {
+            body.append("           <h2>Aucun(s) element(s)</h2>\n");
+        }
+
+        bld.append(body);
+
+        if (isEmpty != 0) {
+            bld.append("            </table>\n");
+        }
+        bld.append("        </div>\n"
+                + //
+                "    </section>");
+        return bld.toString();
     }
 
-    public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Compteur cpt) throws Exception {
+    public void preparedUpdate(PreparedStatement prp, Connexion connexion, Field fld, String value, Compteur cpt)
+            throws Exception {
         int compteur = cpt.getCpt() + 1;
         if (fld.getType().equals(String.class)) {
             prp.setString(compteur, value);
@@ -205,7 +211,8 @@ public class CRUD {
         cpt.setCpt(compteur);
     }
 
-    public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum, Compteur cpt) throws Exception {
+    public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum,
+            Compteur cpt) throws Exception {
         if (fld.getType().equals(String.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 String prefix = cls.getAnnotation(AnnotationClass.class).prefix();
@@ -334,7 +341,8 @@ public class CRUD {
                     String name = fld.getName();
                     bld.append("            <div class=\"prt\">\n");
                     if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
-                        bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + ">" + set.getString(nameInBaseFld) + "</textarea>\n");
+                        bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + ">"
+                                + set.getString(nameInBaseFld) + "</textarea>\n");
                     } else {
 
                         if (fld.isAnnotationPresent(ForeingKey.class)) {
@@ -353,13 +361,15 @@ public class CRUD {
                                     selected = "selected";
                                 }
 
-                                bld.append("                    <option value=\"" + listId.get(a) + "\" " + selected + ">" + list.get(a) + "</option>\n");
+                                bld.append("                    <option value=\"" + listId.get(a) + "\" " + selected
+                                        + ">" + list.get(a) + "</option>\n");
                             }
 
                             bld.append("                </select>\n");
                         } else {
-                            bld.append("                <input type=\"" + inputType(fld) + "\" value=\"" + set.getString(nameInBaseFld) + "\" name=\"" + name + "\" required>\n"
-                                + "                <span>" + name + "</span>\n");
+                            bld.append("                <input type=\"" + inputType(fld) + "\" value=\""
+                                    + set.getString(nameInBaseFld) + "\" name=\"" + name + "\" required>\n"
+                                    + "                <span>" + name + "</span>\n");
                         }
                     }
                     bld.append("            </div>\n");
@@ -428,6 +438,7 @@ public class CRUD {
         Vector<String> a_inserer = new Vector<>();
         for (Field f : listFields) {
             a_inserer.add(f.getAnnotation(AnnotationAttr.class).nameInBase());
+            a_inserer.add(f.getAnnotation(AnnotationAttr.class).nameInBase());
         }
 
         StringBuilder bld = new StringBuilder();
@@ -494,7 +505,8 @@ public class CRUD {
                 bld.append("            <div class=\"prt\">\n");
 
                 if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
-                    bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + "></textarea>\n");
+                    bld.append(
+                            "                <textarea name=\"" + name + "\" placeholder=" + name + "></textarea>\n");
                 } else {
                     if (fld.isAnnotationPresent(ForeingKey.class)) {
                         ForeingKey foreingKey = fld.getAnnotation(ForeingKey.class);
@@ -505,20 +517,25 @@ public class CRUD {
                         Vector<String> listId = getData(fld.getAnnotation(AnnotationAttr.class).nameInBase(), foreingKey.cls(),null);
 
                         for (int a = 0; a < list.size(); a++) {
-                            bld.append("                    <option value=\"" + listId.get(a) + "\">" + list.get(a) + "</option>\n");
+                            bld.append("                    <option value=\"" + listId.get(a) + "\">" + list.get(a)
+                                    + "</option>\n");
 
                         }
 
                         bld.append("                </select>\n");
                     } else {
-                        bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name + "\" required>\n"
-                        + "                <span>" + name + "</span>\n");
+                        bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name
+                                + "\" required>\n"
+                                + "                <span>" + name + "</span>\n");
                     }
                 }
                 bld.append("            </div>\n");
             }
         }
         bld.append("            <button type=\"submit\">Valider</button>\n"
+                + "            <div class=\"err\">\n" + //
+                "                <span></span>\n" + //
+                "            </div>"
                 + "            <div class=\"err\">\n" + //
                 "                <span></span>\n" + //
                 "            </div>"
