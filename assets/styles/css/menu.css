@@ -1,10 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
 header {
     height: 80px;
     background-color: white;
@@ -22,24 +15,21 @@ header {
     left: 15px;
     transform: translateY(-50%);
     font-size: 23px;
+    cursor: pointer;
 }
 
 menu {
     transform: translateX(0);
     padding-top: 80px;
-    position: fixed;
+    position: relative;
     width: 330px;
     top: 0;
     left: 0;
     height: 100vh;
     background-color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.218);
-    transition: .3s;
-}
-
-menu.hide {
-    transform: translateX(-100%);
-    transition: .3s;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    z-index: 5;
 }
 
 .menu_ttr {
@@ -61,7 +51,6 @@ menu.hide {
     height: 75%;
     min-height: 75%;
 }
-
 
 .acc_ttr, .lien {
     height: 50px;

@@ -533,9 +533,6 @@ public class CRUD {
                 + "            <div class=\"err\">\n" + //
                 "                <span></span>\n" + //
                 "            </div>"
-                + "            <div class=\"err\">\n" + //
-                "                <span></span>\n" + //
-                "            </div>"
                 + //
                 "        </form>\n"
                 + //
