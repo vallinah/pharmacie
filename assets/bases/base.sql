@@ -31,6 +31,7 @@ CREATE SEQUENCE unite_mesure_id_seq START 1;
 CREATE SEQUENCE forme_id_seq START 1;
 CREATE SEQUENCE mode_administration_id_seq START 1;
 CREATE SEQUENCE produit_id_seq START 1;
+CREATE SEQUENCE mouvement_id_seq START 1;
 CREATE SEQUENCE produit_categorie_personne_id_seq START 1;
 CREATE SEQUENCE produit_maladie_id_seq START 1;
 
@@ -82,6 +83,18 @@ CREATE TABLE produit (
     FOREIGN KEY (id_mode_administration) REFERENCES mode_administration (id_mode_administration),
     FOREIGN KEY (id_laboratoire) REFERENCES laboratoire (id_laboratoire)
 );
+
+CREATE TABLE mouvement(
+   id_mouvement VARCHAR(50) DEFAULT CONCAT('MVT', LPAD(nextval('mouvement_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
+   quantite INTEGER NOT NULL,
+   prix_unitaire_achat NUMERIC(18,2)   NOT NULL,
+   prix_unitaire_vente NUMERIC(18,2)  ,
+   date_mouvement DATE NOT NULL,
+   id_produit VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id_mouvement),
+   FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
+);
+
 
 CREATE TABLE produit_categorie_personne (
     id_produit_categorie_personne VARCHAR(50) DEFAULT CONCAT('PCP', LPAD(nextval('produit_categorie_personne_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
