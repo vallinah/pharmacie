@@ -27,6 +27,12 @@ public class Function {
         liste.add(Produit.class);
         liste.add(Maladie.class);
         liste.add(Laboratoire.class);
+        liste.add(ModeAdministration.class);
+        liste.add(ProduitCategoriePersonne.class);
+        liste.add(ProduitMaladie.class);
+        liste.add(CategoriePersonne.class);
+        liste.add(UniteMesure.class);
+        liste.add(Forme.class);
         return liste;
     }
 

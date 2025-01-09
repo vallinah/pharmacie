@@ -216,7 +216,9 @@ public class CRUD {
         if (fld.getType().equals(String.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 String prefix = cls.getAnnotation(AnnotationClass.class).prefix();
-                prp.setString(indexNum, prefix + "" + connexion.incrementSequence(sequenceName));
+                String id = connexion.incrementSequence(sequenceName) + "";
+                int nbZero = 8 - id.length();
+                prp.setString(indexNum, prefix + "0".repeat(nbZero) + id);
             } else {
                 prp.setString(indexNum, value);
                 cpt.setCpt(cpt.getCpt() + 1);
@@ -330,7 +332,7 @@ public class CRUD {
             StringBuilder bld = new StringBuilder();
             bld.append("    <section class=\"gnr\">\n"
                     + //
-                    "        <h1>Update " + nameInBase + "</h1>\n"
+                    "        <h1>Update <br>" + nameInBase + "</h1>\n"
                     + //
                     "        <form action=\"./crud?cls=" + cls.getName() + "&id=" + id + "\" method=\"post\">\n");
 
@@ -491,7 +493,7 @@ public class CRUD {
         StringBuilder bld = new StringBuilder();
         bld.append("    <section class=\"gnr\">\n"
                 + //
-                "        <h1>Insertion " + nameInBase + "</h1>\n"
+                "        <h1>Insertion <br>" + nameInBase + "</h1>\n"
                 + //
                 "        <form action=\"./crud?cls=" + cls.getName() + "\" method=\"post\">\n");
 

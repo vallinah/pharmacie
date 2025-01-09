@@ -4,7 +4,7 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq")
+@AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq", prefix = "PRD")
 public class Produit {
     @AnnotationAttr(nameInBase = "id_produit", inc = true)
     String idProduit;
