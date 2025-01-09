@@ -4,6 +4,7 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 import java.sql.Date;
+import java.sql.ResultSet;
 
 @AnnotationClass(nameInBase = "mouvement", sequence = "mouvement_id_seq")
 public class Mouvement {
@@ -11,15 +12,24 @@ public class Mouvement {
     private String idMouvement;
     @AnnotationAttr(nameInBase = "quantite")
     private int quantite;
-    @AnnotationAttr(nameInBase = "prix_unitaire_achat")
-    private double prixUnitaireAchat;
-    @AnnotationAttr(nameInBase = "prix_unitaire_vente")
-    private double prixUnitaireVente;
+    @AnnotationAttr(nameInBase = "prix_achat_unitaire")
+    private double prixAchatUnitaire;
+    @AnnotationAttr(nameInBase = "prix_vente_unitaire")
+    private double prixVenteUnitaire;
     @AnnotationAttr(nameInBase = "date_mouvement")
     private Date dateMouvement;
     @ForeingKey(cls = "produit", col = "nom_produit")
     @AnnotationAttr(nameInBase = "id_produit")
     private String idProduit;
+
+    public Mouvement(ResultSet resultSet) throws Exception {
+        this.setIdMouvement(resultSet.getString("id_mouvement"));
+        this.setQuantite(resultSet.getInt("quantite"));
+        this.setPrixAchatUnitaire(resultSet.getDouble("prix_achat_unitaire"));
+        this.setPrixVenteUnitaire(resultSet.getDouble("prix_vente_unitaire"));
+        this.setDateMouvement(resultSet.getDate("date_mouvement"));
+        this.setIdProduit(resultSet.getString("id_produit"));
+    }
 
     public Mouvement() {
     }
@@ -40,20 +50,20 @@ public class Mouvement {
         this.quantite = quantite;
     }
 
-    public double getPrixUnitaireAchat() {
-        return prixUnitaireAchat;
+    public double getPrixAchatUnitaire() {
+        return prixAchatUnitaire;
     }
 
-    public void setPrixUnitaireAchat(double prixUnitaireAchat) {
-        this.prixUnitaireAchat = prixUnitaireAchat;
+    public void setPrixAchatUnitaire(double prixAchatUnitaire) {
+        this.prixAchatUnitaire = prixAchatUnitaire;
     }
 
-    public double getPrixUnitaireVente() {
-        return prixUnitaireVente;
+    public double getPrixVenteUnitaire() {
+        return prixVenteUnitaire;
     }
 
-    public void setPrixUnitaireVente(double prixUnitaireVente) {
-        this.prixUnitaireVente = prixUnitaireVente;
+    public void setPrixVenteUnitaire(double prixVenteUnitaire) {
+        this.prixVenteUnitaire = prixVenteUnitaire;
     }
 
     public Date getDateMouvement() {
