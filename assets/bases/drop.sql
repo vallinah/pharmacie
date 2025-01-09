@@ -1,6 +1,7 @@
 -- Suppression des tables existantes
 DROP TABLE IF EXISTS produit_maladie;
 DROP TABLE IF EXISTS produit_categorie_personne;
+DROP TABLE IF EXISTS mouvement;
 DROP TABLE IF EXISTS produit;
 DROP TABLE IF EXISTS mode_administration;
 DROP TABLE IF EXISTS forme;
@@ -12,6 +13,7 @@ DROP TABLE IF EXISTS laboratoire;
 -- Suppression des séquences existantes
 DROP SEQUENCE IF EXISTS produit_maladie;
 DROP SEQUENCE IF EXISTS produit_categorie_personne;
+DROP SEQUENCE IF EXISTS mouvement;
 DROP SEQUENCE IF EXISTS produit;
 DROP SEQUENCE IF EXISTS mode_administration;
 DROP SEQUENCE IF EXISTS forme;

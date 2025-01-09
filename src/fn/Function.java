@@ -25,6 +25,7 @@ public class Function {
     public static Vector<Class<?>> listeClass() {
         Vector<Class<?>> liste = new Vector<>();
         liste.add(Produit.class);
+        liste.add(Mouvement.class);
         liste.add(Maladie.class);
         liste.add(Laboratoire.class);
         liste.add(ModeAdministration.class);

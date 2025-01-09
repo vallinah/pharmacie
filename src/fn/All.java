@@ -18,14 +18,21 @@ public class All {
         nameInBase = cls.getAnnotation(AnnotationClass.class).nameInBase();
     }
 
-    public Vector<Vector<String>> getAll() throws Exception {
+    public Vector<Vector<String>> getAll(String param) throws Exception {
         Vector<Vector<String>> all = new Vector<>();
         
         ResultSet set = null;
         Connexion connexion = Function.dbConnect();
+        if (param != null) {
+            if (param.isEmpty()) {
+                param = "*";
+            }
+        } else {
+            param = "*";
+        }
 
         try {
-            String req = "select * from " + nameInBase;
+            String req = "select " + param + " from " + nameInBase;
             set = connexion.getStmt().executeQuery(req);
             ResultSetMetaData metaData = set.getMetaData();
 

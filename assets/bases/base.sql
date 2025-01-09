@@ -47,7 +47,7 @@ CREATE TABLE maladie (
 );
 
 CREATE TABLE categorie_personne (
-    id_categorie_personne VARCHAR(50) DEFAULT CONCAT('CAT', LPAD(nextval('categorie_personne_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
+    id_categorie_personne VARCHAR(50) DEFAULT CONCAT('CATP', LPAD(nextval('categorie_personne_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
     categorie_personne VARCHAR(50) NOT NULL
 );
 
@@ -91,7 +91,6 @@ CREATE TABLE mouvement(
    prix_unitaire_vente NUMERIC(18,2)  ,
    date_mouvement DATE NOT NULL,
    id_produit VARCHAR(50)  NOT NULL,
-   PRIMARY KEY(id_mouvement),
    FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
 );
 

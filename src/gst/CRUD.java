@@ -140,7 +140,7 @@ public class CRUD {
         }
 
         All all = new All(cls);
-        Vector<Vector<String>> rehetra = all.getAll();
+        Vector<Vector<String>> rehetra = all.getAll(null);
         Vector<String> titre = all.getAllTitre();
 
         for (int a = 0; a < titre.size(); a++) {
@@ -213,6 +213,8 @@ public class CRUD {
 
     public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum,
             Compteur cpt) throws Exception {
+                System.out.println(value + " " + indexNum + " " + cpt.getCpt());
+
         if (fld.getType().equals(String.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 String prefix = cls.getAnnotation(AnnotationClass.class).prefix();
@@ -367,9 +369,13 @@ public class CRUD {
 
                             bld.append("                </select>\n");
                         } else {
-                            bld.append("                <input type=\"" + inputType(fld) + "\" value=\""
-                                    + set.getString(name) + "\" name=\"" + name + "\" required>\n"
-                                    + "                <span>" + name + "</span>\n");
+                            if (annotation.insert()) {
+                                bld.append("                <input type=\"" + inputType(fld) + "\" value=\""
+                                    + set.getString(name) + "\" name=\"" + name + "\" required>\n");
+                                if (!fld.getType().equals(Date.class) && !fld.getType().equals(java.sql.Date.class) &&!fld.getType().equals(LocalDate.class)) {
+                                    bld.append("                <span>" + name + "</span>\n");
+                                }
+                            }
                         }
                     }
                     bld.append("            </div>\n");
@@ -459,6 +465,8 @@ public class CRUD {
         String req = scriptInsert();
         Connection connection = null;
         PreparedStatement prp = null;
+
+        System.out.println(req);
         try {
             Connexion connexion = Function.dbConnect();
             connection = connexion.getConnexe();
@@ -523,9 +531,13 @@ public class CRUD {
 
                         bld.append("                </select>\n");
                     } else {
-                        bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name
-                                + "\" required>\n"
-                                + "                <span>" + name + "</span>\n");
+                        if (annotation.insert()) {
+                            bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name
+                            + "\" required>\n");
+                            if (!fld.getType().equals(Date.class) && !fld.getType().equals(java.sql.Date.class) && !fld.getType().equals(LocalDate.class)) {
+                                bld.append("                <span>" + name + "</span>\n");
+                            }
+                        }
                     }
                 }
                 bld.append("            </div>\n");
