@@ -38,8 +38,7 @@ public class Crud extends HttpServlet {
             out.println(Function.giveJson("cls", clsName));
         } catch (Exception e) {
             resp.setStatus(500);
-            // out.println(Function.giveJson("err", e.getMessage()));
-            e.printStackTrace(out);
+            out.println(Function.giveJson("err", e.getMessage()));
         }
     }
     
