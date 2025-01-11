@@ -8,6 +8,7 @@ import fn.All;
 import fn.Compteur;
 import fn.Function;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -110,8 +111,9 @@ public class CRUD {
 
     public String inputType(Field fld) {
         String type = "text";
-        if (fld.getType().equals(Integer.class) || fld.getType().equals(Double.class)
-                || fld.getType().equals(Float.class)) {
+        if (fld.getType().equals(int.class) || fld.getType().equals(Integer.class) || 
+        fld.getType().equals(double.class) || fld.getType().equals(Double.class) || 
+        fld.getType().equals(float.class) || fld.getType().equals(Float.class) ) {
             type = "number";
         } else if (fld.getType().equals(Date.class) || fld.getType().equals(java.sql.Date.class)
                 || fld.getType().equals(LocalDate.class)) {
@@ -197,15 +199,15 @@ public class CRUD {
         int compteur = cpt.getCpt() + 1;
         if (fld.getType().equals(String.class)) {
             prp.setString(compteur, value);
-        } else if (fld.getClass().equals(Date.class)
-                || fld.getClass().equals(java.sql.Date.class)
-                || fld.getClass().equals(LocalDate.class)) {
+        } else if (fld.getType().equals(Date.class)
+                || fld.getType().equals(java.sql.Date.class)
+                || fld.getType().equals(LocalDate.class)) {
             prp.setDate(compteur, Function.dateByString(value));
-        } else if (fld.getClass().equals(Integer.class)) {
+        } else if (fld.getType().equals(int.class) || fld.getType().equals(Integer.class)) {
             prp.setInt(compteur, Integer.parseInt(value));
-        } else if (fld.getClass().equals(Double.class)) {
+        } else if (fld.getType().equals(double.class) || fld.getType().equals(Double.class)) {
             prp.setDouble(compteur, Double.parseDouble(value));
-        } else if (fld.getClass().equals(Float.class)) {
+        } else if (fld.getType().equals(float.class) || fld.getType().equals(Float.class)) {
             prp.setFloat(compteur, Float.parseFloat(value));
         }
         cpt.setCpt(compteur);
@@ -213,31 +215,31 @@ public class CRUD {
 
     public void prepared(PreparedStatement prp, Connexion connexion, Field fld, String value, int indexNum,
             Compteur cpt) throws Exception {
-                System.out.println(value + " " + indexNum + " " + cpt.getCpt());
-
+        boolean increment = true;
         if (fld.getType().equals(String.class)) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 String prefix = cls.getAnnotation(AnnotationClass.class).prefix();
                 String id = connexion.incrementSequence(sequenceName) + "";
                 int nbZero = 8 - id.length();
                 prp.setString(indexNum, prefix + "0".repeat(nbZero) + id);
+                increment = false;
             } else {
                 prp.setString(indexNum, value);
-                cpt.setCpt(cpt.getCpt() + 1);
             }
-            return;
-        } else if (fld.getClass().equals(Date.class)
-                || fld.getClass().equals(java.sql.Date.class)
-                || fld.getClass().equals(LocalDate.class)) {
+        } else if (fld.getType().equals(Date.class)
+                || fld.getType().equals(java.sql.Date.class)
+                || fld.getType().equals(LocalDate.class)) {
             prp.setDate(indexNum, Function.dateByString(value));
-        } else if (fld.getClass().equals(Integer.class)) {
+        } else if (fld.getType().equals(int.class) || fld.getType().equals(Integer.class)) {
             prp.setInt(indexNum, Integer.parseInt(value));
-        } else if (fld.getClass().equals(Double.class)) {
+        } else if (fld.getType().equals(double.class) || fld.getType().equals(Double.class)) {
             prp.setDouble(indexNum, Double.parseDouble(value));
-        } else if (fld.getClass().equals(Float.class)) {
+        } else if (fld.getType().equals(float.class) || fld.getType().equals(Float.class)) {
             prp.setFloat(indexNum, Float.parseFloat(value));
         }
-        cpt.setCpt(cpt.getCpt() + 1);
+        if (increment) {
+            cpt.setCpt(cpt.getCpt() + 1);
+        }
     }
 
     public Vector<Field> fieldMapped() throws Exception {
@@ -466,7 +468,7 @@ public class CRUD {
         Connection connection = null;
         PreparedStatement prp = null;
 
-        System.out.println(req);
+        System.out.println("req : " + req + ", sizeInsertion : " + insertion.size());
         try {
             Connexion connexion = Function.dbConnect();
             connection = connexion.getConnexe();
