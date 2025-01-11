@@ -1,11 +1,14 @@
 package base;
 
+import java.sql.ResultSet;
+
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq")
+@AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq", prefix = "PRD")
 public class Produit {
+
     @AnnotationAttr(nameInBase = "id_produit", inc = true)
     String idProduit;
     @AnnotationAttr(nameInBase = "nom_produit")
@@ -29,6 +32,21 @@ public class Produit {
     @ForeingKey(cls = "laboratoire", col = "nom_laboratoire")
     @AnnotationAttr(nameInBase = "id_laboratoire")
     String idLaboratoire;
+
+    // ? Constructeur
+
+    public Produit(ResultSet set) throws Exception {
+        idProduit  = set.getString("id_produit");
+        nomProduit = set.getString("nom_produit");
+        prixAchatUnitaire = set.getDouble("prix_vente_unitaire");
+        nombre = set.getInt("nombre");
+        prixAchatUnitaire = set.getDouble("prix_achat_unitaire");
+        quantite = set.getString("quantite");
+        description = set.getString("description");
+        idForme = set.getString("idForme");
+        idModeAdministration = set.getString("id_mode_administration");
+        idLaboratoire = set.getString("id_laboratoire");
+    }
 
     public String getIdProduit() {
         return idProduit;

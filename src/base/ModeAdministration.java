@@ -7,7 +7,7 @@ import annotation.AnnotationClass;
  *
  * @author
  */
-@AnnotationClass(nameInBase = "mode_administration", sequence = "mode_administration_id_seq")
+@AnnotationClass(nameInBase = "mode_administration", sequence = "mode_administration_id_seq", prefix = "MOD")
 public class ModeAdministration {
 
     @AnnotationAttr(nameInBase = "id_mode_administration", inc = true)

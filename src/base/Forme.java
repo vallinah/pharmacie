@@ -2,12 +2,13 @@ package base;
 
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
+import annotation.ForeingKey;
 
 /**
  *
  * @author
  */
-@AnnotationClass(nameInBase = "forme", sequence = "forme_id_seq")
+@AnnotationClass(nameInBase = "forme", sequence = "forme_id_seq", prefix = "FRM")
 public class Forme {
 
     @AnnotationAttr(nameInBase = "id_forme", inc = true)
@@ -17,6 +18,7 @@ public class Forme {
     String forme;
 
     @AnnotationAttr(nameInBase = "id_unite_mesure")
+    @ForeingKey(col = "unite_mesure", cls = "unite_mesure")
     String idUniteMesure;
 
     public String getIdForme() {

@@ -24,6 +24,8 @@ main {
 
 .gnr h1 {
     height: 100px;
+    text-align: center;
+    margin-bottom: 30px !important;
 }
 
 .gnr form {
@@ -196,6 +198,10 @@ section.list {
     height: 90%;
 }
 
+.list .ttr {
+    height: 100px;
+}
+
 a.back {
     color:  white;
     background-color: var(--secondary-color);
@@ -215,3 +221,8 @@ a.back {
     font-size: 4em;
     margin-top: 80px;
 }
+
+/* .body form {
+    display: flex;
+    align-items: center;
+} */

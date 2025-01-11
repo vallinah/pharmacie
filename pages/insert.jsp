@@ -34,6 +34,19 @@
                         <% } %>
                     </div>
                 </div>
+                <div class="acc">
+                    <div class="acc_ttr">
+                        <i class="bi bi-person-circle"></i>
+                        <h2>Fonctionality</h2>
+                        <i class="bi bi-chevron-right"></i>
+                    </div>                                                                      
+                    <div class="acc_body">
+                        <div class="prt">
+                            <i class="bi bi-person-badge"></i>
+                            <a href="fn_1.jsp">Functionality 1</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="lien">
                     <i class="bi bi-arrow-left"></i>
                      <a href="crud.jsp?cls=<%= request.getParameter("cls") %>">Retour</a>

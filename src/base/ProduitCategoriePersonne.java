@@ -7,7 +7,7 @@ import annotation.AnnotationClass;
  *
  * @author
  */
-@AnnotationClass(nameInBase = "produit_categorie_personne", sequence="produit_categorie_personne_id_seq")
+@AnnotationClass(nameInBase = "produit_categorie_personne", sequence="produit_categorie_personne_id_seq", prefix = "PCP")
 public class ProduitCategoriePersonne {
 
     @AnnotationAttr(nameInBase = "id_produit", inc = true)

@@ -11,7 +11,7 @@ import annotation.AnnotationClass;
  *
  * @author
  */
-@AnnotationClass(nameInBase = "maladie", sequence = "maladie_id_seq")
+@AnnotationClass(nameInBase = "maladie", sequence = "maladie_id_seq", prefix = "MLD")
 public class Maladie {
 
     @AnnotationAttr(nameInBase = "id_maladie", inc = true)
