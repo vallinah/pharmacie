@@ -1,4 +1,18 @@
+-- Active: 1735375537127@@127.0.0.1@5432@pharmacie@public
 -- Suppression des séquences si elles existent
+
+-- Suppression des tables si elles existent
+DROP TABLE IF EXISTS produit_maladie CASCADE;
+DROP TABLE IF EXISTS produit_categorie_personne CASCADE;
+DROP TABLE if EXISTS mouvement;
+DROP TABLE IF EXISTS produit CASCADE;
+DROP TABLE IF EXISTS mode_administration CASCADE;
+DROP TABLE IF EXISTS forme CASCADE;
+DROP TABLE IF EXISTS unite_mesure CASCADE;
+DROP TABLE IF EXISTS categorie_personne CASCADE;
+DROP TABLE IF EXISTS maladie CASCADE;
+DROP TABLE IF EXISTS laboratoire CASCADE;
+
 DO $$ 
 BEGIN
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'laboratoire_id_seq') THEN DROP SEQUENCE laboratoire_id_seq; END IF;
@@ -10,18 +24,8 @@ BEGIN
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'produit_id_seq') THEN DROP SEQUENCE produit_id_seq; END IF;
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'produit_categorie_personne_id_seq') THEN DROP SEQUENCE produit_categorie_personne_id_seq; END IF;
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'produit_maladie_id_seq') THEN DROP SEQUENCE produit_maladie_id_seq; END IF;
+    IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'mouvement_id_seq') THEN DROP SEQUENCE mouvement_id_seq; END IF;
 END $$;
-
--- Suppression des tables si elles existent
-DROP TABLE IF EXISTS produit_maladie CASCADE;
-DROP TABLE IF EXISTS produit_categorie_personne CASCADE;
-DROP TABLE IF EXISTS produit CASCADE;
-DROP TABLE IF EXISTS mode_administration CASCADE;
-DROP TABLE IF EXISTS forme CASCADE;
-DROP TABLE IF EXISTS unite_mesure CASCADE;
-DROP TABLE IF EXISTS categorie_personne CASCADE;
-DROP TABLE IF EXISTS maladie CASCADE;
-DROP TABLE IF EXISTS laboratoire CASCADE;
 
 -- Création des séquences
 CREATE SEQUENCE laboratoire_id_seq START 1;
@@ -87,8 +91,8 @@ CREATE TABLE produit (
 CREATE TABLE mouvement(
    id_mouvement VARCHAR(50) DEFAULT CONCAT('MVT', LPAD(nextval('mouvement_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
    quantite INTEGER NOT NULL,
-   prix_unitaire_achat NUMERIC(18,2)   NOT NULL,
-   prix_unitaire_vente NUMERIC(18,2)  ,
+   prix_unitaire_achat NUMERIC(18,2)  DEFAULT 0,
+   prix_unitaire_vente NUMERIC(18,2)  DEFAULT 0,
    date_mouvement DATE NOT NULL,
    id_produit VARCHAR(50)  NOT NULL,
    FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
