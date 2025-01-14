@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS unite_mesure CASCADE;
 DROP TABLE IF EXISTS categorie_personne CASCADE;
 DROP TABLE IF EXISTS maladie CASCADE;
 DROP TABLE IF EXISTS laboratoire CASCADE;
+DROP Table if EXISTS conseil_du_mois CASCADE;
 
 DO $$ 
 BEGIN
@@ -25,6 +26,7 @@ BEGIN
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'produit_categorie_personne_id_seq') THEN DROP SEQUENCE produit_categorie_personne_id_seq; END IF;
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'produit_maladie_id_seq') THEN DROP SEQUENCE produit_maladie_id_seq; END IF;
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'mouvement_id_seq') THEN DROP SEQUENCE mouvement_id_seq; END IF;
+    IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'conseil_du_mois_id_seq') THEN DROP SEQUENCE conseil_du_mois_id_seq; END IF;
 END $$;
 
 -- Création des séquences
@@ -158,28 +160,23 @@ INSERT INTO mode_administration (mode_administration)
 VALUES 
     ('Oral'), ('Intraveineuse'), ('Injection'), ('Topique'), ('Inhalation');
 
+--insertion  produit
+
 -- Insertion dans `produit`
-DO $$
-DECLARE
-    forme_id VARCHAR(50);
-    mode_id VARCHAR(50);
-    labo_id VARCHAR(50);
-BEGIN
-    FOR i IN 1..10 LOOP
-        SELECT id_forme INTO forme_id FROM forme LIMIT 1 OFFSET ((i-1) % 5);
-        SELECT id_mode_administration INTO mode_id FROM mode_administration LIMIT 1 OFFSET ((i-1) % 5);
-        SELECT id_laboratoire INTO labo_id FROM laboratoire LIMIT 1 OFFSET ((i-1) % 10);
-        INSERT INTO produit (nom_produit, prix_vente_unitaire, nombre, prix_achat_unitaire, quantite, description, id_forme, id_mode_administration, id_laboratoire)
-        VALUES (
-            CONCAT('Produit_', i), 
-            10.0 * i, 
-            i * 10, 
-            5.0 * i, 
-            CONCAT(i * 10, ' unités'), 
-            CONCAT('Description du produit_', i), 
-            forme_id, 
-            mode_id, 
-            labo_id
-        );
-    END LOOP;
-END $$;
+-- Insertion dans `produit`
+-- Insertion dans `produit`
+INSERT INTO produit (nom_produit, prix_vente_unitaire, nombre, prix_achat_unitaire, quantite, description, id_forme, id_mode_administration, id_laboratoire)
+VALUES 
+    ('Paracétamol', 5.99, 1000, 3.50, '10 comprimés', 'Soulage la douleur et abaisse la fièvre', 
+     (SELECT id_forme FROM forme WHERE forme = 'Forme_tablette'),
+     (SELECT id_mode_administration FROM mode_administration WHERE mode_administration = 'Oral'),
+     (SELECT id_laboratoire FROM laboratoire WHERE nom_laboratoire = 'Sanofi'));
+
+INSERT INTO produit (nom_produit, prix_vente_unitaire, nombre, prix_achat_unitaire, quantite, description, id_forme, id_mode_administration, id_laboratoire)
+VALUES 
+    ('Ibuprofène', 7.50, 800, 4.25, '20 comprimés', 'Réduit l inflammation, soulage la douleur', 
+     (SELECT id_forme FROM forme WHERE forme = 'Forme_tablette'),
+     (SELECT id_mode_administration FROM mode_administration WHERE mode_administration = 'Oral'),
+     (SELECT id_laboratoire FROM laboratoire WHERE nom_laboratoire = 'Pfizer'));
+
+-- Ajouter d'autres produits selon vos besoins en adaptant les valeurs et les références aux autres tables.
