@@ -4,14 +4,69 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import base.ConseilDuMois;
 import base.Mouvement;
 import base.Produit;
 import base.connexe.Connexion;
 
 public class Functionality {
 
+    public Vector<ConseilDuMois> getReqFn_3(int month, int year) throws Exception {
+        String req = "SELECT *\n" + //
+                        "FROM\n" + //
+                        "    conseil_du_mois cdm\n" + //
+                        "    JOIN produit p ON p.id_produit = cdm.id_produit\n" + //
+                        "WHERE (\n" + //
+                        "        EXTRACT(\n" + //
+                        "            MONTH\n" + //
+                        "            FROM cdm.date_debut\n" + //
+                        "        ) >= ?\n" + //
+                        "        and EXTRACT(\n" + //
+                        "            MONTH\n" + //
+                        "            FROM cdm.date_fin\n" + //
+                        "        ) <= ?\n" + //
+                        "    )\n" + //
+                        "    and (\n" + //
+                        "        EXTRACT(\n" + //
+                        "            YEAR\n" + //
+                        "            FROM cdm.date_debut\n" + //
+                        "        ) >= ?\n" + //
+                        "        and EXTRACT(\n" + //
+                        "            YEAR\n" + //
+                        "            FROM cdm.date_fin\n" + //
+                        "        )\n" + //
+                        "        <= ?\n" + //
+                        "    );";
+
+        Vector<ConseilDuMois> all = new Vector<>();
+
+        Connexion connexion = Function.dbConnect();
+        PreparedStatement prepared = null;
+        ResultSet set = null;
+
+        try {
+            prepared = connexion.getConnexe().prepareStatement(req);
+                prepared.setInt(1, month);
+                prepared.setInt(2, month);
+            prepared.setInt(3, year);
+            prepared.setInt(4, year);
+
+            set = prepared.executeQuery();
+            while (set.next()) {
+                all.add(new ConseilDuMois(set));
+            }
+            return all;
+        } catch (Exception e) {
+            throw  e;
+        } finally {
+            if (set != null) set.close();
+            if (prepared != null) prepared.close();
+            connexion.finaleClose();
+        }
+    }
+
     public String getReqFn_2(String idCategoriePersonne, String idMode) throws Exception {
-        String req = "SELECT (m.id_mouvement, m.quantite, m.prix_unitaire_achat, m.prix_unitaire_vente, m.date_mouvement, p.nom_produit)\n" + //
+        String req = "SELECT m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.id_produit\n" + //
                         "from\n" + //
                         "    produit p\n" + //
                         "    JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit\n" + //
@@ -21,6 +76,11 @@ public class Functionality {
         String cnd_categorie = "";
         String  cnd_idMode = "";
         boolean first = false;
+
+        if (idCategoriePersonne == null && idMode == null) {
+            req += " where 1 <> 1";
+            return req;
+        }
 
         if (idCategoriePersonne != null) {
             if (!idCategoriePersonne.isEmpty()) {

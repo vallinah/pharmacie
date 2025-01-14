@@ -6,7 +6,7 @@ import java.util.Vector;
 
 import com.google.gson.Gson;
 
-import base.Mouvement;
+import base.ConseilDuMois;
 import fn.Function;
 import fn.Functionality;
 import jakarta.servlet.ServletException;
@@ -15,22 +15,23 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/pages/fn_2")
-public class Fn_2 extends HttpServlet {
+@WebServlet("/pages/fn_3")
+public class Fn_3 extends HttpServlet {
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         try {
-            String id_mode = req.getParameter(req.getParameter("id_mode_administration"));
-            String idCategorie_personne = req.getParameter("id_categorie_personne");
+            String[] splt = req.getParameter("month_year").split("-");
+            int year = Integer.parseInt(splt[0]);
+            int month = Integer.parseInt(splt[1]);
 
             Functionality fn = new Functionality();
-            Vector<Mouvement> listmMouvements = fn.getFn_2(idCategorie_personne, id_mode);
+            Vector<ConseilDuMois> listmConseilDuMois = fn.getReqFn_3(month, year);
 
             Gson gson = new Gson();
-            out.println(Function.giveJson("rep", gson.toJson(listmMouvements)));
+            out.println(Function.giveJson("rep", gson.toJson(listmConseilDuMois)));
         } catch (Exception e) {
             resp.setStatus(500);
             // e.printStackTrace(out);

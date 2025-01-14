@@ -13,22 +13,25 @@ public class Produit {
     String idProduit;
     @AnnotationAttr(nameInBase = "nom_produit")
     String nomProduit;
-    @AnnotationAttr(nameInBase = "prix_vente_unitaire")
+    @AnnotationAttr(nameInBase = "prix_vente_unitaire", show = false)
     double prixVenteUnitaire;
-    @AnnotationAttr(nameInBase = "nombre")
+    @AnnotationAttr(nameInBase = "nombre", show = false)
     int nombre;
-    @AnnotationAttr(nameInBase = "prix_achat_unitaire")
+    @AnnotationAttr(nameInBase = "prix_achat_unitaire", show = false)
     double prixAchatUnitaire;
-    @AnnotationAttr(nameInBase = "quantite")
+    @AnnotationAttr(nameInBase = "quantite", show = false)
     String quantite;
     @AnnotationAttr(nameInBase = "description", textarea = true)
     String description;
-    @AnnotationAttr(nameInBase = "id_forme")
+    
+    @AnnotationAttr(nameInBase = "id_forme", show = false)
     @ForeingKey(cls = "forme", col = "forme")
     String idForme;
+
     @ForeingKey(cls = "mode_administration", col = "mode_administration")
-    @AnnotationAttr(nameInBase = "id_mode_administration")
+    @AnnotationAttr(nameInBase = "id_mode_administration", show = false)
     String idModeAdministration;
+
     @ForeingKey(cls = "laboratoire", col = "nom_laboratoire")
     @AnnotationAttr(nameInBase = "id_laboratoire")
     String idLaboratoire;

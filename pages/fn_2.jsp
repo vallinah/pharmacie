@@ -45,12 +45,14 @@
         </menu>
         <section class="body">
             <form action="fn_2" method="post">
-                <select name="" id="">
+                <select name="id_categorie_personne" id="">
+                    <option value="">Choise</option>
                     <% for (Vector<String> prs : all_categorie_personne) { %>
                         <option value="<%= prs.get(0) %>"><%= prs.get(1) %></option>
                     <% } %>
                 </select>
-                 <select name="" id="">
+                 <select name="id_mode_administration" id="">
+                    <option value="">Choise</option>
                     <% for (Vector<String> mode : all_mode_administration) { %>
                         <option value="<%= mode.get(0) %>"><%= mode.get(1) %></option>
                     <% } %>
@@ -61,10 +63,10 @@
             <div class="list">
                 <table border="1">
                     <tr>
-                    <th>id_mouvement</th>
+                        <th>id_mouvement</th>
                         <th>quantite</th>
-                        <th>prix_unitaire_achat</th>
-                        <th>prix_unitaire_vente</th>
+                        <th>prix_achat_unitaire</th>
+                        <th>prix_vente_unitaire</th>
                         <th>date_mouvement</th>
                         <th>nom_produit</th>
                     </tr>

@@ -129,11 +129,11 @@ public class CRUD {
         bld.append("    <section class=\"list\">\n"
                 + //
                 "       <div class='ttr'>\n"
-                + "           <h1>Listes " + nameInBase + "</h1>\n"
+                + "           <h1>Listes <br>" + nameInBase + "</h1>\n"
                 + //
                 "        </div>\n"
                 + "        <div class=\"bd\">\n");
-
+        
         for (Field fld : listFields) {
             if (fld.getAnnotation(AnnotationAttr.class).inc()) {
                 idName = fld.getName();

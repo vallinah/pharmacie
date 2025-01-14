@@ -14,7 +14,7 @@ public class Mouvement {
     private int quantite;
     @AnnotationAttr(nameInBase = "prix_achat_unitaire", insert = false)
     private double prixAchatUnitaire;
-    @AnnotationAttr(nameInBase = "prix_vente_unitaire", insert = false)
+    @AnnotationAttr(nameInBase = "prix_vente_unitaire", insert = false, show = false)
     private double prixVenteUnitaire;
     @AnnotationAttr(nameInBase = "date_mouvement")
     private Date dateMouvement;

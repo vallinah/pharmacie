@@ -38,6 +38,7 @@ CREATE SEQUENCE produit_id_seq START 1;
 CREATE SEQUENCE mouvement_id_seq START 1;
 CREATE SEQUENCE produit_categorie_personne_id_seq START 1;
 CREATE SEQUENCE produit_maladie_id_seq START 1;
+CREATE SEQUENCE conseil_du_mois_id_seq START 1;
 
 -- Création des tables
 CREATE TABLE laboratoire (
@@ -91,8 +92,8 @@ CREATE TABLE produit (
 CREATE TABLE mouvement(
    id_mouvement VARCHAR(50) DEFAULT CONCAT('MVT', LPAD(nextval('mouvement_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
    quantite INTEGER NOT NULL,
-   prix_unitaire_achat NUMERIC(18,2)  DEFAULT 0,
-   prix_unitaire_vente NUMERIC(18,2)  DEFAULT 0,
+   prix_achat_unitaire NUMERIC(18,2)  DEFAULT 0,
+   prix_vente_unitaire NUMERIC(18,2)  DEFAULT 0,
    date_mouvement DATE NOT NULL,
    id_produit VARCHAR(50)  NOT NULL,
    FOREIGN KEY(id_produit) REFERENCES produit(id_produit)
@@ -114,6 +115,16 @@ CREATE TABLE produit_maladie (
     FOREIGN KEY (id_produit) REFERENCES produit (id_produit),
     FOREIGN KEY (id_maladie) REFERENCES maladie (id_maladie)
 );
+
+
+CREATE Table conseil_du_mois (
+    id_conseil_du_mois VARCHAR(50) DEFAULT CONCAT('CDM', LPAD(nextval('conseil_du_mois_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
+    date_debut DATE,
+    date_fin date,
+    id_produit VARCHAR(50),
+    FOREIGN KEY (id_produit) REFERENCES produit (id_produit)
+);
+
 
 -- Insertion des données dans `laboratoire`
 INSERT INTO laboratoire (nom_laboratoire)

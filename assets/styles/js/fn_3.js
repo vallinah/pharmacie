@@ -1,9 +1,12 @@
-let list = document.querySelector(".list");
+let list = document.querySelector(".bd");
 let tab = document.querySelector('table');
 
+const filtre = document.querySelector(".filtre");
+const ttr = document.querySelector(".body .ttr");
+ttr.appendChild(filtre);
 function ajax(data = "") {
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "fn_2");
+    xhr.open("POST", "fn_3");
     xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
     xhr.responseType = "json";
     xhr.onreadystatechange = () => {
@@ -14,36 +17,42 @@ function ajax(data = "") {
                     break;
                 default:
                     let {rep} = xhr.response;
+                    
                     rep = JSON.parse(rep);
-                    console.log(rep.length);
+
                     
                     if (rep.length > 0) {
                         
                         tab.remove();
                         tab.innerHTML = `<tr>
-                                        <th>id_mouvement</th>
-                                        <th>quantite</th>
-                                        <th>prix_achat_unitaire</th>
-                                        <th>prix_vente_unitaire</th>
-                                        <th>date_mouvement</th>
-                                        <th>nom_produit</th>
-                                    </tr>`;
+                                    <th>id_conseil_du_mois</th>
+                                    <th>date_debut</th>
+                                    <th>date_fin</th>
+                                    <th>nom_produit</th>
+                                    <th>Action</th>
+                            </tr>`;
 
                         for (let a = 0; a < rep.length; a++) {
                             let tr = document.createElement("tr");
                             let content = "";
                             for (let key in rep[a]) {                                
-                                content += `<td>${rep[a][key]}</td>`; 
+                                content += `<td>${rep[a][key]}</td>`;
                             }
+                            content += `<td>
+                                            <div class='action'>
+                                                <a href="update.jsp?cls=base.ConseilDuMois&id=${rep[a]['id_conseil_du_mois']}"><i class="bi bi-pencil"></i></a>
+                                                <a href="crud?cls=base.ConseilDuMois&id=${rep[a]['id_conseil_du_mois']}"><i class="bi bi-trash"></i></a>
+                                            </div>
+                                        </td>`
                             tr.innerHTML = content;
                             tab.appendChild(tr);
                         }
                         list.innerHTML = "";
                         list.appendChild(tab);
                     } else {
-                        list.innerHTML = "<h1>Aucun element</h1>";
+                        list.innerHTML = "<h1 id='empty'>Aucun element</h1>";
                     }
-                    break;
+                    break;  
             }
         }
     }
