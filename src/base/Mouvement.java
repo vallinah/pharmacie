@@ -21,6 +21,9 @@ public class Mouvement {
     @ForeingKey(cls = "produit", col = "nom_produit")
     @AnnotationAttr(nameInBase = "id_produit")
     private String idProduit;
+    @ForeingKey(cls = "client", col = "nom_client")
+    @AnnotationAttr(nameInBase = "id_client")
+    private String idClient;
 
     public Mouvement(ResultSet resultSet) throws Exception {
         this.setIdMouvement(resultSet.getString("id_mouvement"));
@@ -29,6 +32,7 @@ public class Mouvement {
         this.setPrixVenteUnitaire(resultSet.getDouble("prix_vente_unitaire"));
         this.setDateMouvement(resultSet.getDate("date_mouvement"));
         this.setIdProduit(resultSet.getString("id_produit"));
+        this.setIdClient(resultSet.getString("id_client"));
     }
 
     public Mouvement() {
@@ -82,4 +86,11 @@ public class Mouvement {
         this.idProduit = idProduit;
     }
 
+    public String getIdClient() {
+        return idClient;
+    }
+
+    public void setIdClient(String idClient) {
+        this.idClient = idClient;
+    }
 }

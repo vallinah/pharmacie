@@ -60,5 +60,3 @@ form.addEventListener("submit", e => {
     let params = new URLSearchParams(new FormData(form));
     ajax(params.toString());
 })
-
-ajax();

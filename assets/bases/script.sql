@@ -87,19 +87,39 @@ WHERE (
         and EXTRACT(
             YEAR
             FROM cdm.date_fin
-        )
-        <= 2025
+        ) <= 2025
     );
 
-    SELECT * FROM produit_categorie_personne;
-    SELECT * FROM produit_maladie;
+SELECT * FROM produit_categorie_personne;
 
+SELECT * FROM produit_maladie;
 
 -----------------------
 
-SELECT distinct m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.id_produit
+SELECT distinct
+    m.id_mouvement,
+    m.quantite,
+    m.prix_achat_unitaire,
+    m.prix_vente_unitaire,
+    m.date_mouvement,
+    p.id_produit
 from
     produit p
     JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit
-    JOIN mouvement m ON m.id_produit = p.id_produit where 
-    pcp.id_categorie_personne = 'CATP00000001' and     p.id_mode_administration = 'MOD00000004';    
+    JOIN mouvement m ON m.id_produit = p.id_produit
+where
+    pcp.id_categorie_personne = 'CATP00000001';
+
+    SELECT * FROM produit_categorie_personne;
+
+-------------------
+
+-- fn 4
+
+SELECT DISTINCT c.*
+from mouvement m
+    JOIN client c ON c.id_client = m.id_client
+WHERE
+    m.date_mouvement = ?;
+
+    SELECT * from mouvement;

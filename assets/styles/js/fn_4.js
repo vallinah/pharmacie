@@ -6,7 +6,7 @@ const ttr = document.querySelector(".body .ttr");
 ttr.appendChild(filtre);
 function ajax(data = "") {
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "fn_3");
+    xhr.open("POST", "fn_4");
     xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
     xhr.responseType = "json";
     xhr.onreadystatechange = () => {
@@ -25,13 +25,13 @@ function ajax(data = "") {
                         
                         tab.remove();
                         tab.innerHTML = `<tr>
-                                    <th>id_conseil_du_mois</th>
-                                    <th>date_debut</th>
-                                    <th>date_fin</th>
-                                    <th>nom_produit</th>
-                                    <th>Action</th>
+                                <th>id_client</th>
+                                <th>nom_client</th>
+                                <th>Action</th>
                             </tr>`;
 
+                        console.log(rep);
+                    
                         for (let a = 0; a < rep.length; a++) {
                             let tr = document.createElement("tr");
                             let content = "";
@@ -40,8 +40,7 @@ function ajax(data = "") {
                             }
                             content += `<td>
                                             <div class='action'>
-                                                <a href="update.jsp?cls=base.ConseilDuMois&id=${rep[a]['id_conseil_du_mois']}"><i class="bi bi-pencil"></i></a>
-                                                <a href="crud?cls=base.ConseilDuMois&id=${rep[a]['id_conseil_du_mois']}"><i class="bi bi-trash"></i></a>
+                                                <a href="update.jsp?cls=base.Client&id=${rep[a]['idClient']}"><i class="bi bi-pencil"></i></a>
                                             </div>
                                         </td>`
                             tr.innerHTML = content;

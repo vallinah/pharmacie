@@ -27,6 +27,10 @@
         <i class="bi bi-person-badge"></i>
         <a href="conseildumois.jsp">Conseil du Mois</a>
     </div>
+    <div class="prt">
+        <i class="bi bi-person-badge"></i>
+        <a href="client.jsp">Client</a>
+    </div>
 </div>
 </div>
 <div class="acc">

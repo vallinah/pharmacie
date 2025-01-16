@@ -1,15 +1,48 @@
 package fn;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import base.Client;
 import base.ConseilDuMois;
 import base.Mouvement;
 import base.Produit;
 import base.connexe.Connexion;
 
 public class Functionality {
+
+    public Vector<Client> getReqFn_4(Date daty) throws Exception {
+
+        String req = "SELECT DISTINCT c.*\n" + //
+                        "from mouvement m\n" + //
+                        "    JOIN client c ON c.id_client = m.id_client\n" + //
+                        "WHERE\n" + //
+                        "    m.date_mouvement = ?";
+
+        Vector<Client> all = new Vector<>();                
+        Connexion connexion = Function.dbConnect();
+        PreparedStatement prepared = null;
+        ResultSet set = null;
+
+        try {
+            prepared = connexion.getConnexe().prepareStatement(req);
+            prepared.setDate(1, daty);
+
+            set = prepared.executeQuery();
+            while (set.next()) {
+                all.add(new Client(set));
+            }
+            return all;
+        } catch (Exception e) {
+            throw  e;
+        } finally {
+            if (set != null) set.close();
+            if (prepared != null) prepared.close();
+            connexion.finaleClose();
+        }        
+    } 
 
     public Vector<ConseilDuMois> getReqFn_3(int month, int year) throws Exception {
         String req = "SELECT *\n" + //
