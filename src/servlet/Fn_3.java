@@ -23,12 +23,10 @@ public class Fn_3 extends HttpServlet {
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         try {
-            String[] splt = req.getParameter("month_year").split("-");
-            int year = Integer.parseInt(splt[0]);
-            int month = Integer.parseInt(splt[1]);
+            int year = Integer.parseInt(req.getParameter("year"));
 
             Functionality fn = new Functionality();
-            Vector<ConseilDuMois> listmConseilDuMois = fn.getReqFn_3(month, year);
+            Vector<ConseilDuMois> listmConseilDuMois = fn.getReqFn_3(1, year);
 
             Gson gson = new Gson();
             out.println(Function.giveJson("rep", gson.toJson(listmConseilDuMois)));

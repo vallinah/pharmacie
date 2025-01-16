@@ -1,6 +1,10 @@
 let list = document.querySelector(".list");
 let tab = document.querySelector('table');
 
+const filtre = document.querySelector(".filtre");
+const ttr = document.querySelector(".body .ttr");
+ttr.appendChild(filtre);
+
 function ajax(data = "") {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "fn_2");

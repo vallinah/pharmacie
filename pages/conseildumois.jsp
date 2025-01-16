@@ -33,8 +33,8 @@
             <div class="filtre" id="filtre">
                 <form action="fn_3" method="post">
                 <label for="">
-                    <span>Month and Year</span>
-                    <input type="month" name="month_year" id="" required>
+                    <span>Year</span>
+                    <input type="number" name="year" id="" required>
                 </label>
                     <button type="submit">Valider</button>
                 </form>

@@ -18,16 +18,6 @@ public class Functionality {
                         "    JOIN produit p ON p.id_produit = cdm.id_produit\n" + //
                         "WHERE (\n" + //
                         "        EXTRACT(\n" + //
-                        "            MONTH\n" + //
-                        "            FROM cdm.date_debut\n" + //
-                        "        ) >= ?\n" + //
-                        "        and EXTRACT(\n" + //
-                        "            MONTH\n" + //
-                        "            FROM cdm.date_fin\n" + //
-                        "        ) <= ?\n" + //
-                        "    )\n" + //
-                        "    and (\n" + //
-                        "        EXTRACT(\n" + //
                         "            YEAR\n" + //
                         "            FROM cdm.date_debut\n" + //
                         "        ) >= ?\n" + //
@@ -46,10 +36,8 @@ public class Functionality {
 
         try {
             prepared = connexion.getConnexe().prepareStatement(req);
-                prepared.setInt(1, month);
-                prepared.setInt(2, month);
-            prepared.setInt(3, year);
-            prepared.setInt(4, year);
+            prepared.setInt(1, year);
+            prepared.setInt(2, year);
 
             set = prepared.executeQuery();
             while (set.next()) {

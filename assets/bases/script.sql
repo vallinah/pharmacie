@@ -97,9 +97,9 @@ WHERE (
 
 -----------------------
 
-SELECT m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.id_produit
+SELECT distinct m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.id_produit
 from
     produit p
     JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit
     JOIN mouvement m ON m.id_produit = p.id_produit where 
-    id_mode_administration = 'MOD00000002';
+    pcp.id_categorie_personne = 'CATP00000001' and     p.id_mode_administration = 'MOD00000004';    

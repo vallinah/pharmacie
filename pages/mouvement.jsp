@@ -21,10 +21,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/styles/css/crud.css">
     <title>Mouvement</title>
 </head>
 <body>
-    <%-- <%@include file="../inc/header.jsp" %> --%>
+    <%@include file="../inc/header.jsp" %>
     <main>
         <menu>
             <div class="menu_ttr">
@@ -41,22 +42,22 @@
             </div>
         </menu>
         <section class="body">
-            <div class="filtre">
+            <div class="filtre" id='filtre'>
                 <form action="fn_2" method="post">
-                <select name="id_categorie_personne" id="">
-                    <option value="">Choise</option>
-                    <% for (Vector<String> prs : all_categorie_personne) { %>
-                        <option value="<%= prs.get(0) %>"><%= prs.get(1) %></option>
-                    <% } %>
-                </select>
-                 <select name="id_mode_administration" id="">
-                    <option value="">Choise</option>
-                    <% for (Vector<String> mode : all_mode_administration) { %>
-                        <option value="<%= mode.get(0) %>"><%= mode.get(1) %></option>
-                    <% } %>
-                </select>
-                <button type="submit">Valider</button>
-            </form>
+                    <select name="id_categorie_personne" id="">
+                        <option value="">Choise</option>
+                        <% for (Vector<String> prs : all_categorie_personne) { %>
+                            <option value="<%= prs.get(0) %>"><%= prs.get(1) %></option>
+                        <% } %>
+                    </select>
+                    <select name="id_mode_administration" id="">
+                        <option value="">Choise</option>
+                        <% for (Vector<String> mode : all_mode_administration) { %>
+                            <option value="<%= mode.get(0) %>"><%= mode.get(1) %></option>
+                        <% } %>
+                    </select>
+                    <button type="submit">Valider</button>
+                </form>
             </div>
             <%= crd.html_liste() %>
         </section>
