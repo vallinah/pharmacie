@@ -40,6 +40,15 @@ public class CRUD {
         }
     }
 
+    private boolean detectForeignKey() throws Exception {
+        for (Field fld : listFields)  {
+            if (fld.isAnnotationPresent(ForeingKey.class)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private Field getFieldByName(String fldName) throws Exception {
         for (Field fld : listFields) {
             if (fldName.equalsIgnoreCase(fld.getName())) {
@@ -153,7 +162,15 @@ public class CRUD {
                 + //
                 "               <tr>\n";
         int isEmpty = 0;
+
+        boolean isForeignKey = detectForeignKey();
+
         for (Vector<String> ligne : rehetra) {
+            String trash = "<a href=\\\"crud?cls=\" + cls.getName() + \"&id=\" + ligne.firstElement()\n" + //
+                                "                    + \"\"><i class=\"bi bi-trash\"></i></a" ;
+            if (isForeignKey) {
+                trash = "";
+            }
             for (String value : ligne) {
                 body.append("                    <td>" + value + "</td>\n");
             }
@@ -162,10 +179,7 @@ public class CRUD {
                     "                       <div class='action'>\n"
                     + "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id="
                     + ligne.firstElement() + "\"><i class=\"bi bi-pencil\"></i></a>\n"
-                    + //
-                    "                           <a href=\"crud?cls=" + cls.getName() + "&id=" + ligne.firstElement()
-                    + "\"><i class=\"bi bi-trash\"></i></a>\n"
-                    + //
+                    + trash + //
                     "                       </div>\n"
                     + "                   </td>\n"
                     + //
