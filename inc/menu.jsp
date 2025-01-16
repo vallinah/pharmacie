@@ -21,6 +21,10 @@
     <% } %>
     <div class="prt">
         <i class="bi bi-person-badge"></i>
+        <a href="mouvement.jsp">Mouvement</a>
+    </div>
+    <div class="prt">
+        <i class="bi bi-person-badge"></i>
         <a href="conseildumois.jsp">Conseil du Mois</a>
     </div>
 </div>

@@ -1,6 +1,16 @@
 <%@page import="gst.CRUD" %>
 <%@page import="fn.Function"%>
+<%@page import="java.util.Vector"%>
+<%@page import="fn.All"%>
+<%@page import="base.*"%>
 
+<%
+    All categorie_personne = new All(CategoriePersonne.class);
+    All mode_administration = new All(ModeAdministration.class);
+
+    Vector<Vector<String>> all_categorie_personne = categorie_personne.getAll("id_categorie_personne, categorie_personne");
+    Vector<Vector<String>> all_mode_administration = mode_administration.getAll("id_mode_administration, mode_administration");
+%>
 <%
     Class<?> cls = Class.forName("base.Mouvement");
     CRUD crd = new CRUD(cls);
@@ -14,7 +24,7 @@
     <title>Mouvement</title>
 </head>
 <body>
-    <%@include file="../inc/header.jsp" %>
+    <%-- <%@include file="../inc/header.jsp" %> --%>
     <main>
         <menu>
             <div class="menu_ttr">
@@ -22,32 +32,7 @@
             </div>
             <div class="menu_bd">
                 <div class="acc">
-                    <div class="acc_ttr">
-                        <i class="bi bi-person-circle"></i>
-                        <h2>Listes Entites</h2>
-                        <i class="bi bi-chevron-right"></i>
-                    </div>                                                                      
-                    <div class="acc_body">
-                        <% for (Class<?> kilasy : Function.listeClass()) { %>
-                            <div class="prt">
-                                <i class="bi bi-person-badge"></i>
-                                <a href="crud.jsp?cls=<%= kilasy.getName() %>"><%= kilasy.getSimpleName() %></a>
-                            </div>
-                        <% } %>
-                    </div>
-                </div>
-                <div class="acc">
-                    <div class="acc_ttr">
-                        <i class="bi bi-person-circle"></i>
-                        <h2>Fonctionality</h2>
-                        <i class="bi bi-chevron-right"></i>
-                    </div>                                                                      
-                    <div class="acc_body">
-                        <div class="prt">
-                            <i class="bi bi-person-badge"></i>
-                            <a href="fn_1.jsp">Functionality 1</a>
-                        </div>
-                    </div>
+                    <%@include file="../inc/menu.jsp" %>
                 </div>
                 <div class="lien">
                     <i class="bi bi-plus"></i>
@@ -57,7 +42,21 @@
         </menu>
         <section class="body">
             <div class="filtre">
-                
+                <form action="fn_2" method="post">
+                <select name="id_categorie_personne" id="">
+                    <option value="">Choise</option>
+                    <% for (Vector<String> prs : all_categorie_personne) { %>
+                        <option value="<%= prs.get(0) %>"><%= prs.get(1) %></option>
+                    <% } %>
+                </select>
+                 <select name="id_mode_administration" id="">
+                    <option value="">Choise</option>
+                    <% for (Vector<String> mode : all_mode_administration) { %>
+                        <option value="<%= mode.get(0) %>"><%= mode.get(1) %></option>
+                    <% } %>
+                </select>
+                <button type="submit">Valider</button>
+            </form>
             </div>
             <%= crd.html_liste() %>
         </section>

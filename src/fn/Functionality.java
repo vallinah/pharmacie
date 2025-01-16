@@ -77,11 +77,6 @@ public class Functionality {
         String  cnd_idMode = "";
         boolean first = false;
 
-        if (idCategoriePersonne == null && idMode == null) {
-            req += " where 1 <> 1";
-            return req;
-        }
-
         if (idCategoriePersonne != null) {
             if (!idCategoriePersonne.isEmpty()) {
                 cnd_categorie = "    pcp.id_categorie_personne = ?";
