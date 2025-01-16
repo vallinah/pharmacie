@@ -6,7 +6,7 @@ import annotation.ForeingKey;
 import java.sql.Date;
 import java.sql.ResultSet;
 
-@AnnotationClass(nameInBase = "mouvement", sequence = "mouvement_id_seq")
+@AnnotationClass(nameInBase = "mouvement", sequence = "mouvement_id_seq", prefix = "MVT")
 public class Mouvement {
     @AnnotationAttr(nameInBase = "id_mouvement", inc = true)
     private String idMouvement;
