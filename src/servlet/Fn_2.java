@@ -23,7 +23,7 @@ public class Fn_2 extends HttpServlet {
         PrintWriter out = resp.getWriter();
         resp.setContentType("application/json");
         try {
-            String id_mode = req.getParameter(req.getParameter("id_mode_administration"));
+            String id_mode = req.getParameter("id_mode_administration");
             String idCategorie_personne = req.getParameter("id_categorie_personne");
 
             Functionality fn = new Functionality();

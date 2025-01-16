@@ -66,7 +66,7 @@ public class Functionality {
     }
 
     public String getReqFn_2(String idCategoriePersonne, String idMode) throws Exception {
-        String req = "SELECT m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.id_produit\n" + //
+        String req = "SELECT distinct m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.id_produit\n" + //
                         "from\n" + //
                         "    produit p\n" + //
                         "    JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit\n" + //
@@ -90,7 +90,7 @@ public class Functionality {
                 if (first) {
                     cnd_idMode = " and ";
                 }
-                cnd_idMode += "    id_mode_administration = ?";
+                cnd_idMode += "    p.id_mode_administration = ?";
                 cnd = true;
             }
         }

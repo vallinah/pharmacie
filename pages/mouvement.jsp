@@ -61,5 +61,6 @@
             <%= crd.html_liste() %>
         </section>
     </main>
+    <script src="../assets/styles/js/fn_1.js"></script>
 </body>
 </html>
