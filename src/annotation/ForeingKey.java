@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 public @interface ForeingKey {
     public abstract String col();
     public abstract String cls();
+    public abstract boolean id() default true;
 }

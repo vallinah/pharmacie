@@ -20,7 +20,7 @@ public class Mouvement {
     @AnnotationAttr(nameInBase = "id_produit")
     private String idProduit;
     @AnnotationAttr(nameInBase = "prix_vente_unitaire", insert = false)
-    @ForeingKey(cls = "produit", col = "prix_vente_unitaire")
+    @ForeingKey(cls = "produit", col = "prix_vente_unitaire", id = false)
     private double prixVenteUnitaire;
     @ForeingKey(cls = "client", col = "nom_client")
     @AnnotationAttr(nameInBase = "id_client")
