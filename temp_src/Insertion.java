@@ -20,6 +20,9 @@ public class Insertion extends HttpServlet {
         Enumeration<String> enumeration = req.getParameterNames();
         Vector<String> values = new Vector<>();
         String clsName = null;
+
+        out.println(req.getParameter("nom_produit"));
+
         while (enumeration.hasMoreElements()) {
             String val = enumeration.nextElement();
             if (val.equals("cls")) {
@@ -31,7 +34,7 @@ public class Insertion extends HttpServlet {
         try {
             CRUD crd = new CRUD(Class.forName(clsName));
             crd.insert(values);
-            resp.sendRedirect("insert.jsp?cls=" + clsName);
+            // resp.sendRedirect("crud.jsp?cls=" + clsName);
         } catch (Exception e) {
             e.printStackTrace(out);
         }

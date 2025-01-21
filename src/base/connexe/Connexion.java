@@ -31,8 +31,8 @@ public class Connexion {
     // $ Fonction tsotra
 
     public void finaleClose() throws Exception {
-        stmt.close();
-        connexe.close();
+        if (stmt != null)  stmt.close();
+        if (connexe != null) connexe.close();
     }
 
     public int incrementSequence(String sequenceName) throws Exception {

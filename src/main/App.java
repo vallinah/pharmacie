@@ -1,26 +1,33 @@
 package main;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Vector;
 
-import base.Categorie;
+import base.Laboratoire;
+import base.Mouvement;
 import base.Produit;
-import base.SousCategorie;
+import base.ProduitCategoriePersonne;
+import fn.Functionality;
 import gst.CRUD;
 
 public class App {
 
     public static void main(String[] args) {
         try {
-            CRUD crd = new CRUD(Produit.class);
-            // System.out.println(crd.html_update("21"));
-            Vector<String> vect = new Vector<>();
-            vect.add("dd");
-            vect.add("rr");
-            vect.add("1");
-            crd.update(vect, "1");
+
+            CRUD crd = new CRUD(Mouvement.class);
+            // crd.html_liste();
+            System.out.println(crd.scriptInsert());
+            // Functionality fn = new Functionality();
+
+            // Vector<Mouvement> mvts = fn.getFn_2("CATP00000001", "MOD00000004");
+            // for (Mouvement mvt : mvts) {
+            //     System.out.println(mvt.getIdMouvement());
+            // }
         } catch (Exception e) {
-            // e.printStackTrace();
-            System.out.println("Erreur : " + e.getMessage());
+            e.printStackTrace();
+            // System.out.println("Erreur : " + e.getMessage());
         }
     }
 }

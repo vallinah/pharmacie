@@ -1,0 +1,279 @@
+main {
+    display: flex;
+}
+
+.gnr {
+    width: 600px;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 43px;
+    background: white;
+    box-shadow:  7px 7px 14px #cccccc,
+                 -7px -7px 14px #f4f4f4;
+}
+
+.gnr h1, section.list .ttr {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    font-size: 40px;
+    font-family: "rez";
+    letter-spacing: 5px;
+}
+
+.gnr h1 {
+    height: 100px;
+    text-align: center;
+    margin-bottom: 30px !important;
+}
+
+.gnr form {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 20px;
+}
+
+.gnr form .prt {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.gnr form .prt span {
+    position: absolute;
+    left: 80px;
+    z-index: 1;
+    transition: .5s;
+    opacity: .6;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.gnr form .prt textarea {
+    resize: vertical;
+    min-height: 50px;
+    padding-top: 15px !important;
+    padding-bottom: 15px !important;
+    max-height: 150px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.gnr form .prt textarea::-webkit-scrollbar {
+    width: 0;
+}
+
+.gnr form .prt textarea::-webkit-scrollbar-track {
+    width: 0;
+}
+
+.gnr form .prt input, .gnr form .prt textarea, .gnr form .prt select {
+    width: 80%;
+    height: 50px;
+    border-radius: 5px;
+    border: 0.5px solid black;
+    outline-width: 0px;
+    padding: 0 20px;
+    background-color: transparent;
+    z-index: 2;
+    font-size: 17px;
+}
+
+.gnr form .prt select {
+    appearance: none;
+}
+
+.gnr form .prt select option {
+    text-align: center;
+    background-color: black;
+    color: white;
+}
+
+.gnr form .prt input:focus , .gnr form .prt textarea:focus  {
+    outline: 3px solid var(--secondary-color);
+    transition: .1s;
+}
+
+.gnr form .prt input:focus ~ span, .gnr form .prt textarea:focus ~ span,
+.gnr form .prt input:checked ~ span, .gnr form .prt textarea:checked ~ span,
+.gnr form .prt input:valid ~ span, .gnr form .prt textarea:valid ~ span {
+    transform: translate(20px, -27px);
+    transition: .5s;
+    background-color: white;
+    z-index: 3;
+    padding: 0 10px;
+    opacity: 1;
+}
+
+.gnr form button {
+    width: 180px;
+    padding: 12px 30px;
+    background-color: var(--secondary-color);
+    color: white;
+    font-weight: bolder;
+    text-transform: uppercase;
+    border-radius: 50px;
+    border-width: 0px;
+    cursor: pointer;
+}
+
+.gnr .err {
+    min-height: 20px;
+    color: red;
+    text-align: center;
+    font-weight: bolder;
+}
+
+table {
+    border-collapse: collapse;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    border-width: 0;
+}
+
+table th {
+    min-width: 200px;
+    width: 200px;
+    background-color: var(--secondary-color);
+    color: white;
+    text-transform: uppercase;
+    text-wrap: wrap;
+    font-size: 13px !important;
+}
+
+table tr:first-child {
+    height: 60px;
+}
+
+table tr {
+    height: 50px;
+}
+
+table th, table td {
+    border-width: 0px;
+}
+
+table td {
+    border-bottom: 2px solid;
+}
+
+table td .action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 30px;
+}
+
+table td i {
+    background-color: var(--secondary-color);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+table td a {
+    color: white;
+    text-decoration: none;
+}
+
+.body .bd {
+    height: calc(100% - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+}
+
+.ins {
+    height: 10%;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+.ins a {
+    width: 150px;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+    padding: 10px 40px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border-radius: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+section.list {
+    height: 90%;
+}
+
+.list .ttr {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+a.back {
+    color:  white;
+    background-color: var(--secondary-color);
+    border-radius: 50px;
+    width: 150px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+.bd h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 4em;
+    margin-top: 80px;
+}
+
+/* .body form {
+    display: flex;
+    align-items: center;
+} */
+
+#filtre form {
+    height: 200px !important;
+}
+
+#filtre form input {
+    width: 300px;
+    height: 40px;
+    text-align: center;
+    margin-top: 30px;
+    border: 4px solid var(--secondary-color);
+    border-radius: 5px;
+}
+
+#filtre form button {
+    padding: 10px;
+    width: 200px;
+}
+
+#filtre form label span {
+    font-size: 26px;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.body .ttr {
+    display: block !important;
+    margin-bottom: 50px;
+}
+
+#empty {
+    font-size: 53px;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 40px;
+}

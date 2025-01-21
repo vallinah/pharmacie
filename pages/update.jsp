@@ -1,4 +1,5 @@
 <%@page import="gst.CRUD" %>
+<%@page import="fn.Function"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,12 +7,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>update</title>
+    <link rel="stylesheet" href="../assets/styles/css/crud.css">
+    <script src="../assets/styles/js/crud.js" defer></script>
+    <script src="../assets/styles/js/update.js" defer type="module"></script>
 </head>
 <body>
-    <%
-        Class<?> cls = Class.forName(request.getParameter("cls"));
-        CRUD crd = new CRUD(cls);
-        out.println(crd.html_update(request.getParameter("id")));
-    %>
+    <%@include file="../inc/header.jsp" %>
+    <main>
+        <menu>
+            <div class="menu_ttr">
+                <h1>Menu</h1>
+            </div>
+            <div class="menu_bd">
+                <%@include file="../inc/menu.jsp" %>
+                <div class="lien">
+                    <i class="bi bi-arrow-left"></i>
+                     <a href="crud.jsp?cls=<%= request.getParameter("cls") %>">Retour</a>
+                </div>
+            </div>
+        </menu>
+        <section class="body">
+            <%
+                Class<?> cls = Class.forName(request.getParameter("cls"));
+                CRUD crd = new CRUD(cls);
+                out.println(crd.html_update(request.getParameter("id")));
+            %>
+        </section>
+    </main>
 </body>
 </html>

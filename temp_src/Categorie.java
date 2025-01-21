@@ -1,7 +1,7 @@
 package base;
 
-import java.sql.ResultSet;
 import annotation.*;
+import java.sql.ResultSet;
 
 @AnnotationClass(nameInBase = "categorie", sequence = "categorie_id_seq")
 public class Categorie {

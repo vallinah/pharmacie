@@ -1,0 +1,93 @@
+@import url("font.css");
+
+:root {
+    --secondary-color: #009900; 
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.f {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+header {
+    height: 100px;
+    background-color: white;
+    box-shadow: 5px 0 10px rgba(0, 0, 0, 0.217);
+    position: fixed !important;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: flex;
+}
+
+.logo {
+    width: 15%;
+}
+
+header .ttr {
+    font-family: "rez";
+    font-size: 25px;
+    letter-spacing: 5px;
+    height: 100%;
+    width: 60%;
+    color: white;
+    text-shadow: 3px 3px 2px rgba(0, 0, 0, 0.647), -3px -3px 2px #00990074;
+}
+
+.body {
+    height: 100vh;
+    width: calc(100% - 330px);
+    overflow-y: scroll;
+    padding: 100px 0 !important;
+}
+
+nav {
+    width: 15%;
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100px;
+    height: 30px;
+    background-color: black;
+    color: white;
+    text-decoration: none;
+    position: relative;
+}
+
+nav a::after {
+    content: "";
+    position: absolute;
+    height: 12px;
+    width: 12px;
+    background-color: red;
+    top: 0;
+    right: 10px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.ls {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    padding-left: 20px;
+}
+
+.ls a {
+    font-weight: bolder;
+}
