@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS maladie CASCADE;
 DROP TABLE IF EXISTS laboratoire CASCADE;
 DROP Table if EXISTS conseil_du_mois CASCADE;
 DROP Table if EXISTS client CASCADE;
+DROP Table if EXISTS vendeur CASCADE;
 
 DO $$ 
 BEGIN
@@ -29,6 +30,7 @@ BEGIN
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'mouvement_id_seq') THEN DROP SEQUENCE mouvement_id_seq; END IF;
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'conseil_du_mois_id_seq') THEN DROP SEQUENCE conseil_du_mois_id_seq; END IF;
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'client_id_seq') THEN DROP SEQUENCE client_id_seq; END IF;
+    IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'vendeur_id_seq') THEN DROP SEQUENCE vendeur_id_seq; END IF;
 END $$;
 
 -- Création des séquences
@@ -44,6 +46,7 @@ CREATE SEQUENCE produit_categorie_personne_id_seq START 1;
 CREATE SEQUENCE produit_maladie_id_seq START 1;
 CREATE SEQUENCE conseil_du_mois_id_seq START 1;
 CREATE SEQUENCE client_id_seq START 1;
+CREATE SEQUENCE vendeur_id_seq START 1;
 
 -- Création des tables
 CREATE TABLE laboratoire (
@@ -99,6 +102,11 @@ CREATE Table client (
     nom_client VARCHAR(100) NOT NULL
 )
 
+CREATE Table vendeur (
+    id_vendeur VARCHAR(50) DEFAULT CONCAT('VND', LPAD(nextval('vendeur_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
+    nom_vendeur VARCHAR(100) NOT NULL
+)
+
 CREATE TABLE mouvement(
    id_mouvement VARCHAR(50) DEFAULT CONCAT('MVT', LPAD(nextval('mouvement_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
    quantite INTEGER NOT NULL,
@@ -107,8 +115,10 @@ CREATE TABLE mouvement(
    date_mouvement DATE NOT NULL,
    id_produit VARCHAR(50)  NOT NULL,
    id_client VARCHAR(50),
+   id_vendeur VARCHAR(50),
    FOREIGN KEY(id_produit) REFERENCES produit(id_produit),
-   FOREIGN KEY(id_client) REFERENCES client(id_client)
+   FOREIGN KEY(id_client) REFERENCES client(id_client),
+   FOREIGN KEY(id_vendeur) REFERENCES vendeur(id_vendeur)
 );
 
 

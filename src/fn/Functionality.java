@@ -6,12 +6,57 @@ import java.sql.ResultSet;
 import java.util.Vector;
 
 import base.Client;
+import base.CommissionVendeur;
 import base.ConseilDuMois;
 import base.Mouvement;
 import base.Produit;
 import base.connexe.Connexion;
 
 public class Functionality {
+
+    public Vector<CommissionVendeur> getReqFn_5(Date daty1, Date daty2) throws Exception {
+        String req = "SELECT v.nom_vendeur, sum(\n" + //
+                        "        (\n" + //
+                        "            5 * p.prix_vente_unitaire * m.quantite\n" + //
+                        "        ) / 100\n" + //
+                        "    ) commission\n" + //
+                        "FROM mouvement m\n" + //
+                        "    JOIN vendeur v on v.id_vendeur = m.id_vendeur\n" + //
+                        "    JOIN produit p\n" + //
+                        "    on p.id_produit = m.id_produit\n";
+        if (daty1 != null && daty2 != null) {
+            req += "WHERE\n" + //
+                                "    date_mouvement BETWEEN ? and ?\n";
+        }
+        req += "GROUP BY\n" + //
+                        "    v.id_vendeur";
+
+
+        Vector<CommissionVendeur> all = new Vector<>();                
+        Connexion connexion = Function.dbConnect();
+        PreparedStatement prepared = null;
+        ResultSet set = null;
+
+        try {
+            prepared = connexion.getConnexe().prepareStatement(req);
+            if (daty1 != null && daty2 != null) {
+                prepared.setDate(1, daty1);
+                prepared.setDate(2, daty2);
+            }
+
+            set = prepared.executeQuery();
+            while (set.next()) {
+                all.add(new CommissionVendeur(set));
+            }
+            return all;
+        } catch (Exception e) {
+            throw  e;
+        } finally {
+            if (set != null) set.close();
+            if (prepared != null) prepared.close();
+            connexion.finaleClose();
+        }        
+    }
 
     public Vector<Client> getReqFn_4(Date daty) throws Exception {
 
@@ -87,7 +132,7 @@ public class Functionality {
     }
 
     public String getReqFn_2(String idCategoriePersonne, String idMode) throws Exception {
-        String req = "SELECT distinct m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.id_produit\n" + //
+        String req = "SELECT distinct m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.date_mouvement, p.id_produit, m.id_client\n" + //
                         "from\n" + //
                         "    produit p\n" + //
                         "    JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit\n" + //

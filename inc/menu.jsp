@@ -31,5 +31,9 @@
         <i class="bi bi-person-badge"></i>
         <a href="client.jsp">Client</a>
     </div>
+    <div class="prt">
+        <i class="bi bi-person-badge"></i>
+        <a href="vendeur.jsp">Vendeur</a>
+    </div>
 </div>
 </div>

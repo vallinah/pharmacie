@@ -18,12 +18,14 @@ public class All {
     private Vector<Field> fieldShow = new Vector<>();
     private String req = null;
     private Vector<Field> foreingKey = new Vector<>();
+    private Vector<String> efaVitaJointure = new Vector<>();
 
     public All(Class<?> cls) throws Exception {
         this.cls = cls;
         nameInBase = cls.getAnnotation(AnnotationClass.class).nameInBase();
         setFieldShow();
     }
+
     
     private void setFieldShow() {
         Field[] fld = cls.getDeclaredFields();
@@ -34,15 +36,29 @@ public class All {
                 }
             } 
             if (f.isAnnotationPresent(ForeingKey.class)) {
-                foreingKey.add(f);
+                if (!foreingKey.contains(f)) {
+                    foreingKey.add(f);
+                }
             }
         }
     }
 
+        private boolean checkEfaAoVe(String cls) {
+            for (String str : efaVitaJointure) {
+                if (cls.equalsIgnoreCase(str)) {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     private String scriptJoin(Field fld) {
         String nameFld = fld.getAnnotation(AnnotationAttr.class).nameInBase();
         String otherCls = fld.getAnnotation(ForeingKey.class).cls();
+        if (checkEfaAoVe(otherCls)) {
+            return "";
+        }
+        efaVitaJointure.add(otherCls);
         return   " join " + otherCls + " on " + nameInBase + "." + nameFld + " = " + otherCls + "." + nameFld;
     }
 

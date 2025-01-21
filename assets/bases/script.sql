@@ -110,16 +110,55 @@ from
 where
     pcp.id_categorie_personne = 'CATP00000001';
 
-    SELECT * FROM produit_categorie_personne;
+SELECT * FROM produit_categorie_personne;
 
 -------------------
 
 -- fn 4
 
-SELECT DISTINCT c.*
+SELECT DISTINCT
+    c.*
 from mouvement m
     JOIN client c ON c.id_client = m.id_client
 WHERE
     m.date_mouvement = ?;
 
-    SELECT * from mouvement;
+SELECT * from mouvement;
+
+select mouvement.id_mouvement, mouvement.quantite, mouvement.date_mouvement, produit.prix_vente_unitaire, produit.nom_produit, client.nom_client
+from
+    mouvement
+    join produit on mouvement.prix_vente_unitaire = produit.prix_vente_unitaire
+    join client on mouvement.id_client = client.id_client;
+
+--- fn 5
+
+SELECT v.nom_vendeur, sum(
+        (
+            5 * p.prix_vente_unitaire * m.quantite
+        ) / 100
+    ) commission
+FROM mouvement m
+    JOIN vendeur v on v.id_vendeur = m.id_vendeur
+    JOIN produit p
+    on p.id_produit = m.id_produit
+WHERE
+    date_mouvement BETWEEN '2025-01-21' and '2025-01-21'
+GROUP BY
+    v.id_vendeur;
+
+SELECT *
+FROM mouvement m
+    JOIN vendeur v on v.id_vendeur = m.id_vendeur;
+
+SELECT cv.nom_vendeur, sum(
+        (
+            5 * cv.prix_vente_unitaire * cv.quantite
+        ) / 100)
+FROM (
+        SELECT *
+        FROM mouvement m
+            JOIN vendeur v on v.id_vendeur = m.id_vendeur
+    ) cv
+GROUP BY
+    cv.id_vendeur;
