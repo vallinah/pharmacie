@@ -166,8 +166,8 @@ public class CRUD {
         boolean isForeignKey = detectForeignKey();
 
         for (Vector<String> ligne : rehetra) {
-            String trash = "<a href=\\\"crud?cls=\" + cls.getName() + \"&id=\" + ligne.firstElement()\n" + //
-                                "                    + \"\"><i class=\"bi bi-trash\"></i></a" ;
+            String trash = "<a href=\"crud?cls=" + cls.getName() + "&id=" + ligne.firstElement() + //
+                                "\"><i class=\"bi bi-trash\"></i></a" ;
             if (isForeignKey) {
                 trash = "";
             }
