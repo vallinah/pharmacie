@@ -9,14 +9,16 @@ import annotation.AnnotationClass;
 public class Client {
 
     @AnnotationAttr(nameInBase = "id_client", inc = true)
-    String idClient;
+    private String idClient;
     @AnnotationAttr(nameInBase = "nom_client")
-    String nomClient;
+    private String nomClient;
 
     public Client(ResultSet set) throws Exception {
         idClient = set.getString("id_client");
         nomClient = set.getString("nom_client");
     }
+
+    public Client() {}
 
     public String getIdClient() {
         return idClient;

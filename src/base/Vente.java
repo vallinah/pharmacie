@@ -36,8 +36,7 @@ public class Vente {
         this.setIdClient(resultSet.getString("id_client"));
     }
 
-    public Vente() {
-    }
+    public Vente() {}
 
     public String getIdMouvement() {
         return idMouvement;

@@ -17,13 +17,12 @@ public class Functionality {
     public Vector<CommissionVendeur> getReqFn_5(Date daty1, Date daty2) throws Exception {
         String req = "SELECT v.nom_vendeur, sum(\n" + //
                         "        (\n" + //
-                        "            5 * p.prix_vente_unitaire * m.quantite\n" + //
+                        "            5 * m.prix_vente_unitaire * m.quantite\n" + //
                         "        ) / 100\n" + //
                         "    ) commission\n" + //
-                        "FROM mouvement m\n" + //
-                        "    JOIN vendeur v on v.id_vendeur = m.id_vendeur\n" + //
-                        "    JOIN produit p\n" + //
-                        "    on p.id_produit = m.id_produit\n";
+                        "FROM\n" + //
+                        "    mouvement m\n" + //
+                        "    JOIN vendeur v on v.id_vendeur = m.id_vendeur\n";
         if (daty1 != null && daty2 != null) {
             req += "WHERE\n" + //
                                 "    date_mouvement BETWEEN ? and ?\n";

@@ -18,6 +18,8 @@ public class Vendeur {
         nomVendeur = set.getString("nom_vendeur");
     }
 
+    public Vendeur() {}
+
     public String getIdVendeur() {
         return idVendeur;
     }
