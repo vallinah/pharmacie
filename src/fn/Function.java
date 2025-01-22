@@ -3,7 +3,10 @@ package fn;
 import base.*;
 import base.connexe.Connexion;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
@@ -14,6 +17,38 @@ public class Function {
     
     public static Connexion dbConnect() throws Exception {
         return new Connexion("pharmacie");
+    }
+
+    public static String getDataByID(String table, String columnGet, String columnSelect, String id) throws Exception {
+        String req = "select " + columnGet + " from " + table + " where " + columnSelect + " = ?";
+        String value = "";
+
+        Connexion connexion = Function.dbConnect();
+        Connection connection = null;
+        PreparedStatement prp = null;
+        ResultSet set = null;
+
+        try {
+            connection = connexion.getConnexe();
+            prp = connection.prepareStatement(req);
+            prp.setString(1, id);
+            set = prp.executeQuery();
+
+            if (set.next()) {
+                value = set.getString(1);
+            }
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (set != null)
+                set.close();
+            if (prp != null)
+                prp.close();
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        return value;
     }
 
     public static String giveJson(String cls, String mess) {
