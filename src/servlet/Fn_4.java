@@ -8,7 +8,6 @@ import java.util.Vector;
 import com.google.gson.Gson;
 
 import base.Client;
-import base.ConseilDuMois;
 import fn.Function;
 import fn.Functionality;
 import jakarta.servlet.ServletException;
