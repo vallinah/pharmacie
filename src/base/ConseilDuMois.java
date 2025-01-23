@@ -11,15 +11,15 @@ import annotation.ForeingKey;
 public class ConseilDuMois {
     
     @AnnotationAttr(nameInBase = "id_conseil_du_mois", inc = true)
-    String id_conseil_du_mois;
+    private String id_conseil_du_mois;
     @AnnotationAttr(nameInBase = "date_debut")
-    Date dateDebut;
+    private Date dateDebut;
     @AnnotationAttr(nameInBase = "date_fin")
-    Date dateFin;
+    private Date dateFin;
 
     @ForeingKey(col = "nom_produit", cls = "produit")
     @AnnotationAttr(nameInBase = "id_produit")
-    String idProduit;
+    private String idProduit;
 
     public ConseilDuMois(ResultSet set) throws Exception {
         id_conseil_du_mois = set.getString("id_conseil_du_mois");

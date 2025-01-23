@@ -10,31 +10,31 @@ import annotation.ForeingKey;
 public class Produit {
 
     @AnnotationAttr(nameInBase = "id_produit", inc = true)
-    String idProduit;
+    private String idProduit;
     @AnnotationAttr(nameInBase = "nom_produit")
-    String nomProduit;
+    private String nomProduit;
     @AnnotationAttr(nameInBase = "prix_vente_unitaire", show = false)
-    double prixVenteUnitaire;
+    private double prixVenteUnitaire;
     @AnnotationAttr(nameInBase = "nombre", show = false)
-    int nombre;
+    private int nombre;
     @AnnotationAttr(nameInBase = "prix_achat_unitaire", show = false)
-    double prixAchatUnitaire;
+    private double prixAchatUnitaire;
     @AnnotationAttr(nameInBase = "quantite", show = false)
-    String quantite;
+    private String quantite;
     @AnnotationAttr(nameInBase = "description", textarea = true)
-    String description;
+    private String description;
     
     @AnnotationAttr(nameInBase = "id_forme", show = false)
     @ForeingKey(cls = "forme", col = "forme")
-    String idForme;
+    private String idForme;
 
     @ForeingKey(cls = "mode_administration", col = "mode_administration")
     @AnnotationAttr(nameInBase = "id_mode_administration", show = false)
-    String idModeAdministration;
+    private String idModeAdministration;
 
     @ForeingKey(cls = "laboratoire", col = "nom_laboratoire")
     @AnnotationAttr(nameInBase = "id_laboratoire")
-    String idLaboratoire;
+    private String idLaboratoire;
 
     // ? Constructeur
 
@@ -50,6 +50,8 @@ public class Produit {
         idModeAdministration = set.getString("id_mode_administration");
         idLaboratoire = set.getString("id_laboratoire");
     }
+
+    public Produit() {}
 
     public String getIdProduit() {
         return idProduit;

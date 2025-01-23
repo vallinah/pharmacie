@@ -135,13 +135,12 @@ from
 
 SELECT v.nom_vendeur, sum(
         (
-            5 * p.prix_vente_unitaire * m.quantite
+            5 * m.prix_vente_unitaire * m.quantite
         ) / 100
     ) commission
-FROM mouvement m
+FROM
+    mouvement m
     JOIN vendeur v on v.id_vendeur = m.id_vendeur
-    JOIN produit p
-    on p.id_produit = m.id_produit
 WHERE
     date_mouvement BETWEEN '2025-01-21' and '2025-01-21'
 GROUP BY
@@ -154,7 +153,8 @@ FROM mouvement m
 SELECT cv.nom_vendeur, sum(
         (
             5 * cv.prix_vente_unitaire * cv.quantite
-        ) / 100)
+        ) / 100
+    )
 FROM (
         SELECT *
         FROM mouvement m
@@ -162,3 +162,18 @@ FROM (
     ) cv
 GROUP BY
     cv.id_vendeur;
+
+-- insertion mouvement vente
+
+INSERT INTO
+    mouvement (
+        quantite,
+        date_mouvement,
+        id_produit,
+        id_client,
+        id_vendeur,
+        prix_vente_unitaire
+    )
+VALUES (?, ?, ?, ?, ?, ?);
+
+SELECT * FROM vendeur;

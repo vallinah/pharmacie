@@ -1,5 +1,10 @@
 export default class Crud {
-    constructor() {}
+
+    linkBack
+
+    constructor() {
+        this.linkBack = document.querySelector(".lien a").href;
+    }
 
     #toFormdata(formulaire) {
         let fomdata = new FormData(formulaire);
@@ -25,8 +30,7 @@ export default class Crud {
                         document.querySelector(".gnr .err span").innerText = err;
                         break;
                     default:
-                        let {cls} = xhr.response;
-                        window.location.assign("./crud.jsp?cls=" + cls);
+                        window.location.assign(this.linkBack);
                         return ;
                 }
             }

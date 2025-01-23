@@ -14,7 +14,8 @@ function ajax(data = "") {
             switch (xhr.status) {
                 case 500:
                     
-                    break;
+                    break;            out.println(Function.giveJson("cls", clsName));
+
                 default:
                     let {rep} = xhr.response;
                     

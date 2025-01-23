@@ -1,5 +1,16 @@
 <%@page import="gst.CRUD" %>
 <%@page import="fn.Function"%>
+<%@page import="annotation.AnnotationClass"%>
+
+<%
+    Class<?> cls = Class.forName(request.getParameter("cls"));
+    CRUD crd = new CRUD(cls);
+    String pageJsp = cls.getAnnotation(AnnotationClass.class).page();
+    if (pageJsp.equals("")) {
+        pageJsp = "crud.jsp?cls=" +  request.getParameter("cls");
+    }
+%>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,15 +33,12 @@
                 <%@include file="../inc/menu.jsp" %>
                 <div class="lien">
                     <i class="bi bi-arrow-left"></i>
-                     <a href="crud.jsp?cls=<%= request.getParameter("cls") %>">Retour</a>
+                     <a href="<%= pageJsp %>">Retour</a>
                 </div>
             </div>
         </menu>
         <section class="body">
-            <%
-                CRUD crd = new CRUD(Class.forName(request.getParameter("cls")));
-                out.println(crd.html_insert());
-            %>
+            <%= crd.html_insert() %>
         </section>
     </main>
 

@@ -35,7 +35,6 @@ public class Crud extends HttpServlet {
         try {
             CRUD crd = new CRUD(Class.forName(clsName));
             crd.insert(values);
-            out.println(Function.giveJson("cls", clsName));
         } catch (Exception e) {
             resp.setStatus(500);
             out.println(Function.giveJson("err", e.getMessage()));
@@ -86,7 +85,6 @@ public class Crud extends HttpServlet {
         try {
             Class<?> cls = Class.forName(req.getParameter("cls"));
             String id = req.getParameter("id");
-
             CRUD crd = new CRUD(cls);
             crd.delete(id);
         } catch (Exception e) {

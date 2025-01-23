@@ -1,23 +1,15 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package base;
 
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-/**
- *
- * @author
- */
 @AnnotationClass(nameInBase="laboratoire", sequence="laboratoire_id_seq", prefix = "LAB")
 public class Laboratoire {
 
     @AnnotationAttr(nameInBase="id_laboratoire", inc=true)
-    String idLaboratoire;
+    private String idLaboratoire;
     @AnnotationAttr(nameInBase="nom_laboratoire")
-    String nomLaboratoire;
+    private String nomLaboratoire;
 
 
     public String getIdLaboratoire() {
