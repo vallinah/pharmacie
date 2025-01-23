@@ -4,22 +4,16 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-/**
- *
- * @author
- */
 @AnnotationClass(nameInBase = "forme", sequence = "forme_id_seq", prefix = "FRM")
 public class Forme {
 
     @AnnotationAttr(nameInBase = "id_forme", inc = true)
-    String idForme;
-
+    private String idForme;
     @AnnotationAttr(nameInBase = "forme")
-    String forme;
-
+    private String forme;
     @AnnotationAttr(nameInBase = "id_unite_mesure")
     @ForeingKey(col = "unite_mesure", cls = "unite_mesure")
-    String idUniteMesure;
+    private String idUniteMesure;
 
     public String getIdForme() {
         return idForme;

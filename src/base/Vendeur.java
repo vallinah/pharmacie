@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-@AnnotationClass(nameInBase = "vendeur", sequence = "vendeur_id_seq", prefix = "VND")
+@AnnotationClass(nameInBase = "vendeur", sequence = "vendeur_id_seq", prefix = "VND", page = "vendeur.jsp")
 public class Vendeur {
 
     @AnnotationAttr(nameInBase = "id_vendeur", inc = true)
@@ -17,6 +17,8 @@ public class Vendeur {
         idVendeur = set.getString("id_vendeur");
         nomVendeur = set.getString("nom_vendeur");
     }
+
+    public Vendeur() {}
 
     public String getIdVendeur() {
         return idVendeur;

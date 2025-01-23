@@ -8,6 +8,7 @@ import fn.All;
 import fn.Compteur;
 import fn.Function;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -166,8 +167,8 @@ public class CRUD {
         boolean isForeignKey = detectForeignKey();
 
         for (Vector<String> ligne : rehetra) {
-            String trash = "<a href=\\\"crud?cls=\" + cls.getName() + \"&id=\" + ligne.firstElement()\n" + //
-                                "                    + \"\"><i class=\"bi bi-trash\"></i></a" ;
+            String trash = "<a href=\"crud?cls=" + cls.getName() + "&id=" + ligne.firstElement() + //
+                                "\"><i class=\"bi bi-trash\"></i></a" ;
             if (isForeignKey) {
                 trash = "";
             }
@@ -455,38 +456,6 @@ public class CRUD {
         }
     }
 
-    public  String getDataByID(String table, String columnGet, String columnSelect, String id) throws Exception {
-        String req = "select " + columnGet + " from " + table + " where " + columnSelect + " = ?";
-        String value = "";
-
-        Connexion connexion = Function.dbConnect();
-        Connection connection = null;
-        PreparedStatement prp = null;
-        ResultSet set = null;
-
-        try {
-            connection = connexion.getConnexe();
-            prp = connection.prepareStatement(req);
-            prp.setString(1, id);
-            set = prp.executeQuery();
-
-            if (set.next()) {
-                value = set.getString(1);
-            }
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            if (set != null)
-                set.close();
-            if (prp != null)
-                prp.close();
-            if (connection != null) {
-                connection.close();
-            }
-        }
-        return value;
-    }
-
     public String scriptInsert() throws Exception {
         Vector<String> a_inserer = new Vector<>();
         for (Field f : listFields) {
@@ -509,6 +478,15 @@ public class CRUD {
     }
 
     public void insert(Vector<String> insertion) throws Exception {
+        try {
+            Object newInstance = cls.getConstructor().newInstance();
+            Method methodeInsert  = cls.getMethod("insert", Vector.class);
+            methodeInsert.invoke(newInstance, insertion);
+            return;
+        } catch (Exception e) {
+            System.out.println("ERROR : " + e.getMessage());
+        }
+
         String req = scriptInsert();
         Connection connection = null;
         PreparedStatement prp = null;

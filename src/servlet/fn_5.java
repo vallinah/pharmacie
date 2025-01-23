@@ -7,7 +7,6 @@ import java.util.Vector;
 
 import com.google.gson.Gson;
 
-import base.Client;
 import base.CommissionVendeur;
 import fn.Function;
 import fn.Functionality;

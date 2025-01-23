@@ -3,18 +3,13 @@ package base;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-/**
- *
- * @author
- */
 @AnnotationClass(nameInBase = "mode_administration", sequence = "mode_administration_id_seq", prefix = "MOD")
 public class ModeAdministration {
 
     @AnnotationAttr(nameInBase = "id_mode_administration", inc = true)
-    String idModeAdministration;
-
+    private String idModeAdministration;
     @AnnotationAttr(nameInBase = "mode_administration")
-    String modeAdministration;
+    private String modeAdministration;
 
     public String getIdModeAdministration() {
         return idModeAdministration;

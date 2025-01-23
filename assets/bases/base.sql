@@ -138,7 +138,6 @@ CREATE TABLE produit_maladie (
     FOREIGN KEY (id_maladie) REFERENCES maladie (id_maladie)
 );
 
-
 CREATE Table conseil_du_mois (
     id_conseil_du_mois VARCHAR(50) DEFAULT CONCAT('CDM', LPAD(nextval('conseil_du_mois_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
     date_debut DATE,

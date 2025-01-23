@@ -18,7 +18,6 @@ public class All {
     private Vector<Field> fieldShow = new Vector<>();
     private String req = null;
     private Vector<Field> foreingKey = new Vector<>();
-    private Vector<String> efaVitaJointure = new Vector<>();
 
     public All(Class<?> cls) throws Exception {
         this.cls = cls;
@@ -43,22 +42,9 @@ public class All {
         }
     }
 
-        private boolean checkEfaAoVe(String cls) {
-            for (String str : efaVitaJointure) {
-                if (cls.equalsIgnoreCase(str)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
     private String scriptJoin(Field fld) {
         String nameFld = fld.getAnnotation(AnnotationAttr.class).nameInBase();
         String otherCls = fld.getAnnotation(ForeingKey.class).cls();
-        if (checkEfaAoVe(otherCls)) {
-            return "";
-        }
-        efaVitaJointure.add(otherCls);
         return   " join " + otherCls + " on " + nameInBase + "." + nameFld + " = " + otherCls + "." + nameFld;
     }
 
@@ -67,10 +53,13 @@ public class All {
         if (!foreingKey.isEmpty()) {
             String colonne = "";
             for (int a = 0; a < foreingKey.size(); a++) {
-                String nameFld =foreingKey.get(a).getAnnotation(ForeingKey.class).col();
-                String otherCls = foreingKey.get(a).getAnnotation(ForeingKey.class).cls();
+                ForeingKey frk = foreingKey.get(a).getAnnotation(ForeingKey.class);
+                String nameFld = frk.col();
+                String otherCls = frk.cls();
                 colonne += ", " + otherCls + "." + nameFld + " ";
-                join += scriptJoin(foreingKey.get(a));
+                if (frk.id()) {
+                    join += scriptJoin(foreingKey.get(a));
+                }
             }
             req += colonne;
         }
