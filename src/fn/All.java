@@ -3,6 +3,7 @@ package fn;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.Statement;
 import java.util.Vector;
 
 import annotation.AnnotationAttr;
@@ -95,7 +96,8 @@ public class All {
             req = "select " + param;
             checkForeignKey();
             System.out.println(req);
-            set = connexion.getStmt().executeQuery(req);
+            Statement stmt = connexion.getConnexe().createStatement();
+            set = stmt.executeQuery(req);
             ResultSetMetaData metaData = set.getMetaData();
 
             for (int a = 0; a <  metaData.getColumnCount(); a++) {

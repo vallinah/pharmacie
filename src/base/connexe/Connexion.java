@@ -11,7 +11,6 @@ public class Connexion {
     private String userName = "mihary";
     private String passwd = "mihary";
     private String url = "jdbc:postgresql://localhost:5432/";
-    private Statement stmt;
 
     // ? Constructeur
 
@@ -20,7 +19,6 @@ public class Connexion {
         try {
             Class.forName("org.postgresql.Driver");
             connexe = DriverManager.getConnection(url, userName, passwd);
-            stmt = connexe.createStatement();
         } catch (ClassNotFoundException e) {
             System.out.println("Aucun Driver trouvee");
         } catch (Exception e) {
@@ -31,13 +29,13 @@ public class Connexion {
     // $ Fonction tsotra
 
     public void finaleClose() throws Exception {
-        if (stmt != null)  stmt.close();
         if (connexe != null) connexe.close();
     }
 
     public int incrementSequence(String sequenceName) throws Exception {
         String req = "select nextval(\'" + sequenceName + "\')";
         ResultSet set = null;
+        Statement stmt = connexe.createStatement();
         try {
             set = stmt.executeQuery(req);
             if (set.next()) {
@@ -55,9 +53,5 @@ public class Connexion {
 
     public Connection getConnexe() {
         return connexe;
-    }
-
-    public Statement getStmt() {
-        return stmt;
-    }    
+    } 
 }
