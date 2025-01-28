@@ -26,21 +26,21 @@
 </head>
 <body>
     <%@include file="../inc/header.jsp" %>
+    <menu class="active">
+        <div class="menu_ttr">
+            <h1>Menu</h1>
+        </div>
+        <div class="menu_bd">
+            <div class="acc">
+                <%@include file="../inc/menu.jsp" %>
+            </div>
+            <div class="lien">
+                <i class="bi bi-plus"></i>
+                <a href="insert.jsp?cls=<%= cls.getName() %>">Insertion</a>
+            </div>
+        </div>
+    </menu>
     <main>
-        <menu>
-            <div class="menu_ttr">
-                <h1>Menu</h1>
-            </div>
-            <div class="menu_bd">
-                <div class="acc">
-                    <%@include file="../inc/menu.jsp" %>
-                </div>
-                <div class="lien">
-                    <i class="bi bi-plus"></i>
-                    <a href="insert.jsp?cls=<%= cls.getName() %>">Insertion</a>
-                </div>
-            </div>
-        </menu>
         <section class="body">
             <div class="filtre" id='filtre'>
                 <form action="fn_2" method="post">

@@ -21,13 +21,13 @@ header {
 menu {
     transform: translateX(0);
     padding-top: 80px;
-    position: relative;
+    position: absolute;
     width: 330px;
     top: 0;
     left: 0;
     height: 100vh;
     background-color: white;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.218);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.218) inset;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     z-index: 5;
 }
@@ -124,4 +124,19 @@ menu {
 
 .acc_body .prt .bi {
     margin-right: 20px;
+}
+
+main {
+    width: 100vw;
+    position: relative;
+    left: 0;
+    z-index: 5;
+    background-color: white;
+    transition: .5s;
+}
+
+menu.active ~ main {
+    width: calc(100vw - 330px);
+    left: 330px;
+    transition: .5s;
 }

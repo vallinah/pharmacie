@@ -8,16 +8,16 @@
 </head>
 <body>
     <%@include file="../inc/header.jsp" %>
+    <menu class="active">
+        <div class="menu_ttr">
+            <h1>Menu</h1>
+        </div>
+        <div class="menu_bd">
+            <%@include file="../inc/menu.jsp" %>
+        </div>
+    </menu>
     <main>
-        <menu>
-            <div class="menu_ttr">
-                <h1>Menu</h1>
-            </div>
-            <div class="menu_bd">
-                <%@include file="../inc/menu.jsp" %>
-            </div>
-        </menu>
+        <section class="body"></section>
     </main>
-    <section class="body"></section>
 </body>
 </html

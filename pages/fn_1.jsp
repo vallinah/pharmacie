@@ -20,29 +20,29 @@
     <title>Fn_1</title>
 </head>
 <body>
-    <main>
-        <menu>
-            <div class="menu_ttr">
-                <h1>Menu</h1>
-            </div>
-            <div class="menu_bd">
-                <div class="acc">
-                    <div class="acc_ttr">
-                        <i class="bi bi-person-circle"></i>
-                        <h2>Listes Entites</h2>
-                        <i class="bi bi-chevron-right"></i>
-                    </div>                                                                      
-                    <div class="acc_body">
-                        <% for (Class<?> kilasy : Function.listeClass()) { %>
-                            <div class="prt">
-                                <i class="bi bi-person-badge"></i>
-                                <a href="crud.jsp?cls=<%= kilasy.getName() %>"><%= kilasy.getSimpleName() %></a>
-                            </div>
-                        <% } %>
-                    </div>
+    <menu class="active">
+        <div class="menu_ttr">
+            <h1>Menu</h1>
+        </div>
+        <div class="menu_bd">
+            <div class="acc">
+                <div class="acc_ttr">
+                    <i class="bi bi-person-circle"></i>
+                    <h2>Listes Entites</h2>
+                    <i class="bi bi-chevron-right"></i>
+                </div>                                                                      
+                <div class="acc_body">
+                    <% for (Class<?> kilasy : Function.listeClass()) { %>
+                        <div class="prt">
+                            <i class="bi bi-person-badge"></i>
+                            <a href="crud.jsp?cls=<%= kilasy.getName() %>"><%= kilasy.getSimpleName() %></a>
+                        </div>
+                    <% } %>
                 </div>
             </div>
-        </menu>
+        </div>
+    </menu>
+    <main>
         <section class="body">
             <form action="fn_1" method="post">
                 <select name="" id="">

@@ -24,19 +24,19 @@
 </head>
 <body>
     <%@include file="../inc/header.jsp" %>
+    <menu class="active">
+        <div class="menu_ttr">
+            <h1>Menu</h1>
+        </div>
+        <div class="menu_bd">
+            <%@include file="../inc/menu.jsp" %>
+            <div class="lien">
+                <i class="bi bi-arrow-left"></i>
+                    <a href="<%= pageJsp %>">Retour</a>
+            </div>
+        </div>
+    </menu>
     <main>
-        <menu>
-            <div class="menu_ttr">
-                <h1>Menu</h1>
-            </div>
-            <div class="menu_bd">
-                <%@include file="../inc/menu.jsp" %>
-                <div class="lien">
-                    <i class="bi bi-arrow-left"></i>
-                     <a href="<%= pageJsp %>">Retour</a>
-                </div>
-            </div>
-        </menu>
         <section class="body">
             <%= crd.html_insert() %>
         </section>
