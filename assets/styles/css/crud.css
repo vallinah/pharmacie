@@ -131,21 +131,31 @@ table {
     border-collapse: collapse;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
-    border-width: 0;
+    width: 100% !important;
+    border: none;
 }
 
 table th {
-    min-width: 200px;
-    width: 200px;
+    min-width: 180px;
+    width: 180px;
     background-color: var(--secondary-color);
     color: white;
     text-transform: uppercase;
     text-wrap: wrap;
     font-size: 13px !important;
+
 }
 
 table tr:first-child {
-    height: 60px;
+    height: 70px;
+}
+
+table tr:first-child th:first-child  {
+    border-radius: 30px 0 0 0;
+}
+
+table tr:first-child th:last-child {
+    border-radius: 0 30px 0 0;
 }
 
 table tr {
@@ -183,6 +193,7 @@ table td a {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    padding: 0 100px;
     padding-top: 50px;
 }
 
@@ -213,6 +224,15 @@ section.list {
 
 .list .ttr {
     height: 100px;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.list .ttr h1 {
+    text-wrap: wrap;
+    width: 40%;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
