@@ -1,5 +1,6 @@
 package base;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 
 import annotation.AnnotationAttr;
@@ -36,6 +37,9 @@ public class Produit {
     @AnnotationAttr(nameInBase = "id_laboratoire")
     private String idLaboratoire;
 
+    @AnnotationAttr(nameInBase = "date_update", show = false)
+    private Date dateUpdate;
+
     // ? Constructeur
 
     public Produit(ResultSet set) throws Exception {
@@ -49,6 +53,7 @@ public class Produit {
         idForme = set.getString("idForme");
         idModeAdministration = set.getString("id_mode_administration");
         idLaboratoire = set.getString("id_laboratoire");
+        dateUpdate = set.getDate("date_update");
     }
 
     public Produit() {}
@@ -131,5 +136,13 @@ public class Produit {
 
     public void setIdLaboratoire(String idLaboratoire) {
         this.idLaboratoire = idLaboratoire;
+    }
+
+    public Date getDateUpdate() {
+        return dateUpdate;
+    }
+
+    public void setDateUpdate(Date dateUpdate) {
+        this.dateUpdate = dateUpdate;
     }
 }

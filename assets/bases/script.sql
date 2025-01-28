@@ -177,3 +177,10 @@ INSERT INTO
 VALUES (?, ?, ?, ?, ?, ?);
 
 SELECT * FROM vendeur;
+
+---------------
+
+SELECT * FROM historique_prix_produit hpp
+WHERE 1 = 1
+AND id_produit = ?
+AND date_update > ? AND date_update < ?

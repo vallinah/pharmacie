@@ -18,6 +18,7 @@ DROP Table if EXISTS vendeur CASCADE;
 DROP Table if EXISTS genre CASCADE;
 -- DROP Table if EXISTS mouvement_detail CASCADE; 
 -- DROP Table if EXISTS type_mouvement CASCADE;
+DROP Table if EXISTS historique_prix_produit CASCADE;
 
 DO $$ 
 BEGIN
@@ -101,6 +102,7 @@ CREATE TABLE produit (
     id_forme VARCHAR(50) NOT NULL,
     id_mode_administration VARCHAR(50) NOT NULL,
     id_laboratoire VARCHAR(50) NOT NULL,
+    date_update DATE DEFAULT now(),
     FOREIGN KEY (id_forme) REFERENCES forme (id_forme),
     FOREIGN KEY (id_mode_administration) REFERENCES mode_administration (id_mode_administration),
     FOREIGN KEY (id_laboratoire) REFERENCES laboratoire (id_laboratoire)
@@ -178,6 +180,38 @@ CREATE Table conseil_du_mois (
     FOREIGN KEY (id_produit) REFERENCES produit (id_produit)
 );
 
+
+-- Création de la table historique_prix_produit
+CREATE TABLE historique_prix_produit (
+    id_historique SERIAL PRIMARY KEY,
+    id_produit VARCHAR(50) NOT NULL,
+    prix_vente_unitaire NUMERIC(18, 2) NOT NULL,
+    date_update DATE NOT NULL,
+    Foreign Key (id_produit) REFERENCES produit (id_produit)
+);
+
+-- TRIGGER
+
+-- Création de la fonction déclencheur
+CREATE OR REPLACE FUNCTION update_historique_prix_produit()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Vérifier si le prix de vente unitaire a changé
+    IF NEW.prix_vente_unitaire IS DISTINCT FROM OLD.prix_vente_unitaire THEN
+        -- Insérer dans historique_prix_produit uniquement si le prix de vente unitaire a changé
+        INSERT INTO historique_prix_produit (id_produit, prix_vente_unitaire, date_update)
+        VALUES (NEW.id_produit, NEW.prix_vente_unitaire, NEW.date_update);
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Création du déclencheur
+CREATE TRIGGER trg_historique_prix_produit
+AFTER INSERT OR UPDATE ON produit
+FOR EACH ROW
+EXECUTE FUNCTION update_historique_prix_produit();
 
 -- Insertion des données dans `laboratoire`
 INSERT INTO laboratoire (nom_laboratoire)

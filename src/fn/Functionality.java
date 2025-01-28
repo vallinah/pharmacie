@@ -8,11 +8,57 @@ import java.util.Vector;
 import base.Client;
 import base.CommissionVendeur;
 import base.ConseilDuMois;
+import base.Historique;
 import base.Mouvement;
 import base.Produit;
 import base.connexe.Connexion;
 
 public class Functionality {
+
+    public Vector<Historique> getHistorique(String idProduit, Date d1, Date d2) throws Exception {
+        String req = "SELECT * FROM historique_prix_produit hpp\n" + //
+                        "WHERE 1 = 1\n";
+        if (!idProduit.equals("")) {
+            req += "AND id_produit = ?\n";
+        }
+        if (d1 != null) {
+            req += "AND date_update >= ?\n";
+        }
+
+        if (d2 != null) {
+            req += "AND date_update <= ?\n";
+        }
+
+        Vector<Historique> all = new Vector<>();                
+        Connexion connexion = Function.dbConnect();
+        PreparedStatement prepared = null;
+        ResultSet set = null;
+
+        try {
+            prepared = connexion.getConnexe().prepareStatement(req);
+            int cpt = 0;
+            if (!idProduit.equals("")) {
+                prepared.setString(++cpt, idProduit);
+            }
+            if (d1 != null) {
+                prepared.setDate(++cpt, d1);
+            }
+            if (d2 != null) {
+                prepared.setDate(++cpt, d2);
+            }
+            set = prepared.executeQuery();
+            while (set.next()) {
+                all.add(new Historique(set));
+            }
+            return all;
+        } catch (Exception e) {
+            throw  e;
+        } finally {
+            if (set != null) set.close();
+            if (prepared != null) prepared.close();
+            connexion.finaleClose();
+        }        
+    }
 
     public Vector<CommissionVendeur> getReqFn_5(Date daty1, Date daty2) throws Exception {
         String req = "SELECT v.nom_vendeur, sum(\n" + //
