@@ -4,7 +4,7 @@
 -- Suppression des tables si elles existent
 DROP TABLE IF EXISTS produit_maladie CASCADE;
 DROP TABLE IF EXISTS produit_categorie_personne CASCADE;
-DROP TABLE if EXISTS mouvement;
+DROP TABLE if EXISTS mouvement CASCADE;
 DROP TABLE IF EXISTS produit CASCADE;
 DROP TABLE IF EXISTS mode_administration CASCADE;
 DROP TABLE IF EXISTS forme CASCADE;
@@ -15,6 +15,9 @@ DROP TABLE IF EXISTS laboratoire CASCADE;
 DROP Table if EXISTS conseil_du_mois CASCADE;
 DROP Table if EXISTS client CASCADE;
 DROP Table if EXISTS vendeur CASCADE;
+DROP Table if EXISTS genre CASCADE;
+-- DROP Table if EXISTS mouvement_detail CASCADE; 
+-- DROP Table if EXISTS type_mouvement CASCADE;
 
 DO $$ 
 BEGIN
@@ -31,6 +34,9 @@ BEGIN
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'conseil_du_mois_id_seq') THEN DROP SEQUENCE conseil_du_mois_id_seq; END IF;
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'client_id_seq') THEN DROP SEQUENCE client_id_seq; END IF;
     IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'vendeur_id_seq') THEN DROP SEQUENCE vendeur_id_seq; END IF;
+    IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'genre_id_seq') THEN DROP SEQUENCE genre_id_seq; END IF;
+    -- IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'mouvement_detail_id_seq') THEN DROP SEQUENCE mouvement_detail_id_seq; END IF;
+    -- IF EXISTS (SELECT 1 FROM pg_sequences WHERE schemaname = 'public' AND sequencename = 'type_mouvement_id_seq') THEN DROP SEQUENCE type_mouvement_id_seq; END IF;
 END $$;
 
 -- Création des séquences
@@ -47,6 +53,9 @@ CREATE SEQUENCE produit_maladie_id_seq START 1;
 CREATE SEQUENCE conseil_du_mois_id_seq START 1;
 CREATE SEQUENCE client_id_seq START 1;
 CREATE SEQUENCE vendeur_id_seq START 1;
+CREATE SEQUENCE genre_id_seq START 1;
+-- CREATE SEQUENCE mouvement_detail_id_seq START 1;
+-- CREATE SEQUENCE type_mouvement_id_seq START 1;
 
 -- Création des tables
 CREATE TABLE laboratoire (
@@ -102,10 +111,22 @@ CREATE Table client (
     nom_client VARCHAR(100) NOT NULL
 )
 
+CREATE Table genre (
+    id_genre VARCHAR(50) DEFAULT CONCAT('GNR', LPAD(nextval('genre_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
+    genre VARCHAR(100) NOT NULL
+)
+
 CREATE Table vendeur (
     id_vendeur VARCHAR(50) DEFAULT CONCAT('VND', LPAD(nextval('vendeur_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
-    nom_vendeur VARCHAR(100) NOT NULL
+    nom_vendeur VARCHAR(100) NOT NULL,
+    id_genre VARCHAR(50),
+    Foreign Key (id_genre) REFERENCES genre(id_genre)
 )
+
+-- create Table type_mouvement (
+--     id_type_mouvement VARCHAR(50) DEFAULT CONCAT('TMVT', LPAD(nextval('type_mouvement_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
+--     type_mouvement VARCHAR(50) NOT NULL
+-- )
 
 CREATE TABLE mouvement(
    id_mouvement VARCHAR(50) DEFAULT CONCAT('MVT', LPAD(nextval('mouvement_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
@@ -114,13 +135,24 @@ CREATE TABLE mouvement(
    prix_vente_unitaire NUMERIC(18,2)  DEFAULT 0,
    date_mouvement DATE NOT NULL,
    id_produit VARCHAR(50)  NOT NULL,
-   id_client VARCHAR(50),
-   id_vendeur VARCHAR(50),
+   id_client VARCHAR(50) NOT NULL,
+   id_vendeur VARCHAR(50) NOT NULL,
+--    id_type_mouvement VARCHAR(50) NOT NULL,
    FOREIGN KEY(id_produit) REFERENCES produit(id_produit),
    FOREIGN KEY(id_client) REFERENCES client(id_client),
    FOREIGN KEY(id_vendeur) REFERENCES vendeur(id_vendeur)
+--    FOREIGN KEY(id_type_mouvement) REFERENCES type_mouvement(id_type_mouvement)
 );
 
+-- CREATE Table mouvement_detail (
+--     id_mouvement_detail  VARCHAR(50) DEFAULT CONCAT('MVTD', LPAD(nextval('mouvement_detail_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
+--     id_produit VARCHAR(50) NOT NULL,
+--     id_mouvement VARCHAR(50),
+--     prix DECIMAL(18, 2),
+--     quantite INTEGER not NULL,
+--     FOREIGN KEY(id_produit) REFERENCES produit(id_produit),
+--     FOREIGN KEY(id_mouvement) REFERENCES mouvement(id_mouvement)
+-- )
 
 CREATE TABLE produit_categorie_personne (
     id_produit_categorie_personne VARCHAR(50) DEFAULT CONCAT('PCP', LPAD(nextval('produit_categorie_personne_id_seq')::TEXT, 8, '0')) PRIMARY KEY,
@@ -178,6 +210,8 @@ SELECT CONCAT('Forme_', id_unite_mesure), id_unite_mesure FROM unite_mesure;
 INSERT INTO mode_administration (mode_administration)
 VALUES 
     ('Oral'), ('Intraveineuse'), ('Injection'), ('Topique'), ('Inhalation');
+
+INSERT INTO genre (genre) VALUES ('Homme'), ('Femme');
 
 --insertion  produit
 
