@@ -7,6 +7,7 @@
         <a href="accueil.jsp">
             <img src="../assets/photos/logo.png" width="60">
         </a>
+        <i class="bi bi-list"></i>
     </div>
     <div class="ttr f">
         <h1>Gestion de Pharmacie</h1>
