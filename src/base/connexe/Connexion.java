@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class Connexion {
-    
+
     private Connection connexe = null;
-    private String userName = "mihary";
-    private String passwd = "mihary";
+    private String userName = "postgres";
+    private String passwd = "vallinah";
     private String url = "jdbc:postgresql://localhost:5432/";
 
     // ? Constructeur
@@ -29,7 +29,8 @@ public class Connexion {
     // $ Fonction tsotra
 
     public void finaleClose() throws Exception {
-        if (connexe != null) connexe.close();
+        if (connexe != null)
+            connexe.close();
     }
 
     public int incrementSequence(String sequenceName) throws Exception {
@@ -45,7 +46,8 @@ public class Connexion {
         } catch (Exception e) {
             throw e;
         } finally {
-            if (set != null) set.close();
+            if (set != null)
+                set.close();
         }
     }
 
@@ -53,5 +55,5 @@ public class Connexion {
 
     public Connection getConnexe() {
         return connexe;
-    } 
+    }
 }
