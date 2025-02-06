@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-@AnnotationClass(nameInBase = "genre", sequence = "genre_id_seq", prefix = "GNR")
+@AnnotationClass(nameInBase = "genre", sequence = "genre_id_seq", prefix = "GEN", icone = "bi-gender-ambiguous")
 public class Genre {
     
     @AnnotationAttr(nameInBase = "id_genre", inc = true)

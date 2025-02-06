@@ -6,7 +6,7 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "produit_maladie", prefix = "PMD")
+@AnnotationClass(nameInBase = "produit_maladie", icone = "bi-file-earmark-medical")
 public class ProduitMaladie {
 
     @ForeingKey(col = "nom_produit", cls = "produit")

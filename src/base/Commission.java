@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-@AnnotationClass(nameInBase = "commission", sequence = "commission_id_seq", prefix = "COM")
+@AnnotationClass(nameInBase = "commission", sequence = "commission_id_seq", prefix = "CDM", icone = "bi-piggy-bank")
 public class Commission {
     
     @AnnotationAttr(nameInBase = "id_commission", inc = true)

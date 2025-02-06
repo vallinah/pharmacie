@@ -6,12 +6,12 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "vente_detail", sequence = "vente_detail_id_seq", prefix = "VNTD")
+@AnnotationClass(nameInBase = "vente_detail", sequence = "vente_detail_id_seq", prefix = "VDT", icone = "bi-ui-checks-grid")
 public class VenteDetail {
 
     @AnnotationAttr(nameInBase = "id_vente_detail", inc = true)
     private String idVenteDetail;
-    @AnnotationAttr(nameInBase = "quamtite")
+    @AnnotationAttr(nameInBase = "quantite")
     private int quantite;
     @AnnotationAttr(nameInBase = "prix_unitaire")
     private double prixUnitaire;
@@ -27,7 +27,7 @@ public class VenteDetail {
     }
 
     public VenteDetail() {}
-    
+
     public String getIdVenteDetail() {
         return idVenteDetail;
     }
