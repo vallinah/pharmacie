@@ -1,14 +1,13 @@
 package base;
 
+import java.sql.ResultSet;
+
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "produit_categorie_personne", sequence="produit_categorie_personne_id_seq", prefix = "PCP")
+@AnnotationClass(nameInBase = "produit_categorie_personne", prefix = "PCP")
 public class ProduitCategoriePersonne {
-
-    @AnnotationAttr(nameInBase = "id_produit_categorie_personne", inc = true)
-    private String idProduitCategoriePersonne;
 
     @AnnotationAttr(nameInBase = "id_produit")
     @ForeingKey(col = "nom_produit", cls = "produit")
@@ -17,6 +16,13 @@ public class ProduitCategoriePersonne {
     @AnnotationAttr(nameInBase = "id_categorie_personne")
     @ForeingKey(col = "categorie_personne", cls = "categorie_personne")
     private String idCategoriePersonne;
+
+    public ProduitCategoriePersonne(ResultSet set) throws Exception {
+        setIdProduit(set.getString("id_produit"));
+        setIdCategoriePersonne(set.getString("id_categorie_personne"));
+    }
+
+    public ProduitCategoriePersonne() {}
 
     public String getIdProduit() {
         return idProduit;
