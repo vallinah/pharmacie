@@ -50,6 +50,10 @@ public class All {
     }
 
     private void checkForeignKey() throws Exception {
+        boolean checkVirgule = false;
+        if (req.equals("select ")) {
+            checkVirgule = true;
+        }
         String join = "";
         if (!foreingKey.isEmpty()) {
             String colonne = "";
@@ -57,7 +61,11 @@ public class All {
                 ForeingKey frk = foreingKey.get(a).getAnnotation(ForeingKey.class);
                 String nameFld = frk.col();
                 String otherCls = frk.cls();
-                colonne += ", " + otherCls + "." + nameFld + " ";
+                String virgule = ", ";
+                if (checkVirgule) {
+                    virgule = (a > 0) ? ", " : " ";
+                }
+                colonne += virgule + otherCls + "." + nameFld + " ";
                 if (frk.id()) {
                     join += scriptJoin(foreingKey.get(a));
                 }
@@ -69,7 +77,6 @@ public class All {
 
     public Vector<Vector<String>> getAll(String param) throws Exception {
         Vector<Vector<String>> all = new Vector<>();
-        
         ResultSet set = null;
         Connexion connexion = Function.dbConnect();
         if (param != null) {
