@@ -13,4 +13,5 @@ public @interface AnnotationAttr {
     public abstract boolean insert() default true;
     public abstract boolean textarea() default false;
     public abstract boolean show() default true;
+    public abstract boolean id() default false;
 }

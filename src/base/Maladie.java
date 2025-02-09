@@ -6,7 +6,7 @@ import annotation.AnnotationClass;
 @AnnotationClass(nameInBase = "maladie", sequence = "maladie_id_seq", prefix = "MLD", icone = "bi-virus")
 public class Maladie {
 
-    @AnnotationAttr(nameInBase = "id_maladie", inc = true)
+    @AnnotationAttr(nameInBase = "id_maladie", inc = true, id = true)
     private String idMaladie;
     @AnnotationAttr(nameInBase = "nom_maladie")
     private String nomMaladie;

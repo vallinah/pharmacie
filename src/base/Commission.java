@@ -9,7 +9,7 @@ import annotation.AnnotationClass;
 @AnnotationClass(nameInBase = "commission", sequence = "commission_id_seq", prefix = "CDM", icone = "bi-piggy-bank")
 public class Commission {
     
-    @AnnotationAttr(nameInBase = "id_commission", inc = true)
+    @AnnotationAttr(nameInBase = "id_commission", inc = true, id = true)
     private String idCommission;
     @AnnotationAttr(nameInBase = "commission")
     private double commission;

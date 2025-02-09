@@ -10,7 +10,7 @@ import annotation.ForeingKey;
 @AnnotationClass(nameInBase = "produit", sequence = "produit_id_seq", prefix = "PRO", icone = "bi-box-seam")
 public class Produit {
 
-    @AnnotationAttr(nameInBase = "id_produit", inc = true)
+    @AnnotationAttr(nameInBase = "id_produit", inc = true, id = true)
     private String idProduit;
     @AnnotationAttr(nameInBase = "nom_produit")
     private String nomProduit;

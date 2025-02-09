@@ -9,11 +9,11 @@ import annotation.ForeingKey;
 @AnnotationClass(nameInBase = "produit_categorie_personne", icone = "bi-person-lines-fill", title = "Produit-Categorie-Personne")
 public class ProduitCategoriePersonne {
 
-    @AnnotationAttr(nameInBase = "id_produit")
+    @AnnotationAttr(nameInBase = "id_produit", id = true)
     @ForeingKey(col = "nom_produit", cls = "produit")
     private String idProduit;
 
-    @AnnotationAttr(nameInBase = "id_categorie_personne")
+    @AnnotationAttr(nameInBase = "id_categorie_personne", id = true)
     @ForeingKey(col = "categorie_personne", cls = "categorie_personne")
     private String idCategoriePersonne;
 

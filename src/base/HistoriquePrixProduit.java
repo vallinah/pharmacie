@@ -10,7 +10,7 @@ import annotation.ForeingKey;
 @AnnotationClass(nameInBase = "historique_prix_produit", sequence = "historique_prix_produit_id_seq", prefix = "HPP", icone = "bi-graph-up", title = "Historique Prix")
 public class HistoriquePrixProduit {
  
-    @AnnotationAttr(nameInBase = "id_historique_prix_produit", inc = true)
+    @AnnotationAttr(nameInBase = "id_historique_prix_produit", inc = true, id = true)
     private String idHistorique;
     @AnnotationAttr(nameInBase = "prix_vente_unitaire")
     private double prixVenteUnitaire;

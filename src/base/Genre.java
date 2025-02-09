@@ -8,7 +8,7 @@ import annotation.AnnotationClass;
 @AnnotationClass(nameInBase = "genre", sequence = "genre_id_seq", prefix = "GEN", icone = "bi-gender-ambiguous")
 public class Genre {
     
-    @AnnotationAttr(nameInBase = "id_genre", inc = true)
+    @AnnotationAttr(nameInBase = "id_genre", inc = true, id = true)
     private String idGenre;
     @AnnotationAttr(nameInBase = "genre")
     private String genre;

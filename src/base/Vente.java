@@ -10,7 +10,7 @@ import annotation.ForeingKey;
 @AnnotationClass(nameInBase = "vente", sequence = "vente_id_seq", prefix = "VNT", icone = "bi-credit-card")
 public class Vente {
 
-    @AnnotationAttr(nameInBase = "id_vente", inc = true)
+    @AnnotationAttr(nameInBase = "id_vente", inc = true, id = true)
     private String idVente;
     @AnnotationAttr(nameInBase = "prix_total")
     private double prixTotal;

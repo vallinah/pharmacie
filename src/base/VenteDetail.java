@@ -9,7 +9,7 @@ import annotation.ForeingKey;
 @AnnotationClass(nameInBase = "vente_detail", sequence = "vente_detail_id_seq", prefix = "VDT", icone = "bi-ui-checks-grid", title = "Détails du Vente")
 public class VenteDetail {
 
-    @AnnotationAttr(nameInBase = "id_vente_detail", inc = true)
+    @AnnotationAttr(nameInBase = "id_vente_detail", inc = true, id = true)
     private String idVenteDetail;
     @AnnotationAttr(nameInBase = "quantite")
     private int quantite;

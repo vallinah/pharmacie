@@ -8,7 +8,7 @@ import annotation.AnnotationClass;
 @AnnotationClass(nameInBase = "vendeur", sequence = "vendeur_id_seq", prefix = "VEN", page = "vendeur.jsp", icone = "bi-shop-window")
 public class Vendeur {
 
-    @AnnotationAttr(nameInBase = "id_vendeur", inc = true)
+    @AnnotationAttr(nameInBase = "id_vendeur", inc = true, id = true)
     String idVendeur;
     @AnnotationAttr(nameInBase = "nom_vendeur")
     String nomVendeur;
