@@ -6,7 +6,7 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "produit_categorie_personne", icone = "bi-person-lines-fill")
+@AnnotationClass(nameInBase = "produit_categorie_personne", icone = "bi-person-lines-fill", title = "Produit-Categorie-Personne")
 public class ProduitCategoriePersonne {
 
     @AnnotationAttr(nameInBase = "id_produit")

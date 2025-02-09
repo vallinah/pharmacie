@@ -6,7 +6,7 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "vente_detail", sequence = "vente_detail_id_seq", prefix = "VDT", icone = "bi-ui-checks-grid")
+@AnnotationClass(nameInBase = "vente_detail", sequence = "vente_detail_id_seq", prefix = "VDT", icone = "bi-ui-checks-grid", title = "Détails du Vente")
 public class VenteDetail {
 
     @AnnotationAttr(nameInBase = "id_vente_detail", inc = true)
@@ -16,7 +16,7 @@ public class VenteDetail {
     @AnnotationAttr(nameInBase = "prix_unitaire")
     private double prixUnitaire;
     @AnnotationAttr(nameInBase = "id_vente")
-    @ForeingKey(col = "prix_total", cls = "vente")
+    @ForeingKey(col = "id_vente", cls = "vente")
     private String idVente;
 
     public VenteDetail(ResultSet set) throws Exception {

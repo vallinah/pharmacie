@@ -12,4 +12,6 @@ public @interface AnnotationClass {
     public abstract String sequence() default "";
     public abstract String prefix() default "";
     public abstract String page() default "";
+    public abstract String icone() default "bi-shield-plus";
+    public abstract String title() default "";
 }

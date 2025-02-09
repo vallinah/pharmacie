@@ -7,7 +7,7 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "conseil_du_mois", sequence = "conseil_du_mois_id_seq", page = "conseildumois.jsp")
+@AnnotationClass(nameInBase = "conseil_du_mois", sequence = "conseil_du_mois_id_seq", page = "conseildumois.jsp", icone = "bi-lightbulb", title = "Conseil du Mois")
 public class ConseilDuMois {
     
     @AnnotationAttr(nameInBase = "id_conseil_du_mois", inc = true)

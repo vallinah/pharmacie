@@ -3,7 +3,7 @@ package base;
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 
-@AnnotationClass(nameInBase = "categorie_personne", sequence = "categorie_personne_id_seq", prefix = "CATP", icone = "bi-person-badge")
+@AnnotationClass(nameInBase = "categorie_personne", sequence = "categorie_personne_id_seq", prefix = "CATP", icone = "bi-person-badge", title = "Categorie de Personne")
 public class CategoriePersonne {
 
     @AnnotationAttr(nameInBase = "id_categorie_personne", inc = true)

@@ -13,7 +13,7 @@ public class Commission {
     private String idCommission;
     @AnnotationAttr(nameInBase = "commission")
     private double commission;
-    @AnnotationAttr(nameInBase = "date_commision")
+    @AnnotationAttr(nameInBase = "date_commission")
     private Date dateCommission;
 
     public Commission(ResultSet set) throws Exception {
