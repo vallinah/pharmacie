@@ -9,12 +9,12 @@ import annotation.ForeingKey;
 @AnnotationClass(nameInBase = "produit_maladie", icone = "bi-file-earmark-medical", title = "Produit-Maladie")
 public class ProduitMaladie {
 
-    @ForeingKey(col = "nom_produit", cls = "produit", id = true)
-    @AnnotationAttr(nameInBase = "id_produit")
+    @ForeingKey(col = "nom_produit", cls = "produit")
+    @AnnotationAttr(nameInBase = "id_produit", id = true)
     private String idProduit;
 
-    @ForeingKey(col = "nom_maladie", cls = "maladie", id = true)
-    @AnnotationAttr(nameInBase = "id_maladie")
+    @ForeingKey(col = "nom_maladie", cls = "maladie")
+    @AnnotationAttr(nameInBase = "id_maladie", id = true)
     private String idMaladie;
 
     public ProduitMaladie(ResultSet set) throws Exception {
