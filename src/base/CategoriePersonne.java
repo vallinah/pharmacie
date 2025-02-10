@@ -8,7 +8,7 @@ public class CategoriePersonne {
 
     @AnnotationAttr(nameInBase = "id_categorie_personne", inc = true, id = true)
     String idCategoriePersonne;
-    @AnnotationAttr(nameInBase = "categorie_personne", id = true)
+    @AnnotationAttr(nameInBase = "categorie_personne")
     String categoriePersonne;
 
     public String getIdCategoriePersonne() {

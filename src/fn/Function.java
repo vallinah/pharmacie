@@ -14,9 +14,28 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class Function {
+
     
     public static Connexion dbConnect() throws Exception {
         return new Connexion("pharmacie");
+    }
+
+    public static String toUcWords(String str) {
+        String[] splt = str.split("[^\\w\\d]|_");
+        String result = toUcFirst(splt[0]);
+        for (int a = 1; a < splt.length; a++) {
+            result += " " + toUcFirst(splt[a]);
+        }
+        return result;
+    }
+
+    public static String toUcFirst(String str) {
+        if (str.isEmpty()) {
+            return "";
+        }
+        String substtr = str.substring(1, str.length());
+        String firstStr = str.charAt(0) + "";
+        return firstStr.toUpperCase() + substtr;
     }
 
     public static String getDataByID(String table, String columnGet, String columnSelect, String id) throws Exception {
@@ -58,17 +77,22 @@ public class Function {
         return gson.toJson(obj);
     }
 
-    public static Vector<Class<?>> listeClass() {
-        Vector<Class<?>> liste = new Vector<>();
-        liste.add(Produit.class);
-        liste.add(Maladie.class);
-        liste.add(Laboratoire.class);
-        liste.add(ModeAdministration.class);
-        liste.add(ProduitCategoriePersonne.class);
-        liste.add(ProduitMaladie.class);
-        liste.add(CategoriePersonne.class);
-        liste.add(UniteMesure.class);
-        liste.add(Forme.class);
+    public static Vector<LinkHandler> listeLink() {
+        Vector<LinkHandler> liste = new Vector<>();
+        liste.add(new LinkHandler(Produit.class));
+        liste.add(new LinkHandler(Maladie.class));
+        liste.add(new LinkHandler(ModeAdministration.class));
+        liste.add(new LinkHandler(ProduitCategoriePersonne.class));
+        liste.add(new LinkHandler(ProduitMaladie.class));
+        liste.add(new LinkHandler(CategoriePersonne.class));
+        liste.add(new LinkHandler(HistoriquePrixProduit.class));
+        liste.add(new LinkHandler(Genre.class));
+        liste.add(new LinkHandler(Commission.class));
+        liste.add(new LinkHandler(Vendeur.class));
+        liste.add(new LinkHandler(Client.class));
+        liste.add(new LinkHandler(Vente.class));
+        liste.add(new LinkHandler(VenteDetail.class));
+        liste.add(new LinkHandler(ConseilDuMois.class));
         return liste;
     }
 

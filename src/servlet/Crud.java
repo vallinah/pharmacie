@@ -7,6 +7,10 @@ import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import fn.All;
 import fn.Function;
 import gst.CRUD;
 import jakarta.servlet.ServletException;
@@ -33,8 +37,17 @@ public class Crud extends HttpServlet {
             }
         }
         try {
-            CRUD crd = new CRUD(Class.forName(clsName));
-            crd.insert(values);
+            Class<?> cls = Class.forName(clsName);
+            CRUD crd = new CRUD(cls);
+            String[] ids = crd.insert(values);
+            All all = new All(cls);
+
+            Gson gson = new Gson();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("rep", "Insertion avec succé !");
+            jsonObject.addProperty("obj", gson.toJson(all.getById(ids)));
+
+            out.println(gson.toJson(jsonObject));
         } catch (Exception e) {
             resp.setStatus(500);
             out.println(Function.giveJson("err", e.getMessage()));
@@ -59,20 +72,27 @@ public class Crud extends HttpServlet {
         }
 
         String clsName = null;
-        String id = null;
+        String[] ids = new String[2];
         while (enumeration.hasMoreElements()) {
             String val = enumeration.nextElement();
             if (val.equals("cls")) {
                 clsName = req.getParameter(val);
             } else if (val.equals("id")) {
-                id = req.getParameter(val);
+                ids = req.getParameter(val).split("_");
             }
         }
 
         try {
             CRUD crd = new CRUD(Class.forName(clsName));
-            crd.update(values, id);
-            out.println(Function.giveJson("cls", clsName));
+            String[] ireoId = crd.update(values, ids);
+            All all = new All(Class.forName(clsName));
+
+            Gson gson = new Gson();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("rep", "Update avec succes");
+            jsonObject.addProperty("obj", gson.toJson(all.getById(ireoId)));
+
+            out.println(gson.toJson(jsonObject));
         } catch (Exception e) {
             resp.setStatus(500);
             out.println(Function.giveJson("err", e.getMessage()));
@@ -86,10 +106,12 @@ public class Crud extends HttpServlet {
             Class<?> cls = Class.forName(req.getParameter("cls"));
             String id = req.getParameter("id");
             CRUD crd = new CRUD(cls);
-            crd.delete(id);
+            crd.delete(id.split("_"));
+            out.println(Function.giveJson("mess", "Elément supprimé avec succes !"));
         } catch (Exception e) {
             resp.setStatus(500);
-            e.printStackTrace(out);
+            // e.printStackTrace(out);
+            out.println(Function.giveJson("err", e.getMessage()));
         }
     }
 }
