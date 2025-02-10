@@ -4,19 +4,21 @@ import java.sql.Date;
 import java.sql.ResultSet;
 
 import annotation.AnnotationAttr;
+import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
+@AnnotationClass(nameInBase = "vente", sequence = "vente_id_seq", prefix = "VNT", icone = "bi-credit-card")
 public class Vente {
-    
-    @AnnotationAttr(nameInBase = "id_mouvement", inc = true)
-    private String idMouvement;
-    @AnnotationAttr(nameInBase = "quantite")
-    private int quantite;
-    @AnnotationAttr(nameInBase = "prix_vente_unitaire", insert = false)
-    @ForeingKey(cls = "produit", col = "prix_vente_unitaire")
-    private double prixVenteUnitaire;
-    @AnnotationAttr(nameInBase = "date_mouvement")
-    private Date dateMouvement;
+
+    @AnnotationAttr(nameInBase = "id_vente", inc = true, id = true)
+    private String idVente;
+    @AnnotationAttr(nameInBase = "prix_total")
+    private double prixTotal;
+    @AnnotationAttr(nameInBase = "date_vente")
+    private Date dateVente;
+    @AnnotationAttr(nameInBase = "id_commission")
+    @ForeingKey(col = "commission", cls = "commission")
+    private String idCommission;
     @ForeingKey(cls = "produit", col = "nom_produit")
     @AnnotationAttr(nameInBase = "id_produit")
     private String idProduit;
@@ -27,48 +29,17 @@ public class Vente {
     @AnnotationAttr(nameInBase = "id_vendeur")
     private String idVendeur;
 
-    public Vente(ResultSet resultSet) throws Exception {
-        this.setIdMouvement(resultSet.getString("id_mouvement"));
-        this.setQuantite(resultSet.getInt("quantite"));
-        this.setPrixVenteUnitaire(resultSet.getDouble("prix_vente_unitaire"));
-        this.setDateMouvement(resultSet.getDate("date_mouvement"));
-        this.setIdProduit(resultSet.getString("id_produit"));
-        this.setIdClient(resultSet.getString("id_client"));
+    public Vente(ResultSet set) throws Exception {
+        setIdVente(set.getString("id_vente"));
+        setPrixTotal(set.getDouble("prix_total"));
+        setDateVente(set.getDate("date_vente"));
+        setIdCommission(set.getString("id_commissioin"));
+        setIdProduit(set.getString("id_produit"));
+        setIdClient(set.getString("id_client"));
+        setIdVendeur(set.getString("id_vendeur"));
     }
 
     public Vente() {}
-
-    public String getIdMouvement() {
-        return idMouvement;
-    }
-
-    public void setIdMouvement(String idMouvement) {
-        this.idMouvement = idMouvement;
-    }
-
-    public int getQuantite() {
-        return quantite;
-    }
-
-    public void setQuantite(int quantite) {
-        this.quantite = quantite;
-    }
-
-    public double getPrixVenteUnitaire() {
-        return prixVenteUnitaire;
-    }
-
-    public void setPrixVenteUnitaire(double prixVenteUnitaire) {
-        this.prixVenteUnitaire = prixVenteUnitaire;
-    }
-
-    public Date getDateMouvement() {
-        return dateMouvement;
-    }
-
-    public void setDateMouvement(Date dateMouvement) {
-        this.dateMouvement = dateMouvement;
-    }
 
     public String getIdProduit() {
         return idProduit;
@@ -84,5 +55,45 @@ public class Vente {
 
     public void setIdClient(String idClient) {
         this.idClient = idClient;
+    }
+
+    public String getIdVente() {
+        return idVente;
+    }
+
+    public void setIdVente(String idVente) {
+        this.idVente = idVente;
+    }
+
+    public double getPrixTotal() {
+        return prixTotal;
+    }
+
+    public void setPrixTotal(double prixTotal) {
+        this.prixTotal = prixTotal;
+    }
+
+    public Date getDateVente() {
+        return dateVente;
+    }
+
+    public void setDateVente(Date dateVente) {
+        this.dateVente = dateVente;
+    }
+
+    public String getIdCommission() {
+        return idCommission;
+    }
+
+    public void setIdCommission(String idCommission) {
+        this.idCommission = idCommission;
+    }
+
+    public String getIdVendeur() {
+        return idVendeur;
+    }
+
+    public void setIdVendeur(String idVendeur) {
+        this.idVendeur = idVendeur;
     }
 }

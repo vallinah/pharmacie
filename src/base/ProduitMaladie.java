@@ -1,22 +1,28 @@
 package base;
 
+import java.sql.ResultSet;
+
 import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "produit_maladie", sequence="produit_maladie_id_seq", prefix = "PMD")
+@AnnotationClass(nameInBase = "produit_maladie", icone = "bi-file-earmark-medical", title = "Produit-Maladie")
 public class ProduitMaladie {
 
-    @AnnotationAttr(nameInBase = "id_produit_maladie", inc = true)
-    private String idProduitMaladie;
-
     @ForeingKey(col = "nom_produit", cls = "produit")
-    @AnnotationAttr(nameInBase = "id_produit")
+    @AnnotationAttr(nameInBase = "id_produit", id = true)
     private String idProduit;
 
     @ForeingKey(col = "nom_maladie", cls = "maladie")
-    @AnnotationAttr(nameInBase = "id_maladie")
+    @AnnotationAttr(nameInBase = "id_maladie", id = true)
     private String idMaladie;
+
+    public ProduitMaladie(ResultSet set) throws Exception {
+        setIdProduit(set.getString("id_produit"));
+        setIdMaladie(set.getString("id_maladie"));
+    }
+
+    public ProduitMaladie() {}
 
     public String getIdProduit() {
         return idProduit;

@@ -7,6 +7,8 @@ import base.connexe.Connexion;
 import fn.All;
 import fn.Compteur;
 import fn.Function;
+import fn.LinkHandler;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -23,7 +25,7 @@ public class CRUD {
     private String nameInBase;
     private String sequenceName;
     private Vector<Field> listFields;
-    private String idName;
+    private Vector<Field> listId = new Vector<>();
 
     public CRUD(Class<?> cls) throws Exception {
         if (!cls.isAnnotationPresent(AnnotationClass.class)) {
@@ -34,20 +36,14 @@ public class CRUD {
         sequenceName = cls.getAnnotation(AnnotationClass.class).sequence();
         listFields = fieldMapped();
         for (Field fld : listFields) {
-            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                idName = fld.getAnnotation(AnnotationAttr.class).nameInBase();
-                break;
+            if (fld.getAnnotation(AnnotationAttr.class).id()) {
+                listId.add(fld);
             }
         }
     }
 
-    private boolean detectForeignKey() throws Exception {
-        for (Field fld : listFields)  {
-            if (fld.isAnnotationPresent(ForeingKey.class)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean isTypeInc(Field fld) throws Exception {
+        return fld.getAnnotation(AnnotationAttr.class).inc();
     }
 
     private Field getFieldByName(String fldName) throws Exception {
@@ -135,26 +131,12 @@ public class CRUD {
         StringBuilder bld = new StringBuilder();
         StringBuilder body = new StringBuilder();
         String ttr = "";
-        bld.append("    <section class=\"list\">\n"
-                + //
-                "       <div class='ttr'>\n"
-                + "           <h1>Listes <br>" + nameInBase + "</h1>\n"
-                + //
-                "        </div>\n"
-                + "        <div class=\"bd\">\n");
-        
-        for (Field fld : listFields) {
-            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                idName = fld.getName();
-                break;
-            }
-        }
 
         All all = new All(cls);
         Vector<Vector<String>> rehetra = all.getAll(null);
         Vector<String> titre = all.getAllTitre();
 
-        for (int a = 0; a < titre.size(); a++) {
+        for (int a = 0; a < titre.size() - listId.size(); a++) {
             ttr += "                    <th>" + titre.get(a) + "</th>\n";
         }
         ttr += "                    <th>Action</th>\n"
@@ -164,23 +146,19 @@ public class CRUD {
                 "               <tr>\n";
         int isEmpty = 0;
 
-        boolean isForeignKey = detectForeignKey();
-
         for (Vector<String> ligne : rehetra) {
-            String trash = "<a href=\"crud?cls=" + cls.getName() + "&id=" + ligne.firstElement() + //
-                                "\"><i class=\"bi bi-trash\"></i></a" ;
-            if (isForeignKey) {
-                trash = "";
-            }
-            for (String value : ligne) {
-                body.append("                    <td>" + value + "</td>\n");
+            for (int a = 0; a < ligne.size(); a++) {
+                if (a != ligne.size() - 1) {
+                    body.append("                    <td>" + ligne.get(a) + "</td>\n");
+
+                }
             }
             body.append("                    <td>\n"
                     + //
                     "                       <div class='action'>\n"
-                    + "                           <a href=\"update.jsp?cls=" + cls.getName() + "&id="
-                    + ligne.firstElement() + "\"><i class=\"bi bi-pencil\"></i></a>\n"
-                    + trash + //
+                    + "                           <a href=\"update?cls=" + cls.getName() + "&id="
+                    + ligne.lastElement().trim() + "\" class=\"update modal_active\" data-active=\"update\"><i class=\"bi bi-pencil\"></i></a>\n"
+                    + "                           <a href=\"crud?cls=" + cls.getName() + "&id=" + ligne.lastElement().trim() + "\" class='delete modal_active' data-active='delete'><i class=\"bi bi-trash\"></i></a" + //
                     "                       </div>\n"
                     + "                   </td>\n"
                     + //
@@ -202,9 +180,6 @@ public class CRUD {
         if (isEmpty != 0) {
             bld.append("            </table>\n");
         }
-        bld.append("        </div>\n"
-                + //
-                "    </section>");
         return bld.toString();
     }
 
@@ -277,28 +252,47 @@ public class CRUD {
         return listFields;
     }
 
-    private String scriptUpdate(Vector<String> updt, String id) throws Exception {
+    public String scriptUpdate() throws Exception {
         StringBuilder req = new StringBuilder();
-        String idName = null;
         req.append("update " + nameInBase + " set ");
         int cpt = 0;
+        int countInc = 0;
+        for (Field fld : listFields) {
+            if (fld.getAnnotation(AnnotationAttr.class).inc()) countInc++;
+        }
+
+        int counId = (countInc == 0) ? listId.size() : countInc;
+        int limiteCpt = (listFields.size() == counId) ? counId - 1 : listFields.size() - counId - 1;
+
         for (int a = 0; a < listFields.size(); a++) {
-            if (listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
-                idName = listFields.get(a).getAnnotation(AnnotationAttr.class).nameInBase();
-            } else {
+            if (!listFields.get(a).getAnnotation(AnnotationAttr.class).inc()) {
                 req.append(listFields.get(a).getAnnotation(AnnotationAttr.class).nameInBase() + " = ?");
-                if (cpt != updt.size() - 1) {
+                if (cpt !=  limiteCpt) {
                     req.append(",");
                 }
                 cpt++;
             }
         }
-        req.append(" where " + idName + " = ?");
+        req.append(" where 1 = 1");
+        for (Field fld : listId) {
+            req.append(" and " + fld.getAnnotation(AnnotationAttr.class).nameInBase() + " = ?");
+        }
         return req.toString();
     }
 
-    public void update(Vector<String> updt, String id) throws Exception {
-        String req = scriptUpdate(updt, id);
+    public String[] update(Vector<String> updt, String[] ids) throws Exception {
+        String req = scriptUpdate();
+        String[] ireoId = new String[listId.size()];
+
+        if (listId.size() == listFields.size()) {
+            for (int a = 0; a < listId.size(); a++) {
+                ireoId[a] = updt.get(listFields.indexOf(listId.get(a)));
+            }
+        } else {
+            ireoId = ids;
+        }
+
+        System.out.println(req);
         PreparedStatement prp = null;
         Connection connection = null;
         try {
@@ -314,10 +308,14 @@ public class CRUD {
                     preparedUpdate(prp, connexion, listFields.get(a), updt.get(cpt.getCpt()), cpt);
                 }
             }
-            prp.setString(updt.size() + 1, id);
+            for (int a = 0; a < listId.size(); a++) {
+                prp.setString(updt.size() + (a + 1), ids[a]);
+            }
+            
             prp.executeUpdate();
             connection.commit();
             System.out.println("update reussi : " + req);
+            return ireoId;
         } catch (Exception e) {
             connection.rollback();
             throw e;
@@ -332,15 +330,23 @@ public class CRUD {
         }
     }
 
-    public String html_update(String id) throws Exception {
-        String req = "select * from " + nameInBase + " where " + idName + " = ?";
+    public String html_update(String[] ids) throws Exception {
+        String req = "select * from " + nameInBase + " where 1 = 1";
+
+        for (Field fld : listId) {
+            req +=" and " + fld.getAnnotation(AnnotationAttr.class).nameInBase() + " = ?"; 
+        }
+        System.out.println(req);
+
         PreparedStatement prp = null;
         ResultSet set = null;
         Connexion connexion = Function.dbConnect();
 
         try {
             prp = connexion.getConnexe().prepareStatement(req);
-            prp.setString(1, id);
+            for (int a = 0; a < listId.size(); a++) {
+                prp.setString(a + 1, ids[a]);
+            }
             set = prp.executeQuery();
 
             if (!set.next()) {
@@ -348,24 +354,29 @@ public class CRUD {
             }
 
             StringBuilder bld = new StringBuilder();
-            bld.append("    <section class=\"gnr\">\n"
-                    + //
-                    "        <h1>Update <br>" + nameInBase + "</h1>\n"
-                    + //
-                    "        <form action=\"./crud?cls=" + cls.getName() + "&id=" + id + "\" method=\"post\">\n");
-
+            LinkHandler link = new LinkHandler(cls);
+            bld.append("                <div class=\"form-container\">\n" + //
+                            "                    <div class=\"form-title\">\n" + //
+                            "                        <span class='icone'><i class='bi bi-pencil'></i></span>" + 
+                            "                        <h1> <i class='bi " + link.getIcone() + "'></i>" + link.getTitre() + "</h1>\n" + //
+                            "                    </div>\n" + //
+                            "                    <form class='update' action=\"./crud?cls=" +  cls.getName() + "\" methode='post'>\n");
             for (Field fld : listFields) {
                 AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
+                boolean typeNoPlaceHolder = !fld.getType().equals(Date.class) && !fld.getType().equals(java.sql.Date.class) && !fld.getType().equals(LocalDate.class);
                 if (annotation.insert() && !annotation.inc()) {
                     String name = fld.getAnnotation(AnnotationAttr.class).nameInBase();
-                    bld.append("            <div class=\"prt\">\n");
+                    bld.append("                        <div class=\"form-group\">");
                     if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
-                        bld.append("                <textarea name=\"" + name + "\" placeholder=" + name + ">"
+                        bld.append("                <textarea name=\"" + name + "\" placeholder=" + Function.toUcFirst(name) + ">"
                                 + set.getString(name) + "</textarea>\n");
                     } else {
                         if (fld.isAnnotationPresent(ForeingKey.class)) {
                             ForeingKey foreingKey = fld.getAnnotation(ForeingKey.class);
                             String nomCol = foreingKey.col();
+                            if (typeNoPlaceHolder) {
+                                bld.append("<span>" + Function.toUcFirst(name) + " :</span>\n");
+                            }
                             bld.append("                <select name=\"" + name + "\">\n" + //
                                         "                    <option value=\"\">Choise " + nomCol + "</option>\n");
                             Vector<String> list = getData(nomCol, foreingKey.cls(),null);
@@ -386,10 +397,14 @@ public class CRUD {
                             bld.append("                </select>\n");
                         } else {
                             if (annotation.insert()) {
-                                bld.append("                <input type=\"" + inputType(fld) + "\" value=\""
+
+                                if (typeNoPlaceHolder) {
+                                    bld.append("                <input type=\"" + inputType(fld) + "\" value=\""
+                                    + set.getString(name) + "\" name=\"" + name + "\" placeholder=\"" + Function.toUcFirst(name) + "\" required>\n");
+                                } else {
+                                    bld.append("<span>" + Function.toUcFirst(name) + " :</span>\n" + 
+                                        "                <input type=\"" + inputType(fld) + "\" value=\""
                                     + set.getString(name) + "\" name=\"" + name + "\" required>\n");
-                                if (!fld.getType().equals(Date.class) && !fld.getType().equals(java.sql.Date.class) &&!fld.getType().equals(LocalDate.class)) {
-                                    bld.append("                <span>" + name + "</span>\n");
                                 }
                             }
                         }
@@ -397,14 +412,14 @@ public class CRUD {
                     bld.append("            </div>\n");
                 }
             }
-            bld.append("            <button type=\"submit\">Valider</button>\n" + 
-                        "            <div class=\"err\">\n" + //
-                        "                <span></span>\n" + //
-                        "            </div>"
-                    + //
-                    "        </form>\n"
-                    + //
-                    "    </section>");
+            bld.append("                        <div class=\"form-submit\">\n" + //
+                        "                            <button type=\"submit\">Valider</button>\n" + //
+                        "                        </div>\n" + //
+                        "                    </form>\n" + //
+                        "                    <div class=\"message\">\n" + //
+                        "                        <p class=\"\"></p>\n" + //
+                        "                    </div>" +
+                        "                </div>");
             return bld.toString();
         } catch (Exception e) {
             throw e;
@@ -419,16 +434,12 @@ public class CRUD {
         }
     }
 
-    public void delete(String id) throws Exception {
-        String id_in_base = null;
-        for (Field fld : listFields) {
-            if (fld.getAnnotation(AnnotationAttr.class).inc()) {
-                id_in_base = fld.getAnnotation(AnnotationAttr.class).nameInBase();
-                break;
-            }
-        }
+    public void delete(String[] ids) throws Exception {
+        String req = "delete from " + nameInBase + " where 1 = 1" ;
 
-        String req = "delete from " + nameInBase + " where " + id_in_base + " = ?";
+        for (Field id : listId) {
+            req += " and " + id.getAnnotation(AnnotationAttr.class).nameInBase() + " = ?";
+        }
 
         Connection connection = null;
         PreparedStatement prp = null;
@@ -438,7 +449,9 @@ public class CRUD {
             connection = connexion.getConnexe();
             connection.setAutoCommit(false);
             prp = connection.prepareStatement(req);
-            prp.setString(1, id);
+            for (int a = 0; a < ids.length; a++) {
+                prp.setString(a + 1, ids[a]);
+            }
             prp.executeUpdate();
             connection.commit();
 
@@ -477,21 +490,20 @@ public class CRUD {
         return bld.toString();
     }
 
-    public void insert(Vector<String> insertion) throws Exception {
+    public String[] insert(Vector<String> insertion) throws Exception {
         try {
             Object newInstance = cls.getConstructor().newInstance();
             Method methodeInsert  = cls.getMethod("insert", Vector.class);
-            methodeInsert.invoke(newInstance, insertion);
-            return;
+            return (String[]) methodeInsert.invoke(newInstance, insertion);
         } catch (Exception e) {
-            System.out.println("ERROR : " + e.getMessage());
+            // System.out.println("ERROR : " + e.getMessage());
         }
 
-        String req = scriptInsert();
         Connection connection = null;
         PreparedStatement prp = null;
 
-        System.out.println("req : " + req + ", sizeInsertion : " + insertion.size());
+        String req = scriptInsert();
+
         try {
             Connexion connexion = Function.dbConnect();
             connection = connexion.getConnexe();
@@ -505,6 +517,20 @@ public class CRUD {
             }
             prp.executeUpdate();
             connection.commit();
+
+            AnnotationClass annotationClass = cls.getAnnotation(AnnotationClass.class);
+
+            String[] ids = new String[listId.size()];
+            System.out.println(listId.size());
+            for (int a = 0; a < listId.size(); a++) {
+                if (isTypeInc(listId.get(a))) {
+                    String sequence = connexion.currval(annotationClass.sequence()) + "";
+                    ids[a] = annotationClass.prefix() + "0".repeat(8 - sequence.length()) + sequence;
+                } else {
+                    ids[a] = insertion.get(listFields.indexOf(listId.get(a)));
+                }
+            }
+            return ids;
         } catch (Exception e) {
             if (connection != null) {
                 connection.rollback();
@@ -524,25 +550,30 @@ public class CRUD {
 
     public String html_insert() throws Exception {
         StringBuilder bld = new StringBuilder();
-        bld.append("    <section class=\"gnr\">\n"
-                + //
-                "        <h1>Insertion <br>" + nameInBase + "</h1>\n"
-                + //
-                "        <form action=\"./crud?cls=" + cls.getName() + "\" method=\"post\">\n");
+        LinkHandler link = new LinkHandler(cls);
+        bld.append("                <div class=\"form-container\">\n" + //
+                        "                    <div class=\"form-title\">\n" + //
+                        "                        <span class='icone'><i class='bi bi-plus-circle'></i></span>" + 
+                        "                        <h1> <i class='bi " + link.getIcone() + "'></i>" + link.getTitre() + "</h1>\n" + //
+                        "                    </div>\n" + //
+                        "                    <form class='ajout' action=\"./crud?cls=" +  cls.getName() + "\" methode='post'>\n");
 
         for (Field fld : listFields) {
             AnnotationAttr annotation = fld.getAnnotation(AnnotationAttr.class);
+            boolean typeNoPlaceHolder = !fld.getType().equals(Date.class) && !fld.getType().equals(java.sql.Date.class) && !fld.getType().equals(LocalDate.class);
             if (annotation.insert() && !annotation.inc()) {
                 String name = fld.getName();
-                bld.append("            <div class=\"prt\">\n");
+                bld.append("                        <div class=\"form-group\">");
 
                 if (fld.getAnnotation(AnnotationAttr.class).textarea()) {
-                    bld.append(
-                            "                <textarea name=\"" + name + "\" placeholder=" + name + "></textarea>\n");
+                    bld.append("                <textarea name=\"" + name + "\" placeholder=" + Function.toUcFirst(name) + "></textarea>\n");
                 } else {
                     if (fld.isAnnotationPresent(ForeingKey.class)) {
                         ForeingKey foreingKey = fld.getAnnotation(ForeingKey.class);
                         String nomCol = foreingKey.col();
+                        if (typeNoPlaceHolder) {
+                            bld.append("<span>" + Function.toUcFirst(name) + " :</span>\n");
+                        }
                         bld.append("                <select name=\"" + name + "\">\n" + //
                                     "                    <option value=\"\">Choise " + nomCol + "</option>\n");
                         Vector<String> list = getData(nomCol, foreingKey.cls(),null);
@@ -556,10 +587,13 @@ public class CRUD {
                         bld.append("                </select>\n");
                     } else {
                         if (annotation.insert()) {
-                            bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name
-                            + "\" required>\n");
-                            if (!fld.getType().equals(Date.class) && !fld.getType().equals(java.sql.Date.class) && !fld.getType().equals(LocalDate.class)) {
-                                bld.append("                <span>" + name + "</span>\n");
+                            if (typeNoPlaceHolder) {
+                                bld.append("                <input type=\"" + inputType(fld) + "\" name=\"" + name + "\" placeholder='" +  Function.toUcFirst(name)
+                                + "'\" required>\n");
+                            } else {
+                                bld.append("<span>" + Function.toUcFirst(name) + " :</span>\n" + 
+                                    "                <input type=\"" + inputType(fld) + "\" name=\"" + name
+                                + "\" required>\n");
                             }
                         }
                     }
@@ -567,14 +601,18 @@ public class CRUD {
                 bld.append("            </div>\n");
             }
         }
-        bld.append("            <button type=\"submit\">Valider</button>\n"
-                + "            <div class=\"err\">\n" + //
-                "                <span></span>\n" + //
-                "            </div>"
-                + //
-                "        </form>\n"
-                + //
-                "    </section>");
+        bld.append("                        <div class=\"form-submit\">\n" + //
+                        "                            <button type=\"submit\">Valider</button>\n" + //
+                        "                        </div>\n" + //
+                        "                    </form>\n" + //
+                        "                    <div class=\"message\">\n" + //
+                        "                        <p class=\"\"></p>\n" + //
+                        "                    </div>" +
+                        "                </div>");
         return bld.toString();
+    }
+
+    public Class<?> getCls() {
+        return cls;
     }
 }
