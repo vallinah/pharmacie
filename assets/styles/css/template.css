@@ -775,7 +775,9 @@ main section.list .bd {
     height: calc(100vh - 170px);
     display: flex;
     justify-content: center;
+    align-items: flex-start;
     overflow-y: scroll;
+    padding: 40px 0;
 }
 
 main section.list .bd::-webkit-scrollbar {
@@ -824,7 +826,8 @@ main section.list .bd table .action a {
 
 main section.list .bd table th {
     min-width: 160px;
-    height: 50px;background-color: var(--secondary-color);
+    height: 50px;
+    background-color: var(--secondary-color);
     color: white;
     border-width: 0px;
 }
@@ -840,8 +843,47 @@ main section.list .bd table tr {
     border-width: 0px;
 }
 
+main section.list .bd h1 {
+    font-size: 50px;
+    margin-top: 80px;
+}
+
 menu.active ~ main {
     left: 0px;
     transition: .5s;
     width: 100vw;
+}
+
+main section.list .filtre {
+    height: 40px;
+}
+
+main section.list .filtre form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+main section.list .filtre form span {
+    font-weight: bolder;
+}
+
+main section.list .filtre select, main section.list .filtre button {
+    text-align: center;
+    appearance: none;
+    background-color: black;
+    color: white;
+    border-radius: 50px;
+    height: 30px;
+    border-width: 0;
+    padding: 0 20px;
+}
+
+main section.list .filtre button {
+    background-color: var(--secondary-color);
+    color: white;
+    font-weight: bolder;
 }

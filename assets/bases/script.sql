@@ -10,6 +10,16 @@ WHERE
     pm.id_maladie = ?
     AND pcp.id_categorie_personne = ?;
 
+SELECT DISTINCT p.id_produit, p.nom_produit, p.description, mda.mode_administration, p.id_produit
+from
+    produit p
+    JOIN produit_categorie_personne pcp on pcp.id_produit = p.id_produit
+    JOIN produit_maladie pm on pm.id_produit = p.id_produit
+    JOIN mode_administration mda ON mda.id_mode_administration = p.id_mode_administration
+WHERE
+    pm.id_maladie = ?
+    AND pcp.id_categorie_personne = ?;
+
 -- fonctionnalite 2
 
 SELECT (
