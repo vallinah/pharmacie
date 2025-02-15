@@ -35,18 +35,22 @@ FROM
     JOIN commission c ON c.id_commission = v.id_commission
     JOIN client cli ON cli.id_client = v.id_client
     JOIN vendeur vnd ON vnd.id_vendeur = v.id_vendeur
-WHERE 1 = 1
+WHERE
+    1 = 1
     and pcp.id_categorie_personne = ?
     and p.id_mode_administration = ?
 
 -- fn 3
 
-SELECT *
+SELECT cdm.id_conseil_du_mois, cdm.date_debut, cdm.date_fin, p.nom_produit, cdm.id_conseil_du_mois
 FROM
     conseil_du_mois cdm
     JOIN produit p ON p.id_produit = cdm.id_produit
-WHERE (
-        EXTRACT(
+WHERE
+    1 = 1
+    and (
+        1 = 1
+        and EXTRACT(
             MONTH
             FROM cdm.date_debut
         ) >= 8
@@ -56,7 +60,8 @@ WHERE (
         ) <= 8
     )
     and (
-        EXTRACT(
+        1 = 1
+        and EXTRACT(
             YEAR
             FROM cdm.date_debut
         ) >= 2025
@@ -65,28 +70,6 @@ WHERE (
             FROM cdm.date_fin
         ) <= 2025
     );
-
-SELECT * FROM produit_categorie_personne;
-
-SELECT * FROM produit_maladie;
-
------------------------
-
-SELECT distinct
-    m.id_mouvement,
-    m.quantite,
-    m.prix_achat_unitaire,
-    m.prix_vente_unitaire,
-    m.date_mouvement,
-    p.id_produit
-from
-    produit p
-    JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit
-    JOIN mouvement m ON m.id_produit = p.id_produit
-where
-    pcp.id_categorie_personne = 'CATP00000001';
-
-SELECT * FROM produit_categorie_personne;
 
 -------------------
 

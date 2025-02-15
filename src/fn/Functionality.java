@@ -1,17 +1,10 @@
 package fn;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.Vector;
 
-import base.Client;
-import base.CommissionVendeur;
-import base.ConseilDuMois;
-import base.Historique;
-import base.Mouvement;
-import base.Produit;
 import base.connexe.Connexion;
 
 public class Functionality {
@@ -135,124 +128,92 @@ public class Functionality {
     //     }        
     // } 
 
-    // public Vector<ConseilDuMois> getReqFn_3(int month, int year) throws Exception {
-    //     String req = "SELECT *\n" + //
-    //                     "FROM\n" + //
-    //                     "    conseil_du_mois cdm\n" + //
-    //                     "    JOIN produit p ON p.id_produit = cdm.id_produit\n" + //
-    //                     "WHERE (\n" + //
-    //                     "        EXTRACT(\n" + //
-    //                     "            YEAR\n" + //
-    //                     "            FROM cdm.date_debut\n" + //
-    //                     "        ) >= ?\n" + //
-    //                     "        and EXTRACT(\n" + //
-    //                     "            YEAR\n" + //
-    //                     "            FROM cdm.date_fin\n" + //
-    //                     "        )\n" + //
-    //                     "        <= ?\n" + //
-    //                     "    );";
-
-    //     Vector<ConseilDuMois> all = new Vector<>();
-
-    //     Connexion connexion = Function.dbConnect();
-    //     PreparedStatement prepared = null;
-    //     ResultSet set = null;
-
-    //     try {
-    //         prepared = connexion.getConnexe().prepareStatement(req);
-    //         prepared.setInt(1, year);
-    //         prepared.setInt(2, year);
-
-    //         set = prepared.executeQuery();
-    //         while (set.next()) {
-    //             all.add(new ConseilDuMois(set));
-    //         }
-    //         return all;
-    //     } catch (Exception e) {
-    //         throw  e;
-    //     } finally {
-    //         if (set != null) set.close();
-    //         if (prepared != null) prepared.close();
-    //         connexion.finaleClose();
-    //     }
-    // }
-
-    // public String getReqFn_2(String idCategoriePersonne, String idMode) throws Exception {
-    //     String req = "SELECT distinct m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.date_mouvement, p.id_produit, m.id_client\n" + //
-    //                     "from\n" + //
-    //                     "    produit p\n" + //
-    //                     "    JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit\n" + //
-    //                     "    JOIN mouvement m ON m.id_produit = p.id_produit";
-
-    //     boolean cnd = false;
-    //     String cnd_categorie = "";
-    //     String  cnd_idMode = "";
-    //     boolean first = false;
-
-    //     if (idCategoriePersonne != null) {
-    //         if (!idCategoriePersonne.isEmpty()) {
-    //             cnd_categorie = "    pcp.id_categorie_personne = ?";
-    //             cnd = true;
-    //             first = true;
-    //         }
-    //     }
-
-    //     if (idMode != null) {
-    //         if (!idMode.isEmpty()) {
-    //             if (first) {
-    //                 cnd_idMode = " and ";
-    //             }
-    //             cnd_idMode += "    p.id_mode_administration = ?";
-    //             cnd = true;
-    //         }
-    //     }
-
-    //     if (cnd) {
-    //         req += " where \n";
-    //     }
-
-    //     req += cnd_categorie + cnd_idMode;
-    //     return req;
-    // }
-    
-    // public Vector<Mouvement> getFn_2(String idCategoriePersonne, String idMode) throws Exception {
+    public Vector<Vector<String>> getFonctinnalite3(String date1, String date2) throws Exception {
+        Vector<Vector<String>> all = new Vector<>();
+        String req = "SELECT cdm.id_conseil_du_mois, cdm.date_debut, cdm.date_fin, p.nom_produit, cdm.id_conseil_du_mois\n" + //
+                        "FROM\n" + //
+                        "    conseil_du_mois cdm\n" + //
+                        "    JOIN produit p ON p.id_produit = cdm.id_produit\n" + //
+                        "WHERE\n" + //
+                        "    1 = 1\n";
+        Connexion connexion = Function.dbConnect();
+        PreparedStatement prepared = null;
+        ResultSet set = null;
         
-    //     String req = getReqFn_2(idCategoriePersonne, idMode);
-    //     Vector<Mouvement> all = new Vector<>();
+        String[] splitDate1 = null, splitDate2 = null;
 
-    //     Connexion connexion = Function.dbConnect();
-    //     PreparedStatement prepared = null;
-    //     ResultSet set = null;
+        int counter = 0;
 
-    //     try {
-    //         prepared = connexion.getConnexe().prepareStatement(req);
-    //         int cpt = 1;
-    //         if (idCategoriePersonne != null) {
-    //             if (!idCategoriePersonne.isEmpty()) {
-    //                 prepared.setString(cpt, idCategoriePersonne);
-    //                 cpt++;
-    //             }
-    //         }
-    
-    //         if (idMode != null) {
-    //             if (!idMode.isEmpty()) {
-    //                 prepared.setString(cpt, idMode);
-    //                 cpt++;
-    //             }
-    //         }
-    //         set = prepared.executeQuery();
-    //         while (set.next()) {
-    //             all.add(new Mouvement(set));
-    //         }
-    //         return all;
-    //     } catch (Exception e) {
-    //         throw  e;
-    //     } finally {
-    //         if (set != null) set.close();
-    //         if (prepared != null) prepared.close();
-    //         connexion.finaleClose();
-    //     }
-    // }
+        String month = "and 1 = 1\n";
+        String year = "and 1 = 1\n";
+
+        if (!date1.isEmpty()) {
+            month += "and EXTRACT(\n" + //
+                                "            MONTH\n" + //
+                                "            FROM cdm.date_debut\n" + //
+                                "        ) >= ?\n";
+            year += "and EXTRACT(\n" + //
+                                "            YEAR\n" + //
+                                "            FROM cdm.date_debut\n" + //
+                                "        ) >= ?\n";
+            counter += 2;
+            splitDate1 = date1.split("-");
+        }
+        if (!date2.isEmpty()) {
+            month += "and EXTRACT(\n" + //
+                                "            MONTH\n" + //
+                                "            FROM cdm.date_fin\n" + //
+                                "        ) <= ?\n";
+            year += "and EXTRACT(\n" + //
+                                "            YEAR\n" + //
+                                "            FROM cdm.date_fin\n" + //
+                                "        ) <= ?\n";
+            counter += 2;
+            splitDate2 = date2.split("-");
+        }
+
+        req += month; req += year;
+
+        try {
+            prepared = connexion.getConnexe().prepareStatement(req);
+            if (!date1.isEmpty()) {
+                prepared.setInt(1, Integer.parseInt(splitDate1[1]));
+                if (counter == 4) {
+                    prepared.setInt(3, Integer.parseInt(splitDate1[0]));
+                } else {
+                    prepared.setInt(2, Integer.parseInt(splitDate1[0]));
+                }
+            }
+            if (!date2.isEmpty()) {
+                if (counter == 4) {
+                    prepared.setInt(2,Integer.parseInt(splitDate2[1]));
+                    prepared.setInt(4,Integer.parseInt(splitDate2[0]));
+                } else {
+                    prepared.setInt(1,Integer.parseInt(splitDate2[1]));
+                    prepared.setInt(2,Integer.parseInt(splitDate2[0]));
+                }
+            }
+
+            set = prepared.executeQuery();
+            ResultSetMetaData metaData = set.getMetaData();
+            
+            while (set.next()) {
+                Vector<String> list = new Vector<>();
+                for (int a = 0; a < metaData.getColumnCount(); a++) {
+                    list.add(set.getString(a + 1));
+                }
+                all.add(list);
+            }
+            return all;
+        } catch (Exception e) {
+            throw  e;
+        } finally {
+            if (set != null) set.close();
+            if (prepared != null) prepared.close();
+            connexion.finaleClose();
+        }
+    }
+
 
     public Vector<Vector<String>> getFonctinnalite2(String idCategoriePersonne, String idModeAdministratioin) throws Exception {
         Vector<Vector<String>> all = new Vector<>();

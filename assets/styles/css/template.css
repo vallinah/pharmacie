@@ -882,6 +882,13 @@ main section.list .filtre select, main section.list .filtre button {
     padding: 0 20px;
 }
 
+main section.list .filtre input {
+    border-radius: 10px;
+    border: 2px solid var(--secondary-color);
+    text-align: center;
+    padding: 5px 30px;
+}
+
 main section.list .filtre button {
     background-color: var(--secondary-color);
     color: white;
