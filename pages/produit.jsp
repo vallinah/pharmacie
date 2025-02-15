@@ -24,6 +24,7 @@
     <title>Produit (Fn1)</title>
 </head>
 <body>
+    <span id="emplacement" hidden>base.Produit</span>
     <%@include file="../inc/header.jsp" %>
     <%@include file="../inc/menu.jsp" %>
     <div class="modal">

@@ -24,6 +24,7 @@
     <title>Vente (Fn2)</title>
 </head>
 <body>
+    <span id="emplacement" hidden>base.Vente</span>
     <%@include file="../inc/header.jsp" %>
     <%@include file="../inc/menu.jsp" %>
     <div class="modal">
@@ -57,7 +58,7 @@
         <section class="body">
             <section class="list">
                 <div class="ttr">
-                    <h1><i class="bi bi-box-seam"></i>  Produit</h1>
+                    <h1><i class='bi bi-credit-card'></i> Vente</h1>
                     <button class="ajout modal_active" data-active="ajout"><i class="bi bi-plus-circle"></i>Ajouter</button>
                 </div>
                 <div class="filtre">
