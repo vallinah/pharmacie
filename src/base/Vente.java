@@ -7,7 +7,7 @@ import annotation.AnnotationAttr;
 import annotation.AnnotationClass;
 import annotation.ForeingKey;
 
-@AnnotationClass(nameInBase = "vente", sequence = "vente_id_seq", prefix = "VNT", icone = "bi-credit-card")
+@AnnotationClass(nameInBase = "vente", sequence = "vente_id_seq", prefix = "VNT", icone = "bi-credit-card", page = "vente")
 public class Vente {
 
     @AnnotationAttr(nameInBase = "id_vente", inc = true, id = true)

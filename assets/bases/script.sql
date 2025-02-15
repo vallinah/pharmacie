@@ -10,7 +10,12 @@ WHERE
     pm.id_maladie = ?
     AND pcp.id_categorie_personne = ?;
 
-SELECT DISTINCT p.id_produit, p.nom_produit, p.description, mda.mode_administration, p.id_produit
+SELECT DISTINCT
+    p.id_produit,
+    p.nom_produit,
+    p.description,
+    mda.mode_administration,
+    p.id_produit
 from
     produit p
     JOIN produit_categorie_personne pcp on pcp.id_produit = p.id_produit
@@ -22,56 +27,17 @@ WHERE
 
 -- fonctionnalite 2
 
-SELECT (
-        m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.nom_produit
-    )
-from
-    produit p
+SELECT v.id_vente, v.prix_total, v.date_vente, c.commission, p.nom_produit, cli.nom_client, vnd.nom_vendeur, v.id_vendeur
+FROM
+    vente v
+    JOIN produit p ON p.id_produit = v.id_produit
     JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit
-    JOIN mouvement m ON m.id_produit = p.id_produit
-WHERE
-    pcp.id_categorie_personne = ?
-    and id_mode_administration = ?;
-
-insert into
-    produit (
-        id_produit,
-        nom_produit,
-        prix_vente_unitaire,
-        nombre,
-        prix_achat_unitaire,
-        quantite,
-        description,
-        id_forme,
-        id_mode_administration,
-        id_laboratoire
-    )
-values (
-        'PRD000000011',
-        'rr',
-        3,
-        5,
-        6,
-        67,
-        'ffff',
-        'FRM00000004',
-        'MOD00000003',
-        'LAB00000005'
-    );
-
-SELECT * FROM mode_administration;
-
-SELECT m.id_mouvement, m.quantite, m.prix_achat_unitaire, m.prix_vente_unitaire, m.date_mouvement, p.nom_produit
-from
-    produit p
-    JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit
-    JOIN mouvement m ON m.id_produit = p.id_produit;
-
-SELECT * FROM produit_categorie_personne;
-
-SELECT * from mouvement;
-
-SELECT * FROM produit_categorie_personne;
+    JOIN commission c ON c.id_commission = v.id_commission
+    JOIN client cli ON cli.id_client = v.id_client
+    JOIN vendeur vnd ON vnd.id_vendeur = v.id_vendeur
+WHERE 1 = 1
+    and pcp.id_categorie_personne = ?
+    and p.id_mode_administration = ?
 
 -- fn 3
 
@@ -148,8 +114,7 @@ SELECT v.nom_vendeur, sum(
             5 * m.prix_vente_unitaire * m.quantite
         ) / 100
     ) commission
-FROM
-    mouvement m
+FROM mouvement m
     JOIN vendeur v on v.id_vendeur = m.id_vendeur
 WHERE
     date_mouvement BETWEEN '2025-01-21' and '2025-01-21'
@@ -190,10 +155,13 @@ SELECT * FROM vendeur;
 
 ---------------
 
-SELECT * FROM historique_prix_produit hpp
-WHERE 1 = 1
-AND id_produit = ?
-AND date_update > ? AND date_update < ?;
+SELECT *
+FROM historique_prix_produit hpp
+WHERE
+    1 = 1
+    AND id_produit = ?
+    AND date_update > ?
+    AND date_update < ?;
 
 SELECT * FROM maladie;
 

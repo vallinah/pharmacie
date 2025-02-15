@@ -254,6 +254,57 @@ public class Functionality {
     //     }
     // }
 
+    public Vector<Vector<String>> getFonctinnalite2(String idCategoriePersonne, String idModeAdministratioin) throws Exception {
+        Vector<Vector<String>> all = new Vector<>();
+        String req = "SELECT v.id_vente, v.prix_total, v.date_vente, c.commission, p.nom_produit, cli.nom_client, vnd.nom_vendeur, v.id_vendeur\n" + //
+                        "FROM\n" + //
+                        "    vente v\n" + //
+                        "    JOIN produit p ON p.id_produit = v.id_produit\n" + //
+                        "    JOIN produit_categorie_personne pcp ON pcp.id_produit = p.id_produit\n" + //
+                        "    JOIN commission c ON c.id_commission = v.id_commission\n" + //
+                        "    JOIN client cli ON cli.id_client = v.id_client\n" + //
+                        "    JOIN vendeur vnd ON vnd.id_vendeur = v.id_vendeur\n" + //
+                        "WHERE 1 = 1\n";
+        Connexion connexion = Function.dbConnect();
+        PreparedStatement prepared = null;
+        ResultSet set = null;
+        if (!idCategoriePersonne.isEmpty()) {
+            req += "and pcp.id_categorie_personne = ?\n";
+        }
+        if (!idModeAdministratioin.isEmpty()) {
+            req += "and p.id_mode_administration = ?\n";
+        }
+
+        try {
+            prepared = connexion.getConnexe().prepareStatement(req);
+            int cpt = 0;
+            if (!idCategoriePersonne.isEmpty()) {
+                prepared.setString(++cpt, idCategoriePersonne);
+            }
+            if (!idModeAdministratioin.isEmpty()) {
+                prepared.setString(++cpt, idModeAdministratioin);
+            }
+
+            set = prepared.executeQuery();
+            ResultSetMetaData metaData = set.getMetaData();
+            
+            while (set.next()) {
+                Vector<String> list = new Vector<>();
+                for (int a = 0; a < metaData.getColumnCount(); a++) {
+                    list.add(set.getString(a + 1));
+                }
+                all.add(list);
+            }
+            return all;
+        } catch (Exception e) {
+            throw  e;
+        } finally {
+            if (set != null) set.close();
+            if (prepared != null) prepared.close();
+            connexion.finaleClose();
+        }
+    }
+
     public Vector<Vector<String>> getFonctinnalite(String idMaladie, String idCategoriePersonne) throws Exception {
         Vector<Vector<String>> all = new Vector<>();
         String req = "SELECT DISTINCT p.id_produit, p.nom_produit, p.description, mda.mode_administration, p.id_produit\n" + //
